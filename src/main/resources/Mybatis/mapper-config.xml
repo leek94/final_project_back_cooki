@@ -3,8 +3,25 @@
    "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<settings>
-	<!-- 첨부 파일이 null값일 경우 -->
+		<!-- 첨부 파일이 null값일 경우 -->
 	     <setting name="jdbcTypeForNull" value="NULL"/>
 	     <setting name="mapUnderscoreToCamelCase" value="true"/>
 	</settings>
+	  <typeAliases>
+      <typeAlias alias="awards" type="com.mycompany.webapp.dto.Awards"/>
+      <typeAlias alias="career" type="com.mycompany.webapp.dto.Career"/>
+      <typeAlias alias="category" type="com.mycompany.webapp.dto.Category"/>
+      <typeAlias alias="class" type="com.mycompany.webapp.dto.Class"/>
+      <typeAlias alias="classItem" type="com.mycompany.webapp.dto.ClassItem"/>
+      <typeAlias alias="classReview" type="com.mycompany.webapp.dto.ClassReview"/>
+      <typeAlias alias="curriculum" type="com.mycompany.webapp.dto.Curriculum"/>
+      <typeAlias alias="like" type="com.mycompany.webapp.dto.Like"/>
+      <typeAlias alias="member" type="com.mycompany.webapp.dto.Member"/>
+      <typeAlias alias="participant" type="com.mycompany.webapp.dto.Participant"/>
+      <typeAlias alias="qna" type="com.mycompany.webapp.dto.Qna"/>
+      <typeAlias alias="recipe" type="com.mycompany.webapp.dto.Recipe"/>
+      <typeAlias alias="recipeItem" type="com.mycompany.webapp.dto.RecipeItem"/>
+      <typeAlias alias="recipeProcess" type="com.mycompany.webapp.dto.RecipeProcess"/>
+      <typeAlias alias="recipeReview" type="com.mycompany.webapp.dto.RecipeReview"/>
+   </typeAliases>
 </configuration>
