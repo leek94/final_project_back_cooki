@@ -14,6 +14,7 @@
       <typeAlias alias="class" type="com.mycompany.webapp.dto.Class"/>
       <typeAlias alias="classItem" type="com.mycompany.webapp.dto.ClassItem"/>
       <typeAlias alias="classReview" type="com.mycompany.webapp.dto.ClassReview"/>
+      <typeAlias alias="classThumbnail" type="com.mycompany.webapp.dto.ClassThumbnail"/>
       <typeAlias alias="curriculum" type="com.mycompany.webapp.dto.Curriculum"/>
       <typeAlias alias="like" type="com.mycompany.webapp.dto.Like"/>
       <typeAlias alias="member" type="com.mycompany.webapp.dto.Member"/>

@@ -20,7 +20,4 @@ public class Class { //클래스
 	private Integer cround; //동일 클래스 기수
 	private String memberMid; //->회원 아이디 (이메일 사용)
 	private Integer categoryCtno; //->카테고리 번호
-	private byte[] cimgdata; //이미지 파일 
-	private String cimgtype; //이미지 파일 타입
-	private String cimgoname; //이미지 파일 이름
 }
