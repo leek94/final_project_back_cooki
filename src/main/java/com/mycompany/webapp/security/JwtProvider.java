@@ -105,7 +105,8 @@ public class JwtProvider {
 	}
 
 	
-	 public static final void main(String[] args) { JwtProvider jwtProvider = new
+	 //테스트용
+	 /*public static final void main(String[] args) { JwtProvider jwtProvider = new
 	  JwtProvider("com.mycompany.jsonwebtoken.kosacourse");
 	  
 	  String accessToken = jwtProvider.createAccessToken("user", "ROLE_USER");
@@ -118,9 +119,9 @@ public class JwtProvider {
 	  log.info("userId: " + userId);
 	  
 	  String autority = jwtProvider.getAuthority(jws); log.info("autority: " + autority);
-	  
 	  }
 	  
 	  }
+	  */
 	
 }
