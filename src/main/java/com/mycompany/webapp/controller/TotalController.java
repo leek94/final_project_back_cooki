@@ -1,6 +1,7 @@
 package com.mycompany.webapp.controller;
 
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,4 +15,26 @@ public class TotalController {
 	public String home() {
 		return "restapi";
 	}
+	
+	@GetMapping("/ClassSearch")
+	public void ClassSearch() {
+		
+	}
+	
+	@GetMapping("/recipeSearch")
+	public void recipeSearch() {
+		
+	}
+	
+	@GetMapping("/bestClass")
+	public void bestClass() {
+		
+	}
+	
+	@GetMapping("/bestRecipe")
+	public void bestRecipe() {
+		
+	}
+	
+	
 }

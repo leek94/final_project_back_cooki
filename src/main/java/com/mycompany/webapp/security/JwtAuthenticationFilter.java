@@ -53,6 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 			//AccessToken 유효성 검사 
 			Jws<Claims> jws = jwtProvider.validateToken(accessToken);
 			if(jws!= null) {
+				
 				log.info("accessToken이 유효함");
 				String userId=jwtProvider.getUserId(jws);
 				log.info("userId: "+userId);
@@ -63,8 +64,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 				//인증 객체 얻기
 				Authentication authentication = 
 						new UsernamePasswordAuthenticationToken(userDetails,null ,userDetails.getAuthorities());
+				
 				//스프링 시큐리티에 인증 객체 설정
 				SecurityContextHolder.getContext().setAuthentication(authentication);
+				
 			}else {
 				//유효하지 않을 경우
 				log.info("accessToken이 유효지 않음");

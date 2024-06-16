@@ -42,13 +42,13 @@ public class WebSecurityConfig {
       //사이트 간 요청 위조 방지 비활성화(GET 방식 이외의 방식 요청은 _csrf 토큰을 요구하기 때문)
       http.csrf(config->config.disable());
       
-      // CORS 설정(다른(크로스) 도메인에서 받은 인증 정보(AccessToken)로 요청할 경우 허가) 
+      // CORS 설정(다른(크로스) 도메인에서 받은 인증 정보(AccessToken)로 요청할 경우 허가)
       // A 브라우저에서 받은 jwt 토큰을 통해서 B 브라우저에서 사용가능하게 하기 위해서 ex) 신세계 -> 이마트
       // A 브라우저는 설정할 필요 없지만 B 브라우저는 설정 해야 허가됨
       http.cors(config -> {});
       
       // JWT로 인증이 되도록 필터를 등록
-      //accessToken이 인증처리 되면 아이디와 비밀번호를 인증처리 할 필요가 없어지기 때문에 아이디 검사 전에 위치 시킨다
+      // accessToken이 인증처리 되면 아이디와 비밀번호를 인증처리 할 필요가 없어지기 때문에 아이디 검사 전에 위치 시킨다
       http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // 아이디, 패스워드가 없이 인증 처리를 하려면 id, password 인증 전에 필터가 실행되야 함
       
       return http.build();
