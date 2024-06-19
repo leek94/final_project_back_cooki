@@ -20,4 +20,10 @@ public class Class { //클래스
 	private Integer cround; //동일 클래스 기수
 	private String memberMid; //->회원 아이디 (이메일 사용)
 	private Integer categoryCtno; //->카테고리 번호
+	
+	//category dto 삭제 
+	private Integer ctname; //카테고리 이름
+	
+	//participant dto 삭제
+	private Date pdate; //참여 신청일
 }

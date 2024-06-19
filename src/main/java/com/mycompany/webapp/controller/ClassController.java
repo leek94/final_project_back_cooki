@@ -25,7 +25,7 @@ public class ClassController {
 	}
 	
 	//PathVarialble로 bno 받음
-	@GetMapping("/classDetail/{bno}")
+	@GetMapping("/classDetail/{cno}")
 	public void classDetail() {
 		
 	}
@@ -54,13 +54,13 @@ public class ClassController {
 		
 	}
 	
-	@PutMapping("/reviewUpdate/{cno}")
+	@PutMapping("/reviewUpdate/{rno}")
 	public void reviewUpdate() {
 		
 	}
 	
 	//
-	@DeleteMapping("/reviewDelete/{cno}")
+	@DeleteMapping("/reviewDelete/{rno}")
 	public void reviewDelete() {
 		
 	}
@@ -75,29 +75,17 @@ public class ClassController {
 		
 	}
 	
-	@PutMapping("/qnaReviewUpdate/{cno}")
+	@PutMapping("/qnaReviewUpdate/{qno}")
 	public void qnaReviewUpdate() {
 		
 	}
 	
 	//
-	@DeleteMapping("/qnaReviewDelete/{cno}")
+	@DeleteMapping("/qnaReviewDelete/{qno}")
 	public void qnaReviewDelete() {
 		
 	}
 	
 	// 사진 다운로드
-	@GetMapping("/battach/cno/orderNum")
-	public void classThumbnail() {
-		
-	}
 
-	
-	
-	
-	
-	
-	
-	
-	
 }
