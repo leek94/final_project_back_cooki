@@ -8,6 +8,5 @@ import com.mycompany.webapp.dao.RecipeDao;
 @Service
 public class RecipeService {
 	
-	@Autowired
-	private RecipeDao recipeDao;
+	
 }
