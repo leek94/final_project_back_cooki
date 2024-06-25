@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.webapp.dao.ClassDao">
+
+
+<insert id="insertClass" parameterType="classes">
+	<selectKey keyProperty="cno" resultType="int" order="BEFORE">
+		select seq_cno.nextval from dual
+	</selectKey>
+	insert into classes (
+		cno, ctitle, ccontent, cpersoncount, cprice, caddress, cstartdate,
+		cenddate, cdday, cstarttime, cendtime, chitcount, cround, mid, ctno
+	) values (
+		#{cno}, #{ctitle}, #{ccontent}, #{cpersoncount}, #{cprice}, #{caddress}, #{cstartdate},
+		#{cenddate}, #{cdday}, #{cstarttime}, #{cendtime}, 0, #{cround}, #{mid}, #{ctno} 
+	)
+	
+</insert>
+<!-- 조회수 -> 등록시에는 조회수가 없기 때문에 0으로 insert 해줌-->
+
+<insert id="insertClassThumbnail" parameterType="classThumbnail">
+	insert into classThumbnail (
+		ctorder, ctimgoname, ctimgdata, ctimgtype, cno
+	) values (
+		#{ctorder}, #{ctimgoname}, #{ctimgdata}, #{ctimgtype}, #{cno}
+	)
+</insert>
+
+
+
+</mapper>

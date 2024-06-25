@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.service.ClassService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,10 @@ public class ClassController {
 	}
 	
 	@PostMapping("/classRegister")
-	public void classRegister() {
+	public void classRegister(Classes classes) {	
+		log.info("컨트롤러 classRegister 메소드 실행");
+		classService.createClass(classes);
+		log.info("컨트롤러 classRegister 클래스 객체 생성");
 		
 	}
 	
