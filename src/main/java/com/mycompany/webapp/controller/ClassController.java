@@ -16,8 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/class")
 public class ClassController {
-	@Autowired
-	private ClassService classService;
+
 	
 	@GetMapping("/classList")
 	public void classList() {

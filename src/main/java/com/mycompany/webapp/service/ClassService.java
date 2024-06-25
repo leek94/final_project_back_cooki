@@ -8,6 +8,6 @@ import com.mycompany.webapp.dao.ClassDao;
 @Service
 public class ClassService {
 	
-	
+
 	
 }

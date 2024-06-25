@@ -104,7 +104,7 @@ public class JwtProvider {
 		return autority;
 	}
 
-	
+	 
 	 //테스트용
 	 /*public static final void main(String[] args) { JwtProvider jwtProvider = new
 	  JwtProvider("com.mycompany.jsonwebtoken.kosacourse");
@@ -120,8 +120,8 @@ public class JwtProvider {
 	  
 	  String autority = jwtProvider.getAuthority(jws); log.info("autority: " + autority);
 	  }
-	  
 	  }
+	  
 	  */
 	
 }

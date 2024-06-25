@@ -16,8 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/recipe")
 public class RecipeController {
-	@Autowired
-	private RecipeService recipeService;
+
 	
 	@GetMapping("/recipeList")
 	public void recipeList() {

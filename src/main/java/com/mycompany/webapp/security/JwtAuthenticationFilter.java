@@ -55,7 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 			if(jws!= null) {
 				
 				log.info("accessToken이 유효함");
-				String userId=jwtProvider.getUserId(jws);
+				String userId = jwtProvider.getUserId(jws);
 				log.info("userId: "+userId);
 				
 				//사용자의 상세 정보 가져오기

@@ -68,7 +68,8 @@ public class WebSecurityConfig {
        handler.setRoleHierarchy(roleHierarchy());
        return handler;
    }
-
+   
+   //프론트 엔드와 백엔드의 포트 번호나 도메인 주소가 다를 경우 서로 연결하기 위해서는 아래처럼 cors 설정이 필요함
    //다른 도메인(크로스 도메인) 설정
    @Bean
    public CorsConfigurationSource corsConfigurationSource() {
