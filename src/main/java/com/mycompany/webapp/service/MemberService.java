@@ -24,6 +24,7 @@ public class MemberService {
 
 public void setAwards(Awards awards) {
 	memberDao.insertAwards(awards);
+	}
 	
-}
+
 }

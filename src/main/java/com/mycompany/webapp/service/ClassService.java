@@ -109,6 +109,10 @@ public class ClassService {
 	public Curriculum getCurriculumimg(Curriculum curriculum) {
 		
 		return classDao.selectByCurriculumimg(curriculum);
+	}
+
+	public int getThumbimgCount(int cno) {
+		return classDao.selectByClassThumbCount(cno);
 	}	
 
 }

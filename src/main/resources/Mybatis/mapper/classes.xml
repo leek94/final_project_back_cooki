@@ -78,5 +78,11 @@
 		from curriculum
 		where cno= #{cno} and cuorder = #{cuorder}
 	</select>
+	
+	<select id="selectByClassThumbCount" parameterType="int" resultType="int">
+		select count(*)
+		from classThumbnail
+		where cno= #{cno}
+	</select>
 
 </mapper>

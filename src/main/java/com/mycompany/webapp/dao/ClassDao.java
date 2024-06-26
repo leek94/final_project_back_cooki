@@ -22,6 +22,7 @@ public interface ClassDao {
 	public List<ClassItem> selectClassItemByCno(int cno);
 	public ClassThumbnail selectByClassThumbnail(ClassThumbnail classThumb);
 	public Curriculum selectByCurriculumimg(Curriculum curriculum);
+	public int selectByClassThumbCount(int cno);
 
 	
 }
