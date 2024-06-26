@@ -14,5 +14,7 @@ public interface ClassDao {
 	public int insertClassThumbnail(ClassThumbnail classThumbnail);
 	public int insertItem(ClassItem classItem);
 	public void insertCurriculum(Curriculum curriculum);
+	public int updateBhitcount(int cno);
+	public Classes selectByCno(int cno);
 	
 }

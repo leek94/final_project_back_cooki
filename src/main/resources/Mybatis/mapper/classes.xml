@@ -3,44 +3,57 @@
 <mapper namespace="com.mycompany.webapp.dao.ClassDao">
 
 
-<insert id="insertClass" parameterType="classes">
-	<selectKey keyProperty="cno" resultType="int" order="BEFORE">
-		select seq_cno.nextval from dual
-	</selectKey>
-	insert into classes (
-		cno, ctitle, ccontent, cpersoncount, cprice, caddress, cstartdate,
-		cenddate, cdday, cstarttime, cendtime, chitcount, cround, mid, ctno
-	) values (
-		#{cno}, #{ctitle}, #{ccontent}, #{cpersoncount}, #{cprice}, #{caddress}, #{cstartdate},
-		#{cenddate}, #{cdday}, #{cstarttime}, #{cendtime}, 0, #{cround}, #{mid}, #{ctno} 
-	)
+	<insert id="insertClass" parameterType="classes">
+		<selectKey keyProperty="cno" resultType="int" order="BEFORE">
+			select seq_cno.nextval from dual
+		</selectKey>
+		insert into classes (
+			cno, ctitle, ccontent, cpersoncount, cprice, caddress, cstartdate,
+			cenddate, cdday, cstarttime, cendtime, chitcount, cround, mid, ctno
+		) values (
+			#{cno}, #{ctitle}, #{ccontent}, #{cpersoncount}, #{cprice}, #{caddress}, #{cstartdate},
+			#{cenddate}, #{cdday}, #{cstarttime}, #{cendtime}, 0, #{cround}, #{mid}, #{ctno} 
+		)
+		
+	</insert>
+	<!-- 조회수 -> 등록시에는 조회수가 없기 때문에 0으로 insert 해줌-->
 	
-</insert>
-<!-- 조회수 -> 등록시에는 조회수가 없기 때문에 0으로 insert 해줌-->
-
-<insert id="insertClassThumbnail" parameterType="classThumbnail">
-	insert into classThumbnail (
-		ctorder, ctimgoname, ctimgdata, ctimgtype, cno
-	) values (
-		#{ctorder}, #{ctimgoname}, #{ctimgdata}, #{ctimgtype}, #{cno}
-	)
-</insert>
-
-<insert id="insertCurriculum" parameterType="curriculum">
-	insert into curriculum (
-		cuorder, cutitle, cucontent, cuimgoname, cuimgdata, cuimgtype, cno
-	) values (
-		#{cuorder}, #{cutitle}, #{cucontent}, #{cuimgoname}, #{cuimgdata}, #{cuimgtype}, #{cno}
-	)
-</insert>
-
-<insert id="insertItem" parameterType="classItem">
-	insert into classItem (
-		cino, ciname, cno
-	) values (
-		#{cino}, #{ciname}, #{cno}
-	)
-</insert>
+	<insert id="insertClassThumbnail" parameterType="classThumbnail">
+		insert into classThumbnail (
+			ctorder, ctimgoname, ctimgdata, ctimgtype, cno
+		) values (
+			#{ctorder}, #{ctimgoname}, #{ctimgdata}, #{ctimgtype}, #{cno}
+		)
+	</insert>
+	
+	<insert id="insertCurriculum" parameterType="curriculum">
+		insert into curriculum (
+			cuorder, cutitle, cucontent, cuimgoname, cuimgdata, cuimgtype, cno
+		) values (
+			#{cuorder}, #{cutitle}, #{cucontent}, #{cuimgoname}, #{cuimgdata}, #{cuimgtype}, #{cno}
+		)
+	</insert>
+	
+	<insert id="insertItem" parameterType="classItem">
+		insert into classItem (
+			cino, ciname, cno
+		) values (
+			#{cino}, #{ciname}, #{cno}
+		)
+	</insert>
+	
+	<select id="selectByCno" parameterType="int" resultType="classes"> 
+	select cno, ctitle, ccontent, cpersoncount, cprice, 
+	caddress, cstartdate, cenddate, cdday, cstarttime, cendtime,chitcount,cround,mid, classes.ctno, ctname
+	from classes, category 
+	where cno=#{cno} and classes.ctno= category.ctno
+	
+	</select>
+	
+	<update id="updateBhitcount" parameterType="int">
+	update classes set chitcount=chitcount+1 
+	where cno=#{cno}
+	</update>
 
 
 </mapper>

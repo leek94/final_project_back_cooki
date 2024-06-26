@@ -77,6 +77,13 @@ public class ClassService {
 		log.info("서비스 createItem insert classItem");
 	}
 
+	public Classes getClasses(int cno) {
+		
+		classDao.updateBhitcount(cno);
+		Classes classes = classDao.selectByCno(cno);
+		return classes;
+	}
+
 	
 	
 }
