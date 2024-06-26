@@ -42,7 +42,7 @@ public class ClassController {
 		classService.createClass(classes);
 		log.info("컨트롤러 classRegister 클래스 객체 생성");
 		
-		//cno를 front로 전달하기 위해 map에 JSON 객체 형태로 저장함
+		//cno를 <front>로 전달하기 위해 map에 JSON 객체 형태로 저장해서 보내줌
 		Map<String, Integer> map = new HashMap<>();
 		//map("key", value) -> <front> response.data.cno(=key) -> 저장된 cno(value) 번호 알 수 있음
 		map.put("cno", classes.getCno());
