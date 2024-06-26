@@ -10,7 +10,7 @@
 	<typeAliases>
 	      <typeAlias alias="awards" type="com.mycompany.webapp.dto.Awards"/>
 	      <typeAlias alias="career" type="com.mycompany.webapp.dto.Career"/>
-	      <typeAlias alias="class" type="com.mycompany.webapp.dto.Class"/>
+	      <typeAlias alias="classes" type="com.mycompany.webapp.dto.Classes"/>
 	      <typeAlias alias="career" type="com.mycompany.webapp.dto.Career"/>
 	      <typeAlias alias="awards" type="com.mycompany.webapp.dto.Awards"/>
 	      <typeAlias alias="classItem" type="com.mycompany.webapp.dto.ClassItem"/>
