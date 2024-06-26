@@ -21,7 +21,7 @@ public class AppUserDetailsService implements UserDetailsService {
    
    @Override
    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-      Member member = memberDao.selectByMid(username); 
+      Member member = memberDao.selectByMid(username);
       
       if(member == null) {
          throw new UsernameNotFoundException(username);
