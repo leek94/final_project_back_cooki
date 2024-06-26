@@ -1,6 +1,7 @@
 package com.mycompany.webapp.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,7 +82,14 @@ public class ClassService {
 		
 		classDao.insertCurriculum(curriculum);
 		log.info("서비스 createCurriculum insert curriculum");
-		
 	}
+
+	public List<Curriculum> getCurriculumList(int cno) {
+		return classDao.selectCurriculumByCno(cno);
+	}
+	
+	public List<ClassItem> getClassItemList(int cno) {
+		return classDao.selectClassItemByCno(cno);
+	}	
 
 }

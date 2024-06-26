@@ -16,7 +16,7 @@
 	)
 	
 </insert>
-<!-- 조회수 -> 등록시에는 조회수가 없기 때문에 0으로 insert 해줌-->
+<!-- hitcount -> 등록시에는 조회수가 없기 때문에 0으로 insert 해줌-->
 
 <insert id="insertClassThumbnail" parameterType="classThumbnail">
 	insert into classThumbnail (
@@ -42,5 +42,18 @@
 	)
 </insert>
 
+<!-- 썸네일 이미지 관련 정보를 제외한 커리큘럼 데이터 불러오기  -->
+<select id="selectCurriculumByCno" parameterType="int" resultType="curriculum">
+	select cuorder, cutitle, cucontent, cno
+	from curriculum
+	where cno = #{cno}
+</select>
+
+<!-- 재료 데이터 불러오기 -->
+<select id="selectClassItemByCno" parameterType="int" resultType="classItem">
+	select cino, ciname, cno
+	from classItem
+	where cno = #{cno}
+</select>
 
 </mapper>

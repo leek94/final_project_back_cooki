@@ -1,11 +1,13 @@
 package com.mycompany.webapp.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,6 +72,19 @@ public class ClassController {
 	}
 	
 	// 삭제하기 고민중 - 모집 7일전까지만 삭제 가능하게
+	
+	//path variable 방식으로
+	@GetMapping("/getCurriculumAndItem/{cno}")
+	public Map<String, Object> getCurriculumAndItem(@PathVariable int cno) {
+		List<Curriculum> curriculums = classService.getCurriculumList(cno);
+		List<ClassItem> classItems = classService.getClassItemList(cno);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("curriculums", curriculums);
+		map.put("classItems", classItems);
+		return map;
+	}
+	
 	
 	/*댓글*/
 	
