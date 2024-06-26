@@ -10,7 +10,7 @@
 	<typeAliases>
 	      <typeAlias alias="awards" type="com.mycompany.webapp.dto.Awards"/>
 	      <typeAlias alias="career" type="com.mycompany.webapp.dto.Career"/>
-	      <typeAlias alias="class" type="com.mycompany.webapp.dto.Class"/>
+	      <typeAlias alias="classes" type="com.mycompany.webapp.dto.Classes"/>
 	      <typeAlias alias="career" type="com.mycompany.webapp.dto.Career"/>
 	      <typeAlias alias="awards" type="com.mycompany.webapp.dto.Awards"/>
 	      <typeAlias alias="classItem" type="com.mycompany.webapp.dto.ClassItem"/>
@@ -23,5 +23,5 @@
 	      <typeAlias alias="recipeItem" type="com.mycompany.webapp.dto.RecipeItem"/>
 	      <typeAlias alias="recipeProcess" type="com.mycompany.webapp.dto.RecipeProcess"/>
 	      <typeAlias alias="recipeReview" type="com.mycompany.webapp.dto.RecipeReview"/>
-	 </typeAliases>
+	 </typeAliases> 
 </configuration>

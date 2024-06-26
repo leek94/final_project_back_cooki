@@ -2,8 +2,13 @@ package com.mycompany.webapp.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
-public class ClassDao {
-	//classitem, curriculum, qna, classreview, participant, category
+import com.mycompany.webapp.dto.ClassThumbnail;
+import com.mycompany.webapp.dto.Classes;
 
+@Mapper
+public interface ClassDao {
+
+	public int insertClass(Classes classes);
+	public int insertClassThumbnail(ClassThumbnail classThumbnail);
+	
 }

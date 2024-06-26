@@ -15,4 +15,10 @@
 		insert into Awards(ano, acontent, mid)
 		values(#{ano}, #{acontent},#{mid})
 	</insert>
+	
+	<select id="selectByMid" parameterType="String" resultType="Member">
+		select mid, mname, mrole, menabled, mphonenum, mnickname,mpassword
+		from member 
+		where mid=#{mid}
+	</select>
 </mapper>
