@@ -30,7 +30,7 @@ public class MemberController {
 		
 	}
 	
-	@PostMapping("/join")
+	@PostMapping("/join") 
 	public Member join(@RequestBody Member member) {
 		//비밀번호 암호화 
 		PasswordEncoder passwordEncoder =PasswordEncoderFactories.createDelegatingPasswordEncoder();
