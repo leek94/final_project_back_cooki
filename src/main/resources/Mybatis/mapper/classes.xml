@@ -26,6 +26,13 @@
 	)
 </insert>
 
+<insert id="insertItem" parameterType="classItem">
+	insert into classItem (
+		cino, ciname, cno
+	) values (
+		#{cino}, #{ciname}, #{cno}
+	)
+</insert>
 
 
 </mapper>

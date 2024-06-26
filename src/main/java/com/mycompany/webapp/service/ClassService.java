@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.webapp.dao.ClassDao;
+import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 
@@ -49,13 +50,20 @@ public class ClassService {
 			
 			classDao.insertClassThumbnail(classThumbnail);
 		}
-		log.info("서비스 createClass insertClassThumbnail");
-		
-		
-		
-		
+		log.info("서비스 createClass insertClassThumbnail");	
+	}
+
+	public void createItem(ClassItem classItem) {
+		log.info("서비스 createItem 메소드 실행");
+		classDao.insertItem(classItem);
+		log.info("서비스 createItem insert classItem");
 	}
 	
-
+//	public void createCurriculum(Curriculum curriculum) {
+//		log.info("서비스 createCurriculum 메소드 실행");
+//		classDao.insertCurriculum(curriculum);
+//		log.info("서비스 createCurriculum insert curriculum");
+//		
+//	}
 	
 }
