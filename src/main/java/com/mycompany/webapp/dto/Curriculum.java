@@ -14,5 +14,7 @@ public class Curriculum { //커리큘럼
 	private String cuimgtype; //이미지 파일 종류
 	private Integer cno; //->클래스 번호
 	
-	private MultipartFile cuimg;
+	private MultipartFile cuimg; 
+	//front에서 받은 이미지 파일을 사용하기 위한 필드 선언
+	//service에서 oname, data, type 받기
 }

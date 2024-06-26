@@ -1,5 +1,7 @@
 package com.mycompany.webapp.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.mycompany.webapp.dto.ClassItem;
@@ -16,5 +18,8 @@ public interface ClassDao {
 	public void insertCurriculum(Curriculum curriculum);
 	public int updateBhitcount(int cno);
 	public Classes selectByCno(int cno);
+	public List<Curriculum> selectCurriculumByCno(int cno);
+	public List<ClassItem> selectClassItemByCno(int cno);
+
 	
 }

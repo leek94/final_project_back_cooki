@@ -1,6 +1,7 @@
 package com.mycompany.webapp.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class ClassController {
 		classService.createClass(classes);
 		log.info("컨트롤러 classRegister 클래스 객체 생성");
 		
-		//cno를 front로 전달하기 위해 map에 JSON 객체 형태로 저장함
+		//cno를 <front>로 전달하기 위해 map에 JSON 객체 형태로 저장해서 보내줌
 		Map<String, Integer> map = new HashMap<>();
 		//map("key", value) -> <front> response.data.cno(=key) -> 저장된 cno(value) 번호 알 수 있음
 		map.put("cno", classes.getCno());
@@ -72,6 +73,19 @@ public class ClassController {
 	}
 	
 	// 삭제하기 고민중 - 모집 7일전까지만 삭제 가능하게
+	
+	//path variable 방식으로
+	@GetMapping("/getCurriculumAndItem/{cno}")
+	public Map<String, Object> getCurriculumAndItem(@PathVariable int cno) {
+		List<Curriculum> curriculums = classService.getCurriculumList(cno);
+		List<ClassItem> classItems = classService.getClassItemList(cno);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("curriculums", curriculums);
+		map.put("classItems", classItems);
+		return map;
+	}
+	
 	
 	/*댓글*/
 	

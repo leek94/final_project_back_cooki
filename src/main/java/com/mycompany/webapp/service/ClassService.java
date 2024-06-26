@@ -1,6 +1,7 @@
 package com.mycompany.webapp.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,9 @@ public class ClassService {
 	@Autowired
 	private ClassDao classDao;
 
+	//클래스 기본 정보를 데이터베이스에 저장하기위한 로직
 	public void createClass(Classes classes) {
+		//<front>에서 axios를 통해 넘겨받지 못한 not null 필드값들을 service에서 설정해줘야 함
 		log.info("서비스 createClass 메소드 실행");
 		classes.setMid("test123@naver.com");
 		classes.setCtno(1);
@@ -32,7 +35,7 @@ public class ClassService {
 		//set 해준 클래스 번호 가져오기
 		int cno = classes.getCno();
 		
-		//front에서 가져온 썸네일 파일 모음(배열) 가져오기
+		//<front>에서 axios로 연결된 cthumbnailimgs(배열 형태의 썸네일 파일 모음) 가져오기
 		MultipartFile[] fileImgs = classes.getCthumbnailimgs();
 		
 		//파일 배열을 구조분해 해서 파일 객체로 for문을 통해 하나하나 저장 
@@ -55,9 +58,19 @@ public class ClassService {
 		}
 		log.info("서비스 createClass insertClassThumbnail");	
 	}
-
+	
+	//클래스 재료 정보를 데이터베이스에 저장하기위한 로직
+	public void createItem(ClassItem classItem) {
+		log.info("서비스 createItem 메소드 실행");
+		classDao.insertItem(classItem);
+		log.info("서비스 createItem insert classItem");
+	}
+	
+	//클래스 커리큘럼 정보를 데이터베이스에 저장하기위한 로직
 	public void createCurriculum(Curriculum curriculum) {
 		log.info("서비스 createCurriculum 메소드 실행");
+		
+		//<front>에서 axios로 연결된 cuimg(배열X, <front>에서 하나씩 보내줌) 가져오기
 		MultipartFile fileImg = curriculum.getCuimg();
 		
 		curriculum.setCuimgoname(fileImg.getOriginalFilename());
@@ -69,12 +82,6 @@ public class ClassService {
 		
 		classDao.insertCurriculum(curriculum);
 		log.info("서비스 createCurriculum insert curriculum");
-		
-	}
-	public void createItem(ClassItem classItem) {
-		log.info("서비스 createItem 메소드 실행");
-		classDao.insertItem(classItem);
-		log.info("서비스 createItem insert classItem");
 	}
 
 	public Classes getClasses(int cno) {
@@ -84,6 +91,14 @@ public class ClassService {
 		return classes;
 	}
 
+
+	public List<Curriculum> getCurriculumList(int cno) {
+		return classDao.selectCurriculumByCno(cno);
+	}
+
 	
-	
+	public List<ClassItem> getClassItemList(int cno) {
+		return classDao.selectClassItemByCno(cno);
+	}	
+
 }
