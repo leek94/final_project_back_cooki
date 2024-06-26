@@ -99,6 +99,16 @@ public class ClassService {
 	
 	public List<ClassItem> getClassItemList(int cno) {
 		return classDao.selectClassItemByCno(cno);
+	}
+
+	public ClassThumbnail getThumbnail(ClassThumbnail classThumb) {
+		return classDao.selectByClassThumbnail(classThumb);
+		
+	}
+
+	public Curriculum getCurriculumimg(Curriculum curriculum) {
+		
+		return classDao.selectByCurriculumimg(curriculum);
 	}	
 
 }

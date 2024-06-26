@@ -20,6 +20,8 @@ public interface ClassDao {
 	public Classes selectByCno(int cno);
 	public List<Curriculum> selectCurriculumByCno(int cno);
 	public List<ClassItem> selectClassItemByCno(int cno);
+	public ClassThumbnail selectByClassThumbnail(ClassThumbnail classThumb);
+	public Curriculum selectByCurriculumimg(Curriculum curriculum);
 
 	
 }

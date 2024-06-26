@@ -66,5 +66,17 @@
 	   from classItem
 	   where cno = #{cno}
 	</select>
+	
+	<select id="selectByClassThumbnail" parameterType="classThumbnail" resultType="classThumbnail">
+		select ctorder, ctimgoname, ctimgdata, ctimgtype, cno
+		from classThumbnail
+		where cno = #{cno} and ctorder = #{ctorder}
+	</select>
+	
+	<select id="selectByCurriculumimg" parameterType="curriculum" resultType="curriculum">
+		select cuorder, cuimgoname, cuimgdata, cuimgtype, cno
+		from curriculum
+		where cno= #{cno} and cuorder = #{cuorder}
+	</select>
 
 </mapper>

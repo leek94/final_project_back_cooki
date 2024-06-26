@@ -1,8 +1,12 @@
 package com.mycompany.webapp.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.ClassItem;
+import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.service.ClassService;
@@ -37,6 +42,51 @@ public class ClassController {
 	public Classes classDetail(@PathVariable int cno) {
 		Classes classes = classService.getClasses(cno);
 		return classes;
+	}
+	
+	@GetMapping("/thumbattach/{cno}/{ctorder}")
+	public void downloadThumb(@PathVariable int cno, @PathVariable int ctorder, HttpServletResponse response) {
+		
+		ClassThumbnail classThumb = new ClassThumbnail();
+		classThumb.setCno(cno);
+		classThumb.setCtorder(ctorder);
+		classThumb=classService.getThumbnail(classThumb);
+		
+		try {
+			String fileName = new String(classThumb.getCtimgoname().getBytes("UTF-8"), "ISO-8859-1");
+			response.setHeader("content-Disposition", "attachment; filename=\""+fileName+"\"");
+			response.setContentType(classThumb.getCtimgtype());
+			OutputStream os;
+			os = response.getOutputStream();
+			os.write(classThumb.getCtimgdata());
+			os.flush();
+			os.close();
+	
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	@GetMapping("/curriculumattach/{cno}/{cuorder}")
+	public void downloadCurriculum(@PathVariable int cno, @PathVariable int cuorder, HttpServletResponse response) {
+		Curriculum curriculum = new Curriculum();
+		curriculum.setCno(cno);
+		curriculum.setCuorder(cuorder);
+		curriculum = classService.getCurriculumimg(curriculum);
+		
+		try {
+			String fileName = new String(curriculum.getCuimgoname().getBytes("UTF-8"), "ISO-8859-1");
+			response.setHeader("content-Disposition", "attachment; filename=\""+fileName+"\"");
+			response.setContentType(curriculum.getCuimgtype());
+			OutputStream os;
+			os = response.getOutputStream();
+			os.write(curriculum.getCuimgdata());
+			os.flush();
+			os.close();
+	
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@PostMapping("/classRegister")
