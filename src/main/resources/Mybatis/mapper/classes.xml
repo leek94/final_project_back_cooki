@@ -26,6 +26,14 @@
 	)
 </insert>
 
+<insert id="insertCurriculum" parameterType="curriculum">
+	insert into curriculum (
+		cuorder, cutitle, cucontent, cuimgoname, cuimgdata, cuimgtype, cno
+	) values (
+		#{cuorder}, #{cutitle}, #{cucontent}, #{cuimgoname}, #{cuimgdata}, #{cuimgtype}, #{cno}
+	)
+</insert>
+
 <insert id="insertItem" parameterType="classItem">
 	insert into classItem (
 		cino, ciname, cno

@@ -1,5 +1,7 @@
 package com.mycompany.webapp.service;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +10,7 @@ import com.mycompany.webapp.dao.ClassDao;
 import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
+import com.mycompany.webapp.dto.Curriculum;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,17 +56,27 @@ public class ClassService {
 		log.info("서비스 createClass insertClassThumbnail");	
 	}
 
+	public void createCurriculum(Curriculum curriculum) {
+		log.info("서비스 createCurriculum 메소드 실행");
+		MultipartFile fileImg = curriculum.getCuimg();
+		
+		curriculum.setCuimgoname(fileImg.getOriginalFilename());
+		curriculum.setCuimgtype(fileImg.getContentType());
+		try {
+			curriculum.setCuimgdata(fileImg.getBytes());
+		} catch (IOException e) {
+		}
+		
+		classDao.insertCurriculum(curriculum);
+		log.info("서비스 createCurriculum insert curriculum");
+		
+	}
 	public void createItem(ClassItem classItem) {
 		log.info("서비스 createItem 메소드 실행");
 		classDao.insertItem(classItem);
 		log.info("서비스 createItem insert classItem");
 	}
+
 	
-//	public void createCurriculum(Curriculum curriculum) {
-//		log.info("서비스 createCurriculum 메소드 실행");
-//		classDao.insertCurriculum(curriculum);
-//		log.info("서비스 createCurriculum insert curriculum");
-//		
-//	}
 	
 }

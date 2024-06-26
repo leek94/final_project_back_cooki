@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.Classes;
+import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.service.ClassService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,13 @@ public class ClassController {
 		log.info("컨트롤러 itemRegister 메소드 실행");
 		classService.createItem(classItem);
 		log.info("컨트롤러 itemRegister 클래스아이템 객체 생성");
+	}
+	
+	@PostMapping("/curriculumRegister")
+	public void curriculumRegister(Curriculum curriculum) {
+		log.info("컨트롤러 curriculumRegister 메소드 실행");
+		classService.createCurriculum(curriculum);
+		log.info("컨트롤러 curriculumRegister 커리큘럼 객체 생성");
 	}
 	
 	@PutMapping("/classUpdate")
