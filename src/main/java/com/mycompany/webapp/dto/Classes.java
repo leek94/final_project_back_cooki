@@ -30,5 +30,9 @@ public class Classes { //클래스
 	//participant dto 삭제
 	private Date pdate; //참여 신청일
 	
+	//클래스 디테일에서 크리에이터명을 받아오기
+	private String mnickname;
+
+	
 	private MultipartFile[] cthumbnailimgs; //썸네일 이미지 배열
 }

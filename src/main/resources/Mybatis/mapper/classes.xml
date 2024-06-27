@@ -39,9 +39,9 @@
 	
 	<select id="selectByCno" parameterType="int" resultType="classes"> 
 	select cno, ctitle, ccontent, cpersoncount, cprice, 
-	caddress, cstartdate, cenddate, cdday, cstarttime, cendtime,chitcount,cround,mid, classes.ctno, ctname
-	from classes, category 
-	where cno=#{cno} and classes.ctno= category.ctno
+	caddress, cstartdate, cenddate, cdday, cstarttime, cendtime,chitcount,cround, classes.mid, classes.ctno, ctname, mnickname
+	from classes, category, member
+	where cno=#{cno} and classes.ctno= category.ctno and classes.mid=member.mid
 	</select>
 	
 	<update id="updateBhitcount" parameterType="int">
@@ -78,6 +78,7 @@
 	   select cuorder, cutitle, cucontent, cno
 	   from curriculum
 	   where cno = #{cno}
+	   order by cuorder 
 	</select>
 	
 	<!-- 재료 데이터 불러오기 -->
@@ -104,5 +105,22 @@
 		from classThumbnail
 		where cno= #{cno}
 	</select>
+	
+	<!-- 클래스 참석 여부 -->
+	<insert id="insertClassApply" parameterType="participant">
+	insert into Participant(cno, mid, isparticipant, pdate)
+	values(#{cno}, #{mid}, 1, systimestamp)
+	</insert>
+	
+	<select id="selectByisParticipant" parameterType="participant" resultType="participant">
+	select * from participant 
+	where cno=#{cno} and mid=#{mid}
+	</select>
+	
+	<delete id="deleteClassApply" parameterType="participant">
+	delete from participant 
+	where cno= #{cno} and mid=#{mid}
+	</delete>
+
 
 </mapper>

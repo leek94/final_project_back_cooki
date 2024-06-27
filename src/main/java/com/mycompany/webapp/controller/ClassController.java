@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Curriculum;
+import com.mycompany.webapp.dto.Participant;
 import com.mycompany.webapp.service.ClassService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,19 +43,53 @@ public class ClassController {
 	
 	//PathVarialble로 bno 받음
 	@GetMapping("/classDetail/{cno}")
-	public Classes classDetail(@PathVariable int cno) {
+	public Map<String, Object> classDetail(@PathVariable int cno, Authentication authentication) {
+		String mid = authentication.getName();
 		Classes classes = classService.getClasses(cno);
-		return classes;
+		Participant participant= new Participant();
+		participant.setCno(cno);
+		participant.setMid(mid);
+		log.info("dkdkdk"+ participant);
+		Participant isParticipant = classService.getIsparticipant(participant);
+		log.info("dkdkdk"+ isParticipant);
+		Map<String, Object> map = new HashMap<>();
+		map.put("classes", classes);
+		map.put("isParticipant", isParticipant);
+		log.info("map"+map);
+		return map;
 	}
 	
+	//클래스 신청 여부 받아오기 (단순 문자열이나 숫자를 받을 때는 requestparam을 사용해야 함)
+	@PostMapping("/classApply")
+	public int classApply(@RequestParam int cno, Authentication authentication) {
+		String mid = authentication.getName();
+		log.info("mid"+ mid);
+		log.info("applycno"+cno);
+		Participant participant = new Participant();
+		participant.setCno(cno);
+		participant.setMid(mid);
+		int ClassApply=classService.SetClassApply(participant);
+		log.info("스트링이 아니야"+ClassApply);
+		return ClassApply;
+	}
+	@DeleteMapping("/deleteClassApply/{cno}")
+	public void deleteClassApply(@PathVariable int cno, Authentication authentication) {
+		String mid = authentication.getName();
+		Participant participant = new Participant();
+		
+		participant.setCno(cno);
+		participant.setMid(mid);
+		
+		classService.deleteClassApply(participant);
+	}
+	//클래스 써메니일 갯수 받아오기
 	@GetMapping("/getThumbimgCount/{cno}")
 	public int getThumbimgCount(@PathVariable int cno) {
-		log.info("이잣기ㅇㅇ"+ cno);
 		int cont = classService.getThumbimgCount(cno);
-		log.info("이개숫자" + cont);
 		return  cont;
 	}
 	
+	//클래스 썸네일 이미지 다운로드
 	@GetMapping("/thumbattach/{cno}/{ctorder}")
 	public void downloadThumb(@PathVariable int cno, @PathVariable int ctorder, HttpServletResponse response) {
 		log.info("아무거");
@@ -76,6 +113,8 @@ public class ClassController {
 		}
 		
 	}
+	
+	//커리큘럼 이미지 다운로드
 	@GetMapping("/curriculumattach/{cno}/{cuorder}")
 	public void downloadCurriculum(@PathVariable int cno, @PathVariable int cuorder, HttpServletResponse response) {
 		Curriculum curriculum = new Curriculum();

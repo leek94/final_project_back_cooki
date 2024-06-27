@@ -8,6 +8,7 @@ import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Curriculum;
+import com.mycompany.webapp.dto.Participant;
 
 @Mapper
 public interface ClassDao {
@@ -24,6 +25,9 @@ public interface ClassDao {
 	public Curriculum selectByCurriculumimg(Curriculum curriculum);
 	public int deleteClassThumbnail(int cno);
 	public int selectByClassThumbCount(int cno);
+	public int insertClassApply(Participant participant);
+	public int deleteClassApply(Participant participant);
+	public Participant selectByisParticipant(Participant participant);
 	public int updateClassByCno(Classes classes);
 	public int updateClassItemByCno(ClassItem classItem);
 	public int deleteClassItemByCno(int cno);
