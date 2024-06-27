@@ -184,7 +184,25 @@ public class ClassService {
 
 	public void updateCurriculum(Curriculum curriculum, int cno) {
 		log.info("서비스 updateCurriculum 실행");
-		int deleteResult = classDao.deleteCurriculumByCno(cno);
-		log.info("서비스 updateCurriculum deleteCurriculumByCno 커리큘럼 정보 삭제 완료");
+		
+		//이미지가 null이 아닐 경우 update
+		MultipartFile fileImg = curriculum.getCuimg();
+		
+		if(fileImg != null) {
+			curriculum.setCuimgoname(fileImg.getOriginalFilename());
+			curriculum.setCuimgtype(fileImg.getContentType());
+			try {
+				curriculum.setCuimgdata(fileImg.getBytes());
+			} catch (IOException e) {
+			}
+		}
+		int updateResult = classDao.updateCurriculumByCno(curriculum);
+		log.info("서비스 updateCurriculumByCno 클래스 커리큘럼 정보 업데이트 성공");
+		
+
+		
+		//int deleteResult = classDao.deleteCurriculumByCno(cno);
+		//log.info("서비스 updateCurriculum deleteCurriculumByCno 커리큘럼 정보 삭제 완료");
+		
 	}
 }

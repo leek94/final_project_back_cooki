@@ -57,6 +57,14 @@
 	   )
 	</insert>
 	
+	<update id="updateCurriculumByCno" parameterType="curriculum">
+		update curriculum set cutitle=#{cutitle}, cucontent=#{cucontent}
+		<if test="cuimgoname !=null">
+		,cuimgoname=#{cuimgoname}, cuimgdata=#{cuimgdata}, cuimgtype=#{cuimgtype}
+		</if>
+		where cno=#{cno} and cuorder=#{cuorder}
+	</update>
+	
 	<delete id="deleteCurriculumByCno" parameterType="int">
 		delete from curriculum where cno=#{cno}
 	</delete>
