@@ -12,6 +12,7 @@ import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Curriculum;
+import com.mycompany.webapp.dto.Participant;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -83,14 +84,16 @@ public class ClassService {
 		classDao.insertCurriculum(curriculum);
 		log.info("서비스 createCurriculum insert curriculum");
 	}
-
+	//클래스 디테일 정보 받기 
 	public Classes getClasses(int cno) {
-		
 		classDao.updateBhitcount(cno);
 		Classes classes = classDao.selectByCno(cno);
 		return classes;
 	}
-
+	
+	public Participant getIsparticipant(Participant participant) {
+		return classDao.selectByisParticipant(participant);
+	}
 
 	public List<Curriculum> getCurriculumList(int cno) {
 		return classDao.selectCurriculumByCno(cno);
@@ -113,6 +116,15 @@ public class ClassService {
 
 	public int getThumbimgCount(int cno) {
 		return classDao.selectByClassThumbCount(cno);
+	}
+
+	public int SetClassApply(Participant participant) {
+		return classDao.insertClassApply(participant);
+	}
+
+	public int deleteClassApply(Participant participant) {
+		return classDao.deleteClassApply(participant);
+		
 	}	
 
 }

@@ -23,5 +23,6 @@
 	      <typeAlias alias="recipeItem" type="com.mycompany.webapp.dto.RecipeItem"/>
 	      <typeAlias alias="recipeProcess" type="com.mycompany.webapp.dto.RecipeProcess"/>
 	      <typeAlias alias="recipeReview" type="com.mycompany.webapp.dto.RecipeReview"/>
+	      <typeAlias alias="participant" type="com.mycompany.webapp.dto.Participant"/>
 	 </typeAliases> 
 </configuration>
