@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -164,11 +165,6 @@ public class ClassController {
 		log.info("컨트롤러 curriculumRegister 커리큘럼 객체 생성");
 	}
 	
-	@PutMapping("/classUpdate")
-	public void classUpdate() {
-		
-	}
-	
 	// 삭제하기 고민중 - 모집 7일전까지만 삭제 가능하게
 	
 	//path variable 방식으로
@@ -176,13 +172,26 @@ public class ClassController {
 	public Map<String, Object> getCurriculumAndItem(@PathVariable int cno) {
 		List<Curriculum> curriculums = classService.getCurriculumList(cno);
 		List<ClassItem> classItems = classService.getClassItemList(cno);
-		
+		//<front>에 data를 map 타입으로 보내줌
 		Map<String, Object> map = new HashMap<>();
 		map.put("curriculums", curriculums);
 		map.put("classItems", classItems);
 		return map;
 	}
 	
+	@PutMapping("/classUpdate")
+	public void classUpdate(Classes classes) {
+		log.info("컨트롤러 classUpdate 메소드 실행");
+		classService.updateClass(classes);
+		log.info("컨트롤러 classUpdate 클래스 기본 정보 업데이트");
+	}
+	
+	@PutMapping("/itemUpdate/{cno}")
+	public void itemUpdate(@RequestBody List<ClassItem> classItems, @PathVariable int cno) {
+		log.info("컨트롤러 itemUpdate 메소드 실행");
+		classService.updateItem(classItems, cno); 
+		log.info("컨트롤러 itemUpdate 클래스 재료 정보 업데이트");
+	}
 	
 	/*댓글*/
 	

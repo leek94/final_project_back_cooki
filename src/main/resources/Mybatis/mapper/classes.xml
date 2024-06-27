@@ -17,6 +17,14 @@
 	</insert>
 	<!-- hitcount -> 등록시에는 조회수가 없기 때문에 0으로 insert 해줌-->
 	
+	<update id="updateClassByCno" parameterType="classes">
+		update classes set ctitle=#{ctitle}, ccontent=#{ccontent}, 
+		cpersoncount=#{cpersoncount}, cprice=#{cprice}, caddress=#{caddress}, 
+		cenddate=#{cenddate}, cdday=#{cdday}, 
+		cstarttime=#{cstarttime}, cendtime=#{cendtime}, ctno=#{ctno}
+		where cno=#{cno}
+	</update>
+	
 	<insert id="insertClassThumbnail" parameterType="classThumbnail">
 	   insert into classThumbnail (
 	      ctorder, ctimgoname, ctimgdata, ctimgtype, cno
@@ -24,6 +32,10 @@
 	      #{ctorder}, #{ctimgoname}, #{ctimgdata}, #{ctimgtype}, #{cno}
 	   )
 	</insert>
+	
+	<delete id="deleteClassThumbnail" parameterType="int">
+		delete from classThumbnail where cno=#{cno}
+	</delete>
 	
 	<select id="selectByCno" parameterType="int" resultType="classes"> 
 	select cno, ctitle, ccontent, cpersoncount, cprice, 
@@ -52,6 +64,10 @@
 	      #{cino}, #{ciname}, #{cno}
 	   )
 	</insert>
+	
+	<delete id="deleteClassItemByCno" parameterType="int">
+		delete from classItem where cno = #{cno}
+	</delete>
 	
 	<!-- 썸네일 이미지 관련 정보를 제외한 커리큘럼 데이터 불러오기  -->
 	<select id="selectCurriculumByCno" parameterType="int" resultType="curriculum">

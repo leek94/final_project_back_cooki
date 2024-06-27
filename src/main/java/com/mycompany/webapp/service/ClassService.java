@@ -125,6 +125,59 @@ public class ClassService {
 	public int deleteClassApply(Participant participant) {
 		return classDao.deleteClassApply(participant);
 		
-	}	
+	}
 
+
+	public int updateClass(Classes classes) {
+		log.info("서비스 updateClass 메소드 실행");
+		classes.setMid("test123@naver.com");
+		// 썸네일 업데이트는 기존에 있던 data를 delete 하고 새로운 data를 insert 하는 방식으로 진행
+		MultipartFile[] fileImgs = classes.getCthumbnailimgs();
+		// 썸네일 이미지가 들어오는 경우
+		if (fileImgs != null) {
+			int cno = classes.getCno();
+			// 썸네일 이미지 업데이트 1단계: 기존 썸네일 이미지 data 모두 delete
+			int deleteResult = classDao.deleteClassThumbnail(cno);
+			// 썸네일 이미지 업데이트 2단계: 새로운 썸네일 이미지 data insert
+			for(int i=0; i<fileImgs.length; i++) {
+				//구조분해한 파일 객체를 저장해줄 dto 객체 선언
+				ClassThumbnail classThumbnail = new ClassThumbnail();
+				//객체별로 정보를 저장하기 위한 파일 객체 선언
+				MultipartFile fileImg = fileImgs[i];
+				//파일 객체에 정보 넣어주기
+				classThumbnail.setCtorder(i+1);
+				classThumbnail.setCtimgoname(fileImg.getOriginalFilename());
+				classThumbnail.setCtimgtype(fileImg.getContentType());
+				try {
+					classThumbnail.setCtimgdata(fileImg.getBytes());
+				} catch (Exception e) {
+				}
+				classThumbnail.setCno(cno);
+				classDao.insertClassThumbnail(classThumbnail);
+			}
+		}
+		log.info("서비스 updateClass 클래스 기본 정보 업데이트 성공");
+		return classDao.updateClassByCno(classes);
+	}
+
+	public void updateItem(List<ClassItem> classItems, int cno) {
+		log.info("서비스 updateItem 실행");
+		
+		// 재료 업데이트 1단계: 기존 재료 data 모두 삭제하기
+		int deleteResult = classDao.deleteClassItemByCno(cno);
+		log.info("서비스 deleteClassItemByCno");
+		
+		// 재료 업데이트 2단계: 새로운 재료 data 생성하기
+		for(int i=0; i<classItems.size(); i++) {
+			//cname 저장하기
+			ClassItem classItem = classItems.get(i);
+			//cino 저장하기
+			classItem.setCino(i+1);
+			//cno 저장하기
+			//재료가 모두 delete 되면 cno를 재료 테이블에서 받아올 수 없기 때문에 classes에서 받아온 cno로 넣어줘야함
+			classItem.setCno(cno);	
+			classDao.insertItem(classItem);
+			log.info("서비스 updateItem 클래스 재료 정보 업데이트 성공");
+		}
+	}
 }
