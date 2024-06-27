@@ -27,5 +27,6 @@ public interface ClassDao {
 	public int updateClassByCno(Classes classes);
 	public int updateClassItemByCno(ClassItem classItem);
 	public int deleteClassItemByCno(int cno);
+	public int deleteCurriculumByCno(int cno);
 	
 }

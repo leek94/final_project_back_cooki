@@ -57,6 +57,10 @@
 	   )
 	</insert>
 	
+	<delete id="deleteCurriculumByCno" parameterType="int">
+		delete from curriculum where cno=#{cno}
+	</delete>
+	
 	<insert id="insertItem" parameterType="classItem">
 	   insert into classItem (
 	      cino, ciname, cno

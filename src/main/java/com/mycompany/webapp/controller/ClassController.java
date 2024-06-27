@@ -154,6 +154,13 @@ public class ClassController {
 		log.info("컨트롤러 itemUpdate 클래스 재료 정보 업데이트");
 	}
 	
+	@PutMapping("/curriculumUpdate/{cno}")
+	public void curriculumUpdate(Curriculum curriculum, @PathVariable int cno) {
+		log.info("컨트롤러 curriculumUpdate 메소드 실행");
+		classService.updateCurriculum(curriculum, cno);
+		log.info("컨트롤러 curriculumUpdate 클래스 커리큘럼 정보 업데이트");
+	}
+	
 	/*댓글*/
 	
 	@GetMapping("/reviewList")
