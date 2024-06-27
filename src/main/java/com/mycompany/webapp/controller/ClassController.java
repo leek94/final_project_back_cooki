@@ -44,9 +44,17 @@ public class ClassController {
 		return classes;
 	}
 	
+	@GetMapping("/getThumbimgCount/{cno}")
+	public int getThumbimgCount(@PathVariable int cno) {
+		log.info("이잣기ㅇㅇ"+ cno);
+		int cont = classService.getThumbimgCount(cno);
+		log.info("이개숫자" + cont);
+		return  cont;
+	}
+	
 	@GetMapping("/thumbattach/{cno}/{ctorder}")
 	public void downloadThumb(@PathVariable int cno, @PathVariable int ctorder, HttpServletResponse response) {
-		
+		log.info("아무거");
 		ClassThumbnail classThumb = new ClassThumbnail();
 		classThumb.setCno(cno);
 		classThumb.setCtorder(ctorder);

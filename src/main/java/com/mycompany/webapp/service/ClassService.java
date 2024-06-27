@@ -109,6 +109,41 @@ public class ClassService {
 	public Curriculum getCurriculumimg(Curriculum curriculum) {
 		
 		return classDao.selectByCurriculumimg(curriculum);
-	}	
+	}
+
+	public int getThumbimgCount(int cno) {
+		return classDao.selectByClassThumbCount(cno);
+	}
+
+
+	public int updateClass(Classes classes) {
+		log.info("서비스 updateClass 메소드 실행");
+		classes.setMid("test123@naver.com");
+		MultipartFile[] fileImgs = classes.getCthumbnailimgs();
+		if (fileImgs != null) {
+			int cno = classes.getCno();
+			int deleteResult = classDao.deleteClassThumbnail(cno);
+			for(int i=0; i<fileImgs.length; i++) {
+				//구조분해한 파일 객체를 저장해줄 dto 객체 선언
+				ClassThumbnail classThumbnail = new ClassThumbnail();
+				//객체별로 정보를 저장하기 위한 파일 객체 선언
+				MultipartFile fileImg = fileImgs[i];
+				//파일 객체에 정보 넣어주기
+				classThumbnail.setCtorder(i+1);
+				classThumbnail.setCtimgoname(fileImg.getOriginalFilename());
+				classThumbnail.setCtimgtype(fileImg.getContentType());
+				try {
+					classThumbnail.setCtimgdata(fileImg.getBytes());
+				} catch (Exception e) {
+				}
+				classThumbnail.setCno(cno);
+				
+				classDao.insertClassThumbnail(classThumbnail);
+			}
+		}
+		log.info("서비스 updateClass 업데이트 됨");
+		return classDao.updateClassByCno(classes);
+	}
+
 
 }
