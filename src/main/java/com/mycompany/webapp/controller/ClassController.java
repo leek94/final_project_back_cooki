@@ -46,32 +46,44 @@ public class ClassController {
 	public Map<String, Object> classDetail(@PathVariable int cno, Authentication authentication) {
 		String mid = authentication.getName();
 		Classes classes = classService.getClasses(cno);
+		//클래스 마감 여부 가져오기
+		boolean overPeople = classService.isOverPeople(cno, classes.getCpersoncount());
+		Map<String, Object> map = new HashMap<>();
+		if(overPeople) {
+			map.put("result", "fail");
+		} else {
+			map.put("result","success");
+		}
+		
+		// 클래스 신청 여부 가져오기 
 		Participant participant= new Participant();
 		participant.setCno(cno);
 		participant.setMid(mid);
-		log.info("dkdkdk"+ participant);
 		Participant isParticipant = classService.getIsparticipant(participant);
-		log.info("dkdkdk"+ isParticipant);
-		Map<String, Object> map = new HashMap<>();
 		map.put("classes", classes);
 		map.put("isParticipant", isParticipant);
-		log.info("map"+map);
 		return map;
 	}
 	
 	//클래스 신청 여부 받아오기 (단순 문자열이나 숫자를 받을 때는 requestparam을 사용해야 함)
 	@PostMapping("/classApply")
-	public int classApply(@RequestParam int cno, Authentication authentication) {
+	public Map<String, Object> classApply(@RequestParam int cno, @RequestParam int cpersoncount, Authentication authentication) {
+		boolean overPeople = classService.isOverPeople(cno, cpersoncount);
 		String mid = authentication.getName();
-		log.info("mid"+ mid);
-		log.info("applycno"+cno);
 		Participant participant = new Participant();
 		participant.setCno(cno);
 		participant.setMid(mid);
-		int ClassApply=classService.SetClassApply(participant);
-		log.info("스트링이 아니야"+ClassApply);
-		return ClassApply;
+		Map<String, Object> map = new HashMap<>();
+		if(overPeople) {
+			map.put("result", "fail");
+		} else {
+			map.put("result","success");
+			int ClassApply=classService.SetClassApply(participant);
+			map.put("classApply",ClassApply);
+		}
+		return map;
 	}
+	
 	@DeleteMapping("/deleteClassApply/{cno}")
 	public void deleteClassApply(@PathVariable int cno, Authentication authentication) {
 		String mid = authentication.getName();

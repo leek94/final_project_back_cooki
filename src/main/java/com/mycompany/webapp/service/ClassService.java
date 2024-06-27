@@ -180,4 +180,13 @@ public class ClassService {
 			log.info("서비스 updateItem 클래스 재료 정보 업데이트 성공");
 		}
 	}
+
+	public boolean isOverPeople(int cno, int cpersoncount) {
+		int participants = classDao.selectCpersoncountByCno(cno);
+		if(participants<=cpersoncount) {
+			return false;
+		}else {
+			return true;
+		}
+	}
 }

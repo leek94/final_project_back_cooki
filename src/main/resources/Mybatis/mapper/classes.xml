@@ -117,6 +117,10 @@
 	delete from participant 
 	where cno= #{cno} and mid=#{mid}
 	</delete>
-
+	
+	<select id="selectCpersoncountByCno" parameterType="int" resultType="int">
+	select count(*) from participant
+	where cno=#{cno}
+	</select>
 
 </mapper>
