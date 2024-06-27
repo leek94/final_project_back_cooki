@@ -22,8 +22,10 @@ public interface ClassDao {
 	public List<ClassItem> selectClassItemByCno(int cno);
 	public ClassThumbnail selectByClassThumbnail(ClassThumbnail classThumb);
 	public Curriculum selectByCurriculumimg(Curriculum curriculum);
-	public int updateClassByCno(Classes classes);
 	public int deleteClassThumbnail(int cno);
 	public int selectByClassThumbCount(int cno);
+	public int updateClassByCno(Classes classes);
+	public int updateClassItemByCno(ClassItem classItem);
+	public int deleteClassItemByCno(int cno);
 	
 }

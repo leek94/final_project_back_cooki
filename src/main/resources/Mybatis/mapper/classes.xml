@@ -65,6 +65,10 @@
 	   )
 	</insert>
 	
+	<delete id="deleteClassItemByCno" parameterType="int">
+		delete from classItem where cno = #{cno}
+	</delete>
+	
 	<!-- 썸네일 이미지 관련 정보를 제외한 커리큘럼 데이터 불러오기  -->
 	<select id="selectCurriculumByCno" parameterType="int" resultType="curriculum">
 	   select cuorder, cutitle, cucontent, cno
