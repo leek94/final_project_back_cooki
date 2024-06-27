@@ -131,6 +131,7 @@ public class ClassService {
 	public int updateClass(Classes classes) {
 		log.info("서비스 updateClass 메소드 실행");
 		classes.setMid("test123@naver.com");
+		// 썸네일 제외 data는 update로 진행
 		// 썸네일 업데이트는 기존에 있던 data를 delete 하고 새로운 data를 insert 하는 방식으로 진행
 		MultipartFile[] fileImgs = classes.getCthumbnailimgs();
 		// 썸네일 이미지가 들어오는 경우
@@ -188,5 +189,29 @@ public class ClassService {
 		}else {
 			return true;
 		}
+	}
+
+	public void updateCurriculum(Curriculum curriculum, int cno) {
+		log.info("서비스 updateCurriculum 실행");
+		
+		//이미지가 null이 아닐 경우 update
+		MultipartFile fileImg = curriculum.getCuimg();
+		
+		if(fileImg != null) {
+			curriculum.setCuimgoname(fileImg.getOriginalFilename());
+			curriculum.setCuimgtype(fileImg.getContentType());
+			try {
+				curriculum.setCuimgdata(fileImg.getBytes());
+			} catch (IOException e) {
+			}
+		}
+		int updateResult = classDao.updateCurriculumByCno(curriculum);
+		log.info("서비스 updateCurriculumByCno 클래스 커리큘럼 정보 업데이트 성공");
+		
+
+		
+		//int deleteResult = classDao.deleteCurriculumByCno(cno);
+		//log.info("서비스 updateCurriculum deleteCurriculumByCno 커리큘럼 정보 삭제 완료");
+		
 	}
 }
