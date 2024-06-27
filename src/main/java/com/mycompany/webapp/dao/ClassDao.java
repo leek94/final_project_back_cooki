@@ -26,5 +26,4 @@ public interface ClassDao {
 	public int deleteClassThumbnail(int cno);
 	public int selectByClassThumbCount(int cno);
 	
-	
 }
