@@ -17,4 +17,6 @@ public class Curriculum { //커리큘럼
 	private MultipartFile cuimg; 
 	//front에서 받은 이미지 파일을 사용하기 위한 필드 선언
 	//service에서 oname, data, type 받기
+	
+	private Integer culength; //커리큘럼 길이(갯수)
 }

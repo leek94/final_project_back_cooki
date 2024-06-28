@@ -201,19 +201,95 @@ public class ClassService {
 	public void updateCurriculum(Curriculum curriculum, int cno) {
 		log.info("서비스 updateCurriculum 실행");
 		
-		//이미지가 null이 아닐 경우 update
-		MultipartFile fileImg = curriculum.getCuimg();
+		int cuOrder = curriculum.getCuorder();
+		int cuLength = curriculum.getCulength();
+		int cuRow = classDao.selectCurriculumRowBycno(cno);
 		
-		if(fileImg != null) {
-			curriculum.setCuimgoname(fileImg.getOriginalFilename());
-			curriculum.setCuimgtype(fileImg.getContentType());
-			try {
-				curriculum.setCuimgdata(fileImg.getBytes());
-			} catch (IOException e) {
+		// <front>에서 받아온 커리큘럼 번호가 db보다 클 경우
+		// -> 같은 부분까지는 update / 초과인 부분은 insert
+		if (cuLength > cuRow) {
+			log.info("커리큘럼이 기존보다 추가 됨");
+			if(cuOrder> cuRow) {
+				MultipartFile fileImg = curriculum.getCuimg();
+				if(fileImg != null) {
+					curriculum.setCuimgoname(fileImg.getOriginalFilename());
+					curriculum.setCuimgtype(fileImg.getContentType());
+					try {
+						curriculum.setCuimgdata(fileImg.getBytes());
+					} catch (IOException e) {
+					}
+				}
+				int insertResult = classDao.insertCurriculum(curriculum);
+				log.info("커리큘럼 추가 부분 insert 됨");
+			} else {
+				MultipartFile fileImg = curriculum.getCuimg();
+				log.info("커리큘럼 추가 fileImg:", fileImg);
+				if(fileImg != null) {
+					curriculum.setCuimgoname(fileImg.getOriginalFilename());
+					curriculum.setCuimgtype(fileImg.getContentType());
+					try {
+						curriculum.setCuimgdata(fileImg.getBytes());
+					} catch (IOException e) {
+					}
+				}
+				int updateResult = classDao.updateCurriculumByCno(curriculum);
+				log.info("커리큘럼 같은 부분 update 됨");
+			}	
+		}
+		
+		// <front>에서 받아온 커리큘럼 번호가 db와 같을 경우
+		// -> 모두 update
+		else if (cuLength == cuRow) {
+			log.info("커리큘럼이 기존과 같음");
+			//이미지가 null이 아닐 경우 update
+			MultipartFile fileImg = curriculum.getCuimg();
+
+			if(fileImg != null) {
+				curriculum.setCuimgoname(fileImg.getOriginalFilename());
+				curriculum.setCuimgtype(fileImg.getContentType());
+				try {
+					curriculum.setCuimgdata(fileImg.getBytes());
+				} catch (IOException e) {
+				}
+			}
+			int updateResult = classDao.updateCurriculumByCno(curriculum);
+			log.info("서비스 updateCurriculumByCno 클래스 커리큘럼 정보 업데이트 성공");
+		}
+		
+		// <front>에서 받아온 커리큘럼 번호가 db 보다 작을 경우
+		// -> 들어온 부분 모두 update / 줄어든 부분은 delete
+		else if (cuLength < cuRow) {
+			log.info("커리큘럼이 기존보다 줄어듬");
+			
+			MultipartFile fileImg = curriculum.getCuimg();
+
+			if(fileImg != null) {
+				curriculum.setCuimgoname(fileImg.getOriginalFilename());
+				curriculum.setCuimgtype(fileImg.getContentType());
+				try {
+					curriculum.setCuimgdata(fileImg.getBytes());
+				} catch (IOException e) {
+				}
+			}
+			int updateResult = classDao.updateCurriculumByCno(curriculum);
+			log.info("커리큘럼 같은 부분 update 됨");
+			
+			if(cuOrder == cuLength) {	
+				for(int overOrder=cuLength+1; overOrder<=cuRow; overOrder++) {
+					int deleteResult = classDao.deleteCurriculumRowBycuorder(cno, overOrder);
+				} 
+				log.info("커리큘럼 줄어든 부분 delete 됨");
 			}
 		}
-		int updateResult = classDao.updateCurriculumByCno(curriculum);
-		log.info("서비스 updateCurriculumByCno 클래스 커리큘럼 정보 업데이트 성공");
+		
+		
+		
+
+		
+		
+		
+		
+
 		
 
 		

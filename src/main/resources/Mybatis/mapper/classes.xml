@@ -59,7 +59,7 @@
 	
 	<update id="updateCurriculumByCno" parameterType="curriculum">
 		update curriculum set cutitle=#{cutitle}, cucontent=#{cucontent}
-		<if test="cuimgoname !=null">
+		<if test="cuimgoname != null">
 		,cuimgoname=#{cuimgoname}, cuimgdata=#{cuimgdata}, cuimgtype=#{cuimgtype}
 		</if>
 		where cno=#{cno} and cuorder=#{cuorder}
@@ -107,6 +107,17 @@
 		from curriculum
 		where cno= #{cno} and cuorder = #{cuorder}
 	</select>
+	
+	<select id="selectCurriculumRowBycno" parameterType="int" resultType="int">
+		select count(*)
+		from curriculum
+		where cno= #{cno}
+	</select>
+	
+	<delete id="deleteCurriculumRowBycuorder" parameterType="int">
+		delete from curriculum 
+		where cno= #{cno} and cuorder = #{cuorder}
+	</delete>
 	
 	<select id="selectByClassThumbCount" parameterType="int" resultType="int">
 		select count(*)

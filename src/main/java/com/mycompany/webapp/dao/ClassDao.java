@@ -16,7 +16,7 @@ public interface ClassDao {
 	public int insertClass(Classes classes);
 	public int insertClassThumbnail(ClassThumbnail classThumbnail);
 	public int insertItem(ClassItem classItem);
-	public void insertCurriculum(Curriculum curriculum);
+	public int insertCurriculum(Curriculum curriculum);
 	public int updateBhitcount(int cno);
 	public Classes selectByCno(int cno);
 	public List<Curriculum> selectCurriculumByCno(int cno);
@@ -34,5 +34,7 @@ public interface ClassDao {
 	public int selectCpersoncountByCno(int cno);
 	public int deleteCurriculumByCno(int cno);
 	public int updateCurriculumByCno(Curriculum curriculum);
+	public int selectCurriculumRowBycno(int cno);
+	public int deleteCurriculumRowBycuorder(int cno, int cuorder);
 	
 }
