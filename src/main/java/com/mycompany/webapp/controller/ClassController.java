@@ -46,7 +46,7 @@ public class ClassController {
 	public Map<String, Object> classDetail(@PathVariable int cno, Authentication authentication) {
 		//로그인 시 신청 여부를 판단하여 가져오기
 		if(authentication == null) {
-			
+			 
 			return null;
 		} else {
 			String mid = authentication.getName();

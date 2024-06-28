@@ -193,7 +193,7 @@ public class ClassService {
 		if(participants>=cpersoncount) {
 			map.put("result", false);
 		}else {
-			map.put("result", true);
+			map.put("result", true); 
 		}
 		return map;
 	}
