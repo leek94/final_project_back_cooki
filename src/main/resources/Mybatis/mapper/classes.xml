@@ -108,13 +108,13 @@
 		where cno= #{cno} and cuorder = #{cuorder}
 	</select>
 	
-	<select id="selectCurriculumRowBycno" parameterType="int" resultType="int">
+	<select id="selectCurriculumCountBycno" parameterType="int" resultType="int">
 		select count(*)
 		from curriculum
 		where cno= #{cno}
 	</select>
 	
-	<delete id="deleteCurriculumRowBycuorder" parameterType="int">
+	<delete id="deleteCurriculumCountBycuorder" parameterType="int">
 		delete from curriculum 
 		where cno= #{cno} and cuorder = #{cuorder}
 	</delete>

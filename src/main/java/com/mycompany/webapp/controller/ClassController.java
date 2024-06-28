@@ -159,7 +159,7 @@ public class ClassController {
 		Map<String, Integer> map = new HashMap<>();
 		//map("key", value) -> <front> response.data.cno(=key) -> 저장된 cno(value) 번호 알 수 있음
 		map.put("cno", classes.getCno());
-		log.info("map 값"+ map.toString());
+		//log.info("map 값"+ map.toString());
 		return map;
 	}
 	
