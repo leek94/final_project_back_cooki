@@ -29,7 +29,7 @@ public class ClassService {
 	public void createClass(Classes classes) {
 		//<front>에서 axios를 통해 넘겨받지 못한 not null 필드값들을 service에서 설정해줘야 함
 		log.info("서비스 createClass 메소드 실행");
-		classes.setCtno(1);
+		classes.setCround(1);
 		classDao.insertClass(classes);
 		log.info("서비스 createClass insertClass");
 		
