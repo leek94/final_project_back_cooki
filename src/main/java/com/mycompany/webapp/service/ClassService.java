@@ -1,7 +1,9 @@
 package com.mycompany.webapp.service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -182,13 +184,18 @@ public class ClassService {
 		}
 	}
 
-	public boolean isOverPeople(int cno, int cpersoncount) {
+	public Map<String,Object> isOverPeople(int cno, int cpersoncount) {
+		Map<String, Object> map = new HashMap<>();
 		int participants = classDao.selectCpersoncountByCno(cno);
-		if(participants<=cpersoncount) {
-			return false;
+		log.info("part"+participants);
+		log.info("cper"+cpersoncount);
+		map.put("participants", participants);
+		if(participants>=cpersoncount) {
+			map.put("result", false);
 		}else {
-			return true;
+			map.put("result", true);
 		}
+		return map;
 	}
 
 	public void updateCurriculum(Curriculum curriculum, int cno) {
