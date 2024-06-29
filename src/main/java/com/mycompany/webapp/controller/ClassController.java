@@ -180,9 +180,9 @@ public class ClassController {
 	}
 	
 	@PostMapping("/itemRegister")
-	public void itemRegister(ClassItem classItem) {
+	public void itemRegister(@RequestBody List<ClassItem> classItems) {
 		log.info("컨트롤러 itemRegister 메소드 실행");
-		classService.createItem(classItem);
+		classService.createItem(classItems);
 		log.info("컨트롤러 itemRegister 클래스아이템 객체 생성");
 	}
 	
@@ -214,17 +214,17 @@ public class ClassController {
 		log.info("컨트롤러 classUpdate 클래스 기본 정보 업데이트");
 	}
 	
-	@PutMapping("/itemUpdate/{cno}")
-	public void itemUpdate(@RequestBody List<ClassItem> classItems, @PathVariable int cno) {
+	@PutMapping("/itemUpdate")
+	public void itemUpdate(@RequestBody List<ClassItem> classItems) {
 		log.info("컨트롤러 itemUpdate 메소드 실행");
-		classService.updateItem(classItems, cno); 
+		classService.updateItem(classItems); 
 		log.info("컨트롤러 itemUpdate 클래스 재료 정보 업데이트");
 	}
 	
-	@PutMapping("/curriculumUpdate/{cno}")
-	public void curriculumUpdate(Curriculum curriculum, @PathVariable int cno) {
+	@PutMapping("/curriculumUpdate")
+	public void curriculumUpdate(Curriculum curriculum) {
 		log.info("컨트롤러 curriculumUpdate 메소드 실행");
-		classService.updateCurriculum(curriculum, cno);
+		classService.updateCurriculum(curriculum);
 		log.info("컨트롤러 curriculumUpdate 클래스 커리큘럼 정보 업데이트");
 	}
 	
