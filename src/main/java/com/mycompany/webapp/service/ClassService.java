@@ -29,8 +29,6 @@ public class ClassService {
 	public void createClass(Classes classes) {
 		//<front>에서 axios를 통해 넘겨받지 못한 not null 필드값들을 service에서 설정해줘야 함
 		log.info("서비스 createClass 메소드 실행");
-		classes.setMid("test123@naver.com");
-		classes.setCtno(1);
 		classes.setCround(1);
 		classDao.insertClass(classes);
 		log.info("서비스 createClass insertClass");
@@ -63,9 +61,11 @@ public class ClassService {
 	}
 	
 	//클래스 재료 정보를 데이터베이스에 저장하기위한 로직
-	public void createItem(ClassItem classItem) {
+	public void createItem(List<ClassItem> classItems) {
 		log.info("서비스 createItem 메소드 실행");
-		classDao.insertItem(classItem);
+		for(int i=0; i<classItems.size(); i++) {
+			classDao.insertItem(classItems.get(i));
+		}
 		log.info("서비스 createItem insert classItem");
 	}
 	
@@ -133,7 +133,6 @@ public class ClassService {
 
 	public int updateClass(Classes classes) {
 		log.info("서비스 updateClass 메소드 실행");
-		classes.setMid("test123@naver.com");
 		// 썸네일 제외 data는 update로 진행
 		// 썸네일 업데이트는 기존에 있던 data를 delete 하고 새로운 data를 insert 하는 방식으로 진행
 		MultipartFile[] fileImgs = classes.getCthumbnailimgs();
@@ -164,8 +163,9 @@ public class ClassService {
 		return classDao.updateClassByCno(classes);
 	}
 
-	public void updateItem(List<ClassItem> classItems, int cno) {
+	public void updateItem(List<ClassItem> classItems) {
 		log.info("서비스 updateItem 실행");
+		int cno = classItems.get(0).getCno();
 		
 		// 재료 업데이트 1단계: 기존 재료 data 모두 삭제하기
 		int deleteResult = classDao.deleteClassItemByCno(cno);
@@ -175,14 +175,9 @@ public class ClassService {
 		for(int i=0; i<classItems.size(); i++) {
 			//cname 저장하기
 			ClassItem classItem = classItems.get(i);
-			//cino 저장하기
-			classItem.setCino(i+1);
-			//cno 저장하기
-			//재료가 모두 delete 되면 cno를 재료 테이블에서 받아올 수 없기 때문에 classes에서 받아온 cno로 넣어줘야함
-			classItem.setCno(cno);	
 			classDao.insertItem(classItem);
-			log.info("서비스 updateItem 클래스 재료 정보 업데이트 성공");
 		}
+		log.info("서비스 updateItem 클래스 재료 정보 업데이트 성공");
 	}
 
 	public Map<String,Object> isOverPeople(int cno, int cpersoncount) {
@@ -200,40 +195,32 @@ public class ClassService {
 		return map;
 	}
 
-	public void updateCurriculum(Curriculum curriculum, int cno) {
+	public void updateCurriculum(Curriculum curriculum) {
 		log.info("서비스 updateCurriculum 실행");
 		
+		int cno = curriculum.getCno();
 		int cuOrder = curriculum.getCuorder();
 		int cuLength = curriculum.getCulength();
 		int cuRow = classDao.selectCurriculumRowBycno(cno);
+		
+		MultipartFile fileImg = curriculum.getCuimg();
+		if(fileImg != null) {
+			curriculum.setCuimgoname(fileImg.getOriginalFilename());
+			curriculum.setCuimgtype(fileImg.getContentType());
+			try {
+				curriculum.setCuimgdata(fileImg.getBytes());
+			} catch (IOException e) {
+			}
+		}
 		
 		// <front>에서 받아온 커리큘럼 번호가 db보다 클 경우
 		// -> 같은 부분까지는 update / 초과인 부분은 insert
 		if (cuLength > cuRow) {
 			log.info("커리큘럼이 기존보다 추가 됨");
 			if(cuOrder> cuRow) {
-				MultipartFile fileImg = curriculum.getCuimg();
-				if(fileImg != null) {
-					curriculum.setCuimgoname(fileImg.getOriginalFilename());
-					curriculum.setCuimgtype(fileImg.getContentType());
-					try {
-						curriculum.setCuimgdata(fileImg.getBytes());
-					} catch (IOException e) {
-					}
-				}
 				int insertResult = classDao.insertCurriculum(curriculum);
 				log.info("커리큘럼 추가 부분 insert 됨");
 			} else {
-				MultipartFile fileImg = curriculum.getCuimg();
-				log.info("커리큘럼 추가 fileImg:", fileImg);
-				if(fileImg != null) {
-					curriculum.setCuimgoname(fileImg.getOriginalFilename());
-					curriculum.setCuimgtype(fileImg.getContentType());
-					try {
-						curriculum.setCuimgdata(fileImg.getBytes());
-					} catch (IOException e) {
-					}
-				}
 				int updateResult = classDao.updateCurriculumByCno(curriculum);
 				log.info("커리큘럼 같은 부분 update 됨");
 			}	
@@ -244,16 +231,6 @@ public class ClassService {
 		else if (cuLength == cuRow) {
 			log.info("커리큘럼이 기존과 같음");
 			//이미지가 null이 아닐 경우 update
-			MultipartFile fileImg = curriculum.getCuimg();
-
-			if(fileImg != null) {
-				curriculum.setCuimgoname(fileImg.getOriginalFilename());
-				curriculum.setCuimgtype(fileImg.getContentType());
-				try {
-					curriculum.setCuimgdata(fileImg.getBytes());
-				} catch (IOException e) {
-				}
-			}
 			int updateResult = classDao.updateCurriculumByCno(curriculum);
 			log.info("서비스 updateCurriculumByCno 클래스 커리큘럼 정보 업데이트 성공");
 		}
@@ -262,17 +239,6 @@ public class ClassService {
 		// -> 들어온 부분 모두 update / 줄어든 부분은 delete
 		else if (cuLength < cuRow) {
 			log.info("커리큘럼이 기존보다 줄어듬");
-			
-			MultipartFile fileImg = curriculum.getCuimg();
-
-			if(fileImg != null) {
-				curriculum.setCuimgoname(fileImg.getOriginalFilename());
-				curriculum.setCuimgtype(fileImg.getContentType());
-				try {
-					curriculum.setCuimgdata(fileImg.getBytes());
-				} catch (IOException e) {
-				}
-			}
 			int updateResult = classDao.updateCurriculumByCno(curriculum);
 			log.info("커리큘럼 같은 부분 update 됨");
 			
@@ -283,20 +249,5 @@ public class ClassService {
 				log.info("커리큘럼 줄어든 부분 delete 됨");
 			}
 		}
-		
-		
-		
-
-		
-		
-		
-		
-
-		
-
-		
-		//int deleteResult = classDao.deleteCurriculumByCno(cno);
-		//log.info("서비스 updateCurriculum deleteCurriculumByCno 커리큘럼 정보 삭제 완료");
-		
 	}
 }

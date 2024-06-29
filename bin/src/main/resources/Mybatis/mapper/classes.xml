@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.webapp.dao.ClassDao">
+
+	<insert id="insertClass" parameterType="classes">
+	   <selectKey keyProperty="cno" resultType="int" order="BEFORE">
+	      select seq_cno.nextval from dual
+	   </selectKey>
+	   insert into classes (
+	      cno, ctitle, ccontent, cpersoncount, cprice, caddress, cstartdate,
+	      cenddate, cdday, cstarttime, cendtime, chitcount, cround, mid, ctno
+	   ) values (
+	      #{cno}, #{ctitle}, #{ccontent}, #{cpersoncount}, #{cprice}, #{caddress}, #{cstartdate},
+	      #{cenddate}, #{cdday}, #{cstarttime}, #{cendtime}, 0, #{cround}, #{mid}, #{ctno} 
+	   )
+	   
+	</insert>
+	<!-- hitcount -> 등록시에는 조회수가 없기 때문에 0으로 insert 해줌-->
+	
+	<update id="updateClassByCno" parameterType="classes">
+		update classes set ctitle=#{ctitle}, ccontent=#{ccontent}, 
+		cpersoncount=#{cpersoncount}, cprice=#{cprice}, caddress=#{caddress}, 
+		cenddate=#{cenddate}, cdday=#{cdday}, 
+		cstarttime=#{cstarttime}, cendtime=#{cendtime}, ctno=#{ctno}
+		where cno=#{cno}
+	</update>
+	
+	<insert id="insertClassThumbnail" parameterType="classThumbnail">
+	   insert into classThumbnail (
+	      ctorder, ctimgoname, ctimgdata, ctimgtype, cno
+	   ) values (
+	      #{ctorder}, #{ctimgoname}, #{ctimgdata}, #{ctimgtype}, #{cno}
+	   )
+	</insert>
+	
+	<delete id="deleteClassThumbnail" parameterType="int">
+		delete from classThumbnail where cno=#{cno}
+	</delete>
+	
+	<select id="selectByCno" parameterType="int" resultType="classes"> 
+	select cno, ctitle, ccontent, cpersoncount, cprice, 
+	caddress, cstartdate, cenddate, cdday, cstarttime, cendtime,chitcount,cround, classes.mid, classes.ctno, ctname, mnickname
+	from classes, category, member
+	where cno=#{cno} and classes.ctno= category.ctno and classes.mid=member.mid
+	</select>
+	
+	<update id="updateBhitcount" parameterType="int">
+	update classes set chitcount=chitcount+1 
+	where cno=#{cno}
+	</update>
+	
+	<insert id="insertCurriculum" parameterType="curriculum">
+	   insert into curriculum (
+	      cuorder, cutitle, cucontent, cuimgoname, cuimgdata, cuimgtype, cno
+	   ) values (
+	      #{cuorder}, #{cutitle}, #{cucontent}, #{cuimgoname}, #{cuimgdata}, #{cuimgtype}, #{cno}
+	   )
+	</insert>
+	
+	<update id="updateCurriculumByCno" parameterType="curriculum">
+		update curriculum set cutitle=#{cutitle}, cucontent=#{cucontent}
+		<if test="cuimgoname != null">
+		,cuimgoname=#{cuimgoname}, cuimgdata=#{cuimgdata}, cuimgtype=#{cuimgtype}
+		</if>
+		where cno=#{cno} and cuorder=#{cuorder}
+	</update>
+	
+	<delete id="deleteCurriculumByCno" parameterType="int">
+		delete from curriculum where cno=#{cno}
+	</delete>
+	
+	<insert id="insertItem" parameterType="classItem">
+	   insert into classItem (
+	      cino, ciname, cno
+	   ) values (
+	      #{cino}, #{ciname}, #{cno}
+	   )
+	</insert>
+	
+	<delete id="deleteClassItemByCno" parameterType="int">
+		delete from classItem where cno = #{cno}
+	</delete>
+	
+	<!-- 썸네일 이미지 관련 정보를 제외한 커리큘럼 데이터 불러오기  -->
+	<select id="selectCurriculumByCno" parameterType="int" resultType="curriculum">
+	   select cuorder, cutitle, cucontent, cno
+	   from curriculum
+	   where cno = #{cno}
+	   order by cuorder 
+	</select>
+	
+	<!-- 재료 데이터 불러오기 -->
+	<select id="selectClassItemByCno" parameterType="int" resultType="classItem">
+	   select cino, ciname, cno
+	   from classItem
+	   where cno = #{cno}
+	</select>
+	
+	<select id="selectByClassThumbnail" parameterType="classThumbnail" resultType="classThumbnail">
+		select ctorder, ctimgoname, ctimgdata, ctimgtype, cno
+		from classThumbnail
+		where cno = #{cno} and ctorder = #{ctorder}
+	</select>
+	
+	<select id="selectByCurriculumimg" parameterType="curriculum" resultType="curriculum">
+		select cuorder, cuimgoname, cuimgdata, cuimgtype, cno
+		from curriculum
+		where cno= #{cno} and cuorder = #{cuorder}
+	</select>
+	
+	<select id="selectCurriculumRowBycno" parameterType="int" resultType="int">
+		select count(*)
+		from curriculum
+		where cno= #{cno}
+	</select>
+	
+	<delete id="deleteCurriculumRowBycuorder" parameterType="int">
+		delete from curriculum 
+		where cno= #{cno} and cuorder = #{cuorder}
+	</delete>
+	
+	<select id="selectByClassThumbCount" parameterType="int" resultType="int">
+		select count(*)
+		from classThumbnail
+		where cno= #{cno}
+	</select>
+	
+	<!-- 클래스 참석 여부 -->
+	<insert id="insertClassApply" parameterType="participant">
+	insert into Participant(cno, mid, isparticipant, pdate)
+	values(#{cno}, #{mid}, 1, systimestamp)
+	</insert>
+	
+	<select id="selectByisParticipant" parameterType="participant" resultType="participant">
+	select * from participant 
+	where cno=#{cno} and mid=#{mid}
+	</select>
+	
+	<delete id="deleteClassApply" parameterType="participant">
+	delete from participant 
+	where cno= #{cno} and mid=#{mid}
+	</delete>
+	
+	<select id="selectCpersoncountByCno" parameterType="int" resultType="int">
+	select count(*) from participant
+	where cno=#{cno}
+	</select>
+
+</mapper>
