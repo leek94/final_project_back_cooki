@@ -44,72 +44,41 @@ public class ClassController {
 	//PathVarialble로 bno 받음
 	@GetMapping("/classDetail/{cno}")
 	public Map<String, Object> classDetail(@PathVariable int cno, Authentication authentication) {
-		//로그인 시 신청 여부를 판단하여 가져오기
+		//로그인 하지 않은 사용자가 디테일 페이지를 볼 수 있게 한다
 		if(authentication == null) {
 			 
 			return null;
+		//사용자가 로그인했다면 클래스를 신청했는지 여부를 받아온다
 		} else {
+			//
 			String mid = authentication.getName();
-			// 클래스 값 받아오기
+			// 클래스 디테일 정보 가져오기
 			Classes classes = classService.getClasses(cno);
-			//클래스 인원 마감 여부 받아오기
-			Map<String,Object> overPeople = classService.isOverPeople(cno, classes.getCpersoncount());
 			
-			Map<String, Object> map = new HashMap<>();
-			log.info("lf"+overPeople.get("result"));
-			
-			if(overPeople.get("result").equals(false) ) {
-				log.info("실행실패");
-				map.put("result", "fail");
-			} else {
-				log.info("실행성공");
-				map.put("result","success");
-			}
-			log.info("ee"+overPeople.get("participants"));
-			// 클래스 신청 여부 가져오기 
+			// 클래스 신청 여부를 가져오기 
 			Participant participant= new Participant();
 			participant.setCno(cno);
 			participant.setMid(mid);
 			Participant isParticipant = classService.getIsparticipant(participant);
+			//클래스 인원 마감 여부를 받아오기 위해 cno와 클래스 제한 인원을 매개 변수로 전달
+			Map<String,Object> overPeople = classService.isOverPeople(cno, classes.getCpersoncount());
+			
+			Map<String, Object> map = new HashMap<>();
+			//신청마감 여부의 리턴 값이 false일 때 fail
+			if(overPeople.get("result").equals(false) ) {
+				map.put("result", "fail");
+			} else {
+				map.put("result","success");
+			}
+			//클래스 정보와 사용자가 클래스를 신청했는 지 여부와 신청 마감 여부를 map형태로 전달 
 			map.put("classes", classes);
-			// 신청했는지 여부
 			map.put("isParticipant", isParticipant);
 			map.put("participants", overPeople.get("participants"));
 			return map;
 		}
 		
 	}
-	
-	//클래스 신청 여부 받아오기 (단순 문자열이나 숫자를 받을 때는 requestparam을 사용해야 함)
-	@PostMapping("/classApply")
-	public Map<String, Object> classApply(@RequestParam int cno, @RequestParam int cpersoncount, Authentication authentication) {
-		Map<String,Object> overPeople = classService.isOverPeople(cno, cpersoncount);
-		String mid = authentication.getName();
-		Participant participant = new Participant();
-		participant.setCno(cno);
-		participant.setMid(mid);
-		Map<String, Object> map = new HashMap<>();
-		if(overPeople.get("result").equals(false)) {
-			map.put("result", "fail");
-		} else {
-			map.put("result","success");
-			int ClassApply=classService.SetClassApply(participant);
-			map.put("classApply",ClassApply);
-		}
-		return map;
-	}
-	
-	@DeleteMapping("/deleteClassApply/{cno}")
-	public void deleteClassApply(@PathVariable int cno, Authentication authentication) {
-		String mid = authentication.getName();
-		Participant participant = new Participant();
-		
-		participant.setCno(cno);
-		participant.setMid(mid);
-		
-		classService.deleteClassApply(participant);
-	}
-	
+
 	//클래스 써메니일 갯수 받아오기
 	@GetMapping("/getThumbimgCount/{cno}")
 	public int getThumbimgCount(@PathVariable int cno) {
@@ -120,7 +89,6 @@ public class ClassController {
 	//클래스 썸네일 이미지 다운로드
 	@GetMapping("/thumbattach/{cno}/{ctorder}")
 	public void downloadThumb(@PathVariable int cno, @PathVariable int ctorder, HttpServletResponse response) {
-		log.info("아무거");
 		ClassThumbnail classThumb = new ClassThumbnail();
 		classThumb.setCno(cno);
 		classThumb.setCtorder(ctorder);
@@ -163,6 +131,36 @@ public class ClassController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	//클래스 신청 여부 받아오기 (단순 문자열이나 숫자를 받을 때는 requestparam을 사용해야 함)
+	@PostMapping("/classApply")
+	public Map<String, Object> classApply(@RequestParam int cno, @RequestParam int cpersoncount, Authentication authentication) {
+		Map<String,Object> overPeople = classService.isOverPeople(cno, cpersoncount);
+		String mid = authentication.getName();
+		Participant participant = new Participant();
+		participant.setCno(cno);
+		participant.setMid(mid);
+		Map<String, Object> map = new HashMap<>();
+		if(overPeople.get("result").equals(false)) {
+			map.put("result", "fail");
+		} else {
+			map.put("result","success");
+			int ClassApply=classService.SetClassApply(participant);
+			map.put("classApply",ClassApply);
+		}
+		return map;
+	}
+	
+	@DeleteMapping("/deleteClassApply/{cno}")
+	public void deleteClassApply(@PathVariable int cno, Authentication authentication) {
+		String mid = authentication.getName();
+		Participant participant = new Participant();
+		
+		participant.setCno(cno);
+		participant.setMid(mid);
+		
+		classService.deleteClassApply(participant);
 	}
 	
 	@PostMapping("/classRegister")

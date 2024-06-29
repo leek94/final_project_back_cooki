@@ -88,6 +88,7 @@ public class ClassService {
 	}
 	//클래스 디테일 정보 받기 
 	public Classes getClasses(int cno) {
+		//hitcount service 따로 빼기
 		classDao.updateBhitcount(cno);
 		Classes classes = classDao.selectByCno(cno);
 		return classes;
@@ -185,11 +186,12 @@ public class ClassService {
 	}
 
 	public Map<String,Object> isOverPeople(int cno, int cpersoncount) {
+		//클래스 참여자 수와 클래스 마감 여부를 map 형태로 전달
 		Map<String, Object> map = new HashMap<>();
-		int participants = classDao.selectCpersoncountByCno(cno);
-		log.info("part"+participants);
-		log.info("cper"+cpersoncount);
+		//클래스 신청자 수를 count해서 select 해온다
+		int participants = classDao.selectParticipantsCounttByCno(cno);
 		map.put("participants", participants);
+		//신청 인원이 제한 인원보다 많다면(신청마감) false를 리턴하고 신청 가능하면 true를 리턴
 		if(participants>=cpersoncount) {
 			map.put("result", false);
 		}else {

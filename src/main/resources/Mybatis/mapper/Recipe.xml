@@ -2,4 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mycompany.webapp.dao.RecipeDao">
 
+	<insert id="insertRecipe" parameterType="recipe">
+		<selectKey keyProperty="rno" resultType="int" order="BEFORE">
+			select seq_rno.nextval from dual
+		</selectKey>
+		insert into Recipe(rno, mid, rtitle, rcontent,rhitcount,rdate, rimgoname,rimgdata,rimgtype,ctno)
+		values(#{rno},#{mid},#{rtitle},#{rcontent},0,sysdate,#{rimgoname},#{rimgdata},#{rimgtype},#{ctno})
+	</insert>
+	
+	<insert id="insertRecipItems" parameterType="recipeItem">
+		insert into RecipeItem(rno, rino, riname)
+		values(#{rno},#{rino},#{riname})
+	</insert>
+	
+	<insert id="insertRecipeProcess" parameterType="recipeProcess">
+		insert into RecipeProcess(rporder,rptitle,rpcontent,rpimgoname,rpimgdata,rpimgtype,rno)
+		values(#{rporder},#{rptitle},#{rpcontent},#{rpimgoname},#{rpimgdata},#{rpimgtype},#{rno})
+		
+	</insert>
 </mapper>
