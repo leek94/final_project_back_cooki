@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
+import com.mycompany.webapp.dto.CuList;
 import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.dto.Participant;
 import com.mycompany.webapp.service.ClassService;
@@ -184,9 +185,9 @@ public class ClassController {
 	}
 	
 	@PostMapping("/curriculumRegister")
-	public void curriculumRegister(Curriculum curriculum) {
+	public void curriculumRegister(CuList cuList) {
 		log.info("컨트롤러 curriculumRegister 메소드 실행");
-		classService.createCurriculum(curriculum);
+		classService.createCurriculum(cuList);
 		log.info("컨트롤러 curriculumRegister 커리큘럼 객체 생성");
 	}
 	

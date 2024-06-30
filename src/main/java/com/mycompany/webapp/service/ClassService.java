@@ -13,6 +13,7 @@ import com.mycompany.webapp.dao.ClassDao;
 import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
+import com.mycompany.webapp.dto.CuList;
 import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.dto.Participant;
 
@@ -70,20 +71,27 @@ public class ClassService {
 	}
 	
 	//클래스 커리큘럼 정보를 데이터베이스에 저장하기위한 로직
-	public void createCurriculum(Curriculum curriculum) {
+	public void createCurriculum(CuList cuList) {
 		log.info("서비스 createCurriculum 메소드 실행");
-		
-		//<front>에서 axios로 연결된 cuimg(배열X, <front>에서 하나씩 보내줌) 가져오기
-		MultipartFile fileImg = curriculum.getCuimg();
-		
-		curriculum.setCuimgoname(fileImg.getOriginalFilename());
-		curriculum.setCuimgtype(fileImg.getContentType());
-		try {
-			curriculum.setCuimgdata(fileImg.getBytes());
-		} catch (IOException e) {
+		List<Curriculum> curriculums = cuList.getCurriculums();
+		int cno = cuList.getCno();
+		for(int i=0; i<curriculums.size(); i++) {
+			Curriculum curriculum = curriculums.get(i);
+			curriculum.setCno(cno);
+			
+			MultipartFile fileImg = curriculum.getCuimg();
+			
+			curriculum.setCuimgoname(fileImg.getOriginalFilename());
+			curriculum.setCuimgtype(fileImg.getContentType());
+			try {
+				curriculum.setCuimgdata(fileImg.getBytes());
+			} catch (IOException e) {
+			}
+			
+			classDao.insertCurriculum(curriculum);
 		}
-		
-		classDao.insertCurriculum(curriculum);
+		//<front>에서 axios로 연결된 cuimg(배열X, <front>에서 하나씩 보내줌) 가져오기
+
 		log.info("서비스 createCurriculum insert curriculum");
 	}
 	//클래스 디테일 정보 받기 
