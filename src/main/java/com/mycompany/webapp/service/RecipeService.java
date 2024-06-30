@@ -29,5 +29,14 @@ public class RecipeService {
 		return recipeDao.insertRecipeProcess(recipeProcess);
 		
 	}
-	
+
+	public Recipe getRecipe(int rno) {
+		
+		return recipeDao.selectRecipeByRno(rno);
+	}
+
+	public RecipeProcess getRecipeProcess(RecipeProcess rp) {
+		return recipeDao.selectRecipeProcessByRnoRporder(rp);
+	}
+
 }

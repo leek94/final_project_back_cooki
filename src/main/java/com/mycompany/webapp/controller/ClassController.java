@@ -107,7 +107,6 @@ public class ClassController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	//커리큘럼 이미지 다운로드

@@ -15,5 +15,7 @@ public interface RecipeDao {
 	public int insertRecipItems(List<RecipeItem> recipeItems);
 	public int insertRecipItems(RecipeItem items);
 	public int insertRecipeProcess(RecipeProcess recipeProcess);
+	public Recipe selectRecipeByRno(int rno);
+	public RecipeProcess selectRecipeProcessByRnoRporder(RecipeProcess rp);
 	
 }
