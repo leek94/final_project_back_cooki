@@ -18,6 +18,31 @@
 	<insert id="insertRecipeProcess" parameterType="recipeProcess">
 		insert into RecipeProcess(rporder,rptitle,rpcontent,rpimgoname,rpimgdata,rpimgtype,rno)
 		values(#{rporder},#{rptitle},#{rpcontent},#{rpimgoname},#{rpimgdata},#{rpimgtype},#{rno})
-		
 	</insert>
+	
+	<select id="selectRecipeByRno" resultType="recipe">
+		select rno, rtitle, rcontent, rhitcount, rdate, mid, rimgdata, rimgtype, rimgoname, ctno
+		from recipe
+		where rno = #{rno}
+	</select>
+	
+	<select id="selectRecipeProcessByRnoRporder" resultType="recipeProcess">
+		select rpimgoname, rpimgdata, rpimgtype
+		from recipeprocess
+		where rno = #{rno} and rporder = #{rporder}  
+	</select>
+	
+	<select id="selectRecipeItemListByRno" resultType="recipeItem">
+		select rino, riname
+		from recipeitem
+		where rno = #{rno}
+		order by rino
+	</select>
+	
+	<select id="selectRecipeProcessListByRno" resultType="recipeProcess">
+		select rporder, rptitle, rpcontent
+		from recipeprocess
+		where rno = #{rno}
+		order by rporder
+	</select>
 </mapper>
