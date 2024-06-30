@@ -19,5 +19,8 @@ public interface RecipeDao {
 	public RecipeProcess selectRecipeProcessByRnoRporder(RecipeProcess rp);
 	public List<RecipeItem> selectRecipeItemListByRno(int rno);
 	public List<RecipeProcess> selectRecipeProcessListByRno(int rno);
+	public int updateRecipeByRno(Recipe recipe);
+	public void deleteRecipeItemByRno(int rno);
+	public void updateRecipeProcess(RecipeProcess process);
 	
 }

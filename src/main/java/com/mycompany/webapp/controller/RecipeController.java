@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mycompany.webapp.dto.ClassItem;
-import com.mycompany.webapp.dto.ClassThumbnail;
-import com.mycompany.webapp.dto.Curriculum;
+import com.mycompany.webapp.dto.PrList;
 import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.RecipeItem;
 import com.mycompany.webapp.dto.RecipeProcess;
@@ -101,11 +99,31 @@ public class RecipeController {
 	}
 	
 	@PutMapping("/recipeUpdate")
-	public void recipeUpdate() {
-		
+	public void recipeUpdate(Recipe recipe) {
+		MultipartFile recipeimg=recipe.getRAttach();
+		if(recipeimg!=null) {
+			recipe.setRimgoname(recipeimg.getOriginalFilename());
+			recipe.setRimgtype(recipeimg.getContentType());
+			try {
+				recipe.setRimgdata(recipeimg.getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		recipeService.updateRecipe(recipe);
 	}
 	
-	//
+	@PutMapping("/recipeItemUpdate")
+	private void recipeItemUpdate(@RequestBody List<RecipeItem> recipeItem) {
+		//sevice에서 이전 아이템을 delete한 후 새로 insert 
+		recipeService.updateRecipeItem(recipeItem);
+	}
+	
+	@PutMapping("/recipeProcessUpdate")
+	private void recipeProcessUpdate(PrList prList) {
+		//폼데이터를 리스트 형태로 받기 위해 recipeProcess를 리스트로 가지는 dto를 생성해 호출한다
+		recipeService.updateRecipeProcess(prList);
+	}
 	@DeleteMapping("/recipeDelete")
 	public void recipeDelete() {
 		

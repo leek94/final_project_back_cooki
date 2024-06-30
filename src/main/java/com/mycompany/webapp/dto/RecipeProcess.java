@@ -15,4 +15,5 @@ public class RecipeProcess { //레시피 과정
 	private Integer rno; //->레시피 번호
 	
 	private MultipartFile rpAttach;
+	
 }
