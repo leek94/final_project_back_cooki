@@ -41,6 +41,18 @@ public class ClassController {
 		
 	}
 	
+	@GetMapping("/classNowPerson/{cno}")
+	public Map<String, Object> classNowPerson(@PathVariable int cno){
+		log.info("cno 확인:" + cno);
+		// 인원수 몇명인 바로 리턴하기 위해서 서버에서 인원 확인
+		int nowPerson = classService.getNowPerson(cno);
+		log.info("현재 인원 확인"+ nowPerson);
+		Map<String, Object> map = new HashMap<>();
+		map.put("nowPerson", nowPerson);
+		
+		return map;
+	}
+	
 	//PathVarialble로 bno 받음
 	@GetMapping("/classDetail/{cno}")
 	public Map<String, Object> classDetail(@PathVariable int cno, Authentication authentication) {
@@ -57,6 +69,7 @@ public class ClassController {
 			
 			// 클래스 신청 여부를 가져오기 
 			Participant participant= new Participant();
+			log.info("로그인한 인원 이메일: " + mid);
 			participant.setCno(cno);
 			participant.setMid(mid);
 			Participant isParticipant = classService.getIsparticipant(participant);
@@ -136,18 +149,29 @@ public class ClassController {
 	//클래스 신청 여부 받아오기 (단순 문자열이나 숫자를 받을 때는 requestparam을 사용해야 함)
 	@PostMapping("/classApply")
 	public Map<String, Object> classApply(@RequestParam int cno, @RequestParam int cpersoncount, Authentication authentication) {
+		// 신청 인원 확인을 위한 로직
 		Map<String,Object> overPeople = classService.isOverPeople(cno, cpersoncount);
 		String mid = authentication.getName();
+		
 		Participant participant = new Participant();
 		participant.setCno(cno);
 		participant.setMid(mid);
+		
+		Participant isParticipant = classService.getIsparticipant(participant);
+		
 		Map<String, Object> map = new HashMap<>();
 		if(overPeople.get("result").equals(false)) {
 			map.put("result", "fail");
 		} else {
-			map.put("result","success");
-			int ClassApply=classService.SetClassApply(participant);
-			map.put("classApply",ClassApply);
+			if(isParticipant != null) {
+				map.put("result", "fail");
+				map.put("isParticipant", isParticipant);
+			} else {
+				map.put("result","success");
+				int ClassApply=classService.SetClassApply(participant);
+				map.put("classApply",ClassApply);
+			}
+			
 		}
 		return map;
 	}

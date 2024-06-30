@@ -36,5 +36,4 @@ public interface ClassDao {
 	public int updateCurriculumByCno(Curriculum curriculum);
 	public int selectCurriculumRowBycno(int cno);
 	public int deleteCurriculumRowBycuorder(int cno, int cuorder);
-	
 }
