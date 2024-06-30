@@ -31,4 +31,18 @@
 		from recipeprocess
 		where rno = #{rno} and rporder = #{rporder}  
 	</select>
+	
+	<select id="selectRecipeItemListByRno" resultType="recipeItem">
+		select rino, riname
+		from recipeitem
+		where rno = #{rno}
+		order by rino
+	</select>
+	
+	<select id="selectRecipeProcessListByRno" resultType="recipeProcess">
+		select rporder, rptitle, rpcontent
+		from recipeprocess
+		where rno = #{rno}
+		order by rporder
+	</select>
 </mapper>

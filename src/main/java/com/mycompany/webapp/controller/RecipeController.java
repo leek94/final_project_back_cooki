@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.dto.Recipe;
@@ -86,6 +87,17 @@ public class RecipeController {
 			e.printStackTrace();
 		}
 		recipeService.insertRecipeProcess(recipeProcess);
+	}
+	
+	@GetMapping("/getCurriculumAndItem/{rno}")
+	public Map<String, Object> getCurriculumAndItem(@PathVariable int rno) {
+		List<RecipeItem> recipeItems = recipeService.getRecipeItemList(rno);
+		List<RecipeProcess> recipeProcess = recipeService.getRecipeProcessList(rno);
+		//<front>에 data를 map 타입으로 보내줌
+		Map<String, Object> map = new HashMap<>();
+		map.put("recipeItems", recipeItems);
+		map.put("recipeProcess", recipeProcess);
+		return map;
 	}
 	
 	@PutMapping("/recipeUpdate")

@@ -31,12 +31,19 @@ public class RecipeService {
 	}
 
 	public Recipe getRecipe(int rno) {
-		
 		return recipeDao.selectRecipeByRno(rno);
 	}
 
 	public RecipeProcess getRecipeProcess(RecipeProcess rp) {
 		return recipeDao.selectRecipeProcessByRnoRporder(rp);
+	}
+
+	public List<RecipeItem> getRecipeItemList(int rno) {
+		return recipeDao.selectRecipeItemListByRno(rno);
+	}
+
+	public List<RecipeProcess> getRecipeProcessList(int rno) {
+		return recipeDao.selectRecipeProcessListByRno(rno);
 	}
 
 }
