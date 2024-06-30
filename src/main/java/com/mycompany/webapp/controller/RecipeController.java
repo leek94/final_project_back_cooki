@@ -89,7 +89,7 @@ public class RecipeController {
 		recipeService.insertRecipeProcess(recipeProcess);
 	}
 	
-	@GetMapping("/getCurriculumAndItem/{rno}")
+	@GetMapping("/getRecipeItemAndProcess/{rno}")
 	public Map<String, Object> getCurriculumAndItem(@PathVariable int rno) {
 		List<RecipeItem> recipeItems = recipeService.getRecipeItemList(rno);
 		List<RecipeProcess> recipeProcess = recipeService.getRecipeProcessList(rno);
