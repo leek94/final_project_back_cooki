@@ -31,10 +31,10 @@ public interface ClassDao {
 	public int updateClassByCno(Classes classes);
 	public int updateClassItemByCno(ClassItem classItem);
 	public int deleteClassItemByCno(int cno);
-	public int selectCpersoncountByCno(int cno);
+	public int selectParticipantsCounttByCno(int cno);
 	public int deleteCurriculumByCno(int cno);
 	public int updateCurriculumByCno(Curriculum curriculum);
 	public int selectCurriculumCountBycno(int cno);
 	public int deleteCurriculumCountBycuorder(int cno, int cuorder);
-	
+
 }

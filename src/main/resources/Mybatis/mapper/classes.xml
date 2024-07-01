@@ -141,7 +141,7 @@
 	where cno= #{cno} and mid=#{mid}
 	</delete>
 	
-	<select id="selectCpersoncountByCno" parameterType="int" resultType="int">
+	<select id="selectParticipantsCounttByCno" parameterType="int" resultType="int">
 	select count(*) from participant
 	where cno=#{cno}
 	</select>
