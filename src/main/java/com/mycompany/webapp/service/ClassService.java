@@ -6,16 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.webapp.dao.ClassDao;
+import com.mycompany.webapp.dao.MemberDao;
 import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.CuList;
 import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.dto.Participant;
+import com.mycompany.webapp.dto.Qna;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +28,9 @@ public class ClassService {
 
 	@Autowired
 	private ClassDao classDao;
+	
+	@Autowired
+	private MemberDao memberDao;
 
 	// 클래스 기본 정보를 데이터베이스에 저장하기위한 로직
 	public void createClass(Classes classes) {
@@ -376,5 +382,18 @@ public class ClassService {
 	public int getNowPerson(int cno) {
 		return classDao.selectParticipantsCounttByCno(cno);
 	}
+
+	public void createQna(Qna qna) {
+		log.info("서비스 createQna 실행");
+		classDao.insertQna(qna);
+		log.info("서비스 createQna insertQna");
+	}
+
+	public List<Qna> getQnaList(int cno) {
+		log.info("서비스 getQnaList 실행");
+		return classDao.selectQnaByCno(cno);
+	}
+	
+	
 
 }

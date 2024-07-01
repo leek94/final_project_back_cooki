@@ -26,6 +26,7 @@ import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.CuList;
 import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.dto.Participant;
+import com.mycompany.webapp.dto.Qna;
 import com.mycompany.webapp.service.ClassService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -287,18 +288,29 @@ public class ClassController {
 		
 	}
 	
-	@GetMapping("/qnaReviewList")
-	public void qnaReviewList() {
-		
+	@GetMapping("/qnaList/{cno}")
+	public Map<String, Object> qnaList(@PathVariable int cno, Authentication authentication) {
+		log.info("컨트롤러 qnaList 메소드 실행");
+		//qna 목록을 list 형식으로 받아서 <front>로 넘겨줌
+		List<Qna> qnaList = classService.getQnaList(cno);
+		Map<String, Object> map = new HashMap<>();
+		map.put("qnaList", qnaList);
+		log.info("컨트롤러 qnaList 받아옴");
+		return map;
 	}
 	
-	@PostMapping("/qnaReviewRegister")
-	public void qnaReviewRegister() {
-		
+	@PostMapping("/qnaRegister")
+	public void qnaRegister(@RequestBody Qna qna, Authentication authentication) {
+		//json 형태의 dto 객체를 <front>에서 받아오기 위해서 @RequestBody 어노테이션 필요함
+		log.info("컨트롤러 qnaRegister 메소드 실행");
+		String mid = authentication.getName();
+		qna.setMid(mid);
+		classService.createQna(qna);
+		log.info("컨트롤러 qnaRegister qna 객체 생성");
 	}
 	
-	@PutMapping("/qnaReviewUpdate/{qno}")
-	public void qnaReviewUpdate() {
+	@PutMapping("/qnaUpdate/{qno}")
+	public void qnaUpdate() {
 		
 	}
 	
