@@ -43,6 +43,7 @@ public class RecipeController {
 	@GetMapping("/recipeDetail/{rno}")
 	public Recipe recipeDetail(@PathVariable int rno) {
 		Recipe recipe = recipeService.getRecipe(rno);
+		log.info("레시피 조회" + recipe);
 		recipe.setRimgdata(null);
 		recipe.setRimgoname(null);
 		recipe.setRimgtype(null);
