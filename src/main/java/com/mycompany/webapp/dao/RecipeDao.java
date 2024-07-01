@@ -3,6 +3,7 @@ package com.mycompany.webapp.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.RecipeItem;
@@ -19,5 +20,9 @@ public interface RecipeDao {
 	public RecipeProcess selectRecipeProcessByRnoRporder(RecipeProcess rp);
 	public List<RecipeItem> selectRecipeItemListByRno(int rno);
 	public List<RecipeProcess> selectRecipeProcessListByRno(int rno);
+	public int updateRecipeByRno(Recipe recipe);
+	public void deleteRecipeItemByRno(int rno);
+	public void updateRecipeProcess(RecipeProcess process);
+	public void deleteRecipeProcessByRporder(@Param("rno")int rno, @Param("rporder") int rporder);
 	
 }

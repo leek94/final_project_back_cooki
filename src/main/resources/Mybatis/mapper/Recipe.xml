@@ -45,4 +45,32 @@
 		where rno = #{rno}
 		order by rporder
 	</select>
+	
+	<update id="updateRecipeByRno" parameterType="recipe">
+		update Recipe set rtitle=#{rtitle}, rcontent=#{rcontent}
+		<if test="rimgoname!=null">
+			,rimgoname=#{rimgoname}
+			,rimgdata=#{rimgdata}
+			,rimgtype=#{rimgtype}
+		</if>
+		where rno=#{rno}
+	</update>
+	
+	<delete id="deleteRecipeItemByRno" parameterType="recipeItem">
+		delete from recipeItem where rno=#{rno}
+	</delete>
+	
+	<update id="updateRecipeProcess" parameterType="recipeProcess">
+		update RecipeProcess set rptitle=#{rptitle},rpcontent=#{rpcontent}
+		<if test="rpimgoname!=null">
+			,rpimgoname=#{rpimgoname}
+			,rpimgtype=#{rpimgtype}
+			,rpimgdata=#{rpimgdata}
+		</if>
+		where rno=#{rno} and rporder=#{rporder}
+	</update>
+	
+	<delete id="deleteRecipeProcessByRporder" parameterType="recipeProcess"> 
+		delete from RecipeProcess where rno=#{rno} and rporder=#{rporder}
+	</delete>
 </mapper>
