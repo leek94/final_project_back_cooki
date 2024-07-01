@@ -72,6 +72,7 @@ public class RecipeService {
 		List<RecipeProcess> recipeProcess = prList.getProcesses();
 		//수정하기 전의 process의 길이를 변수에 저장
 		int initLength= prList.getInitialLength();
+		int changeLength= prList.getChangeLength();
 		//front에서 rno를 recipeProcess의 필드에 값을 저장하지 않았기 때문에 
 		//변수로 선언해 for문으로  recipeProcess를 하나씩 업데이트 할 때 값을 같이 전달
 		int rno = prList.getRno();
@@ -99,7 +100,11 @@ public class RecipeService {
 			} else {
 				recipeDao.insertRecipeProcess(process);
 			}
-				
+		}
+		if(initLength>changeLength) {
+			for(int i=changeLength+1;i<=initLength;i++) {
+				recipeDao.deleteRecipeProcessByRporder(rno,i);
+			}
 		}
 	}
 

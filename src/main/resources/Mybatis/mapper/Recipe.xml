@@ -69,4 +69,8 @@
 		</if>
 		where rno=#{rno} and rporder=#{rporder}
 	</update>
+	
+	<delete id="deleteRecipeProcessByRporder" parameterType="recipeProcess"> 
+		delete from RecipeProcess where rno=#{rno} and rporder=#{rporder}
+	</delete>
 </mapper>
