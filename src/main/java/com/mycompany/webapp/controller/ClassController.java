@@ -57,16 +57,22 @@ public class ClassController {
 	//PathVarialble로 bno 받음
 	@GetMapping("/classDetail/{cno}")
 	public Map<String, Object> classDetail(@PathVariable int cno, Authentication authentication) {
+		Map<String, Object> map = new HashMap<>();
+		log.info("클래스 디테일 실행");
+		Classes classes = classService.getClasses(cno);
+		map.put("classes", classes);
 		//로그인 하지 않은 사용자가 디테일 페이지를 볼 수 있게 한다
 		if(authentication == null) {
-			 
-			return null;
+			log.info("로그인 없이 클래스 디테일 실행");
+			map.put("result", "backToLogin");
+			
+			return map;
 		//사용자가 로그인했다면 클래스를 신청했는지 여부를 받아온다
 		} else {
 			//
 			String mid = authentication.getName();
 			// 클래스 디테일 정보 가져오기
-			Classes classes = classService.getClasses(cno);
+			
 			
 			// 클래스 신청 여부를 가져오기 
 			Participant participant= new Participant();
@@ -77,7 +83,7 @@ public class ClassController {
 			//클래스 인원 마감 여부를 받아오기 위해 cno와 클래스 제한 인원을 매개 변수로 전달
 			Map<String,Object> overPeople = classService.isOverPeople(cno, classes.getCpersoncount());
 			
-			Map<String, Object> map = new HashMap<>();
+			
 			//신청마감 여부의 리턴 값이 false일 때 fail
 			if(overPeople.get("result").equals(false) ) {
 				map.put("result", "fail");
@@ -85,7 +91,7 @@ public class ClassController {
 				map.put("result","success");
 			}
 			//클래스 정보와 사용자가 클래스를 신청했는 지 여부와 신청 마감 여부를 map형태로 전달 
-			map.put("classes", classes);
+			
 			map.put("isParticipant", isParticipant);
 			map.put("participants", overPeople.get("participants"));
 			return map;
@@ -149,29 +155,37 @@ public class ClassController {
 	//클래스 신청 여부 받아오기 (단순 문자열이나 숫자를 받을 때는 requestparam을 사용해야 함)
 	@PostMapping("/classApply")
 	public Map<String, Object> classApply(@RequestParam int cno, @RequestParam int cpersoncount, Authentication authentication) {
-		// 신청 인원 확인을 위한 로직
-		Map<String,Object> overPeople = classService.isOverPeople(cno, cpersoncount);
-		String mid = authentication.getName();
-		
-		Participant participant = new Participant();
-		participant.setCno(cno);
-		participant.setMid(mid);
-		
-		Participant isParticipant = classService.getIsparticipant(participant);
-		
 		Map<String, Object> map = new HashMap<>();
-		if(overPeople.get("result").equals(false)) {
-			map.put("result", "fail");
+		log.info("로그인 없이 버튼 클릭");
+		// 사용자가 로그인했다면 클래스를 신청했는지 여부를 받아온다
+		if (authentication == null) {
+			log.info("로그인 없어서 리턴");
+			map.put("result", "backToLogin");
 		} else {
-			if(isParticipant != null) {
-				map.put("result", "fail");
-				map.put("isParticipant", isParticipant);
-			} else {
-				map.put("result","success");
-				int ClassApply=classService.SetClassApply(participant);
-				map.put("classApply",ClassApply);
-			}
+			// 신청 인원 확인을 위한 로직
+			Map<String, Object> overPeople = classService.isOverPeople(cno, cpersoncount);
+			String mid = authentication.getName();
+
+			Participant participant = new Participant();
+			participant.setCno(cno);
+			participant.setMid(mid);
+
+			Participant isParticipant = classService.getIsparticipant(participant);
+
 			
+			if (overPeople.get("result").equals(false)) {
+				map.put("result", "fail");
+			} else {
+				if (isParticipant != null) {
+					map.put("result", "fail");
+					map.put("isParticipant", isParticipant);
+				} else {
+					map.put("result", "success");
+					int ClassApply = classService.SetClassApply(participant);
+					map.put("classApply", ClassApply);
+				}
+
+			}
 		}
 		return map;
 	}
