@@ -399,6 +399,12 @@ public class ClassService {
 		classDao.updateQnaByQno(qna);
 		
 	}
+
+	public void deleteQna(int qno) {
+		log.info("서비스 deleteQna 실행");
+		classDao.deleteQnaByQno(qno);
+		
+	}
 	
 	
 

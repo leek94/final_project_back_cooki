@@ -317,9 +317,11 @@ public class ClassController {
 	}
 	
 	//
-	@DeleteMapping("/qnaReviewDelete/{qno}")
-	public void qnaReviewDelete() {
-		
+	@DeleteMapping("/qnaDelete/{qno}")
+	public void qnaDelete(@PathVariable int qno) {
+		log.info("컨트롤러 qnaDelete 메소드 실행");
+		classService.deleteQna(qno);
+		log.info("컨트롤러 qnaDelete 클래스 Q&A 삭제");
 	}
 	
 	// 사진 다운로드
