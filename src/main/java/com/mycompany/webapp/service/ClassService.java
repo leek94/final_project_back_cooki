@@ -188,21 +188,19 @@ public class ClassService {
 		log.info("서비스 updateItem 클래스 재료 정보 업데이트 성공");
 	}
 
-	public Map<String,Object> isOverPeople(int cno, int cpersoncount) {
+	public String isOverPeople(int cno, int cpersoncount) {
 		log.info("마감인원 수 : "+cpersoncount);
-		//클래스 참여자 수와 클래스 마감 여부를 map 형태로 전달
-		Map<String, Object> map = new HashMap<>();
-		//클래스 신청자 수를 count해서 select 해온다
+		//클래스 신청자가 몇명인지 확인
 		int participants = classDao.selectParticipantsCounttByCno(cno);
 		log.info("신청 인원 수: " + participants);
-		map.put("participants", participants);
+		String result = "";
 		//신청 인원이 제한 인원보다 많다면(신청마감) false를 리턴하고 신청 가능하면 true를 리턴
 		if(participants<cpersoncount) {
-			map.put("result", true);
+			result = "true";
 		}else {
-			map.put("result", false); 
+			result = "false";
 		}
-		return map;
+		return result;
 	}
 
 	public void updateCurriculum(Curriculum curriculum) {
