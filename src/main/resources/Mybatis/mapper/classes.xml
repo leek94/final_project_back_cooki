@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mycompany.webapp.dao.ClassDao">
 
+	<!-- classes 등록 -->
 	<insert id="insertClass" parameterType="classes">
 	   <selectKey keyProperty="cno" resultType="int" order="BEFORE">
 	      select seq_cno.nextval from dual
@@ -17,6 +18,7 @@
 	</insert>
 	<!-- hitcount -> 등록시에는 조회수가 없기 때문에 0으로 insert 해줌-->
 	
+	<!-- classes 수정 -->
 	<update id="updateClassByCno" parameterType="classes">
 		update classes set ctitle=#{ctitle}, ccontent=#{ccontent}, 
 		cpersoncount=#{cpersoncount}, cprice=#{cprice}, caddress=#{caddress}, 
@@ -25,6 +27,7 @@
 		where cno=#{cno}
 	</update>
 	
+	<!-- classThumbnail 등록 -->
 	<insert id="insertClassThumbnail" parameterType="classThumbnail">
 	   insert into classThumbnail (
 	      ctorder, ctimgoname, ctimgdata, ctimgtype, cno
@@ -33,10 +36,12 @@
 	   )
 	</insert>
 	
+	<!-- classThumbnail 삭제 -->
 	<delete id="deleteClassThumbnail" parameterType="int">
 		delete from classThumbnail where cno=#{cno}
 	</delete>
 	
+	<!-- classes 읽기 -->
 	<select id="selectByCno" parameterType="int" resultType="classes"> 
 	select cno, ctitle, ccontent, cpersoncount, cprice, 
 	caddress, cstartdate, cenddate, cdday, cstarttime, cendtime,chitcount,cround, classes.mid, classes.ctno, ctname, mnickname
@@ -44,11 +49,13 @@
 	where cno=#{cno} and classes.ctno= category.ctno and classes.mid=member.mid
 	</select>
 	
+	<!-- hitcount 세기 -->
 	<update id="updateBhitcount" parameterType="int">
 	update classes set chitcount=chitcount+1 
 	where cno=#{cno}
 	</update>
 	
+	<!-- curriculum 등록 -->
 	<insert id="insertCurriculum" parameterType="curriculum">
 	   insert into curriculum (
 	      cuorder, cutitle, cucontent, cuimgoname, cuimgdata, cuimgtype, cno
@@ -57,6 +64,7 @@
 	   )
 	</insert>
 	
+	<!-- curriculum 수정  -->
 	<update id="updateCurriculumByCno" parameterType="curriculum">
 		update curriculum set cutitle=#{cutitle}, cucontent=#{cucontent}
 		<if test="cuimgoname != null">
@@ -65,10 +73,12 @@
 		where cno=#{cno} and cuorder=#{cuorder}
 	</update>
 	
+	<!-- curriculum 삭제 -->
 	<delete id="deleteCurriculumByCno" parameterType="int">
 		delete from curriculum where cno=#{cno}
 	</delete>
 	
+	<!-- classItem 등록 -->
 	<insert id="insertItem" parameterType="classItem">
 	   insert into classItem (
 	      cino, ciname, cno
@@ -77,11 +87,12 @@
 	   )
 	</insert>
 	
+	<!-- classItem 삭제 -->
 	<delete id="deleteClassItemByCno" parameterType="int">
 		delete from classItem where cno = #{cno}
 	</delete>
 	
-	<!-- 썸네일 이미지 관련 정보를 제외한 커리큘럼 데이터 불러오기  -->
+	<!-- 이미지 관련 정보를 제외한 curriculum 읽기  -->
 	<select id="selectCurriculumByCno" parameterType="int" resultType="curriculum">
 	   select cuorder, cutitle, cucontent, cno
 	   from curriculum
@@ -89,36 +100,41 @@
 	   order by cuorder 
 	</select>
 	
-	<!-- 재료 데이터 불러오기 -->
+	<!-- classItem 읽기 -->
 	<select id="selectClassItemByCno" parameterType="int" resultType="classItem">
 	   select cino, ciname, cno
 	   from classItem
 	   where cno = #{cno}
 	</select>
 	
+	<!-- classThumbnail 읽기 -->
 	<select id="selectByClassThumbnail" parameterType="classThumbnail" resultType="classThumbnail">
 		select ctorder, ctimgoname, ctimgdata, ctimgtype, cno
 		from classThumbnail
 		where cno = #{cno} and ctorder = #{ctorder}
 	</select>
 	
+	<!-- curriculum 이미지 관련 정보 읽기  -->
 	<select id="selectByCurriculumimg" parameterType="curriculum" resultType="curriculum">
 		select cuorder, cuimgoname, cuimgdata, cuimgtype, cno
 		from curriculum
 		where cno= #{cno} and cuorder = #{cuorder}
 	</select>
 	
-	<select id="selectCurriculumRowBycno" parameterType="int" resultType="int">
+	<!-- curriculum 등록수 세기 -->
+	<select id="selectCurriculumCountBycno" parameterType="int" resultType="int">
 		select count(*)
 		from curriculum
 		where cno= #{cno}
 	</select>
 	
-	<delete id="deleteCurriculumRowBycuorder" parameterType="int">
+	<!-- curriculum 삭제 -->
+	<delete id="deleteCurriculumCountBycuorder" parameterType="int">
 		delete from curriculum 
 		where cno= #{cno} and cuorder = #{cuorder}
 	</delete>
 	
+	<!-- classThumbnail 세기  -->
 	<select id="selectByClassThumbCount" parameterType="int" resultType="int">
 		select count(*)
 		from classThumbnail
@@ -145,5 +161,29 @@
 	select count(*) from participant
 	where cno=#{cno}
 	</select>
-
+	
+	<!-- qna 등록 -->
+	<insert id="insertQna" parameterType="qna">
+		<selectKey keyProperty="qno" resultType="int" order="BEFORE">
+	      select seq_qno.nextval from dual
+	    </selectKey>
+	   insert into qna (
+	      qno, qtitle, qcontent, qdate, mid, cno
+	   ) values (
+	      #{qno}, #{qtitle}, #{qcontent}, sysdate, #{mid}, #{cno}
+	   )	   
+	</insert>
+	
+	<!-- qna 읽기 -->
+	<select id="selectQnaByCno" parameterType="int" resultType="qna">
+		select qno, qtitle, qcontent, qdate, qna.mid, cno, mnickname
+		from qna, member
+		where cno=#{cno} and qna.mid = member.mid
+		order by qdate desc
+	</select>
+	
+	<update id="updateQnaByQno" parameterType="qna">
+		update qna set qtitle=#{qtitle}, qcontent=#{qcontent}
+		where qno=#{qno}
+	</update>
 </mapper>

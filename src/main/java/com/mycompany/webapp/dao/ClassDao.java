@@ -9,6 +9,7 @@ import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.dto.Participant;
+import com.mycompany.webapp.dto.Qna;
 
 @Mapper
 public interface ClassDao {
@@ -34,6 +35,10 @@ public interface ClassDao {
 	public int selectParticipantsCounttByCno(int cno);
 	public int deleteCurriculumByCno(int cno);
 	public int updateCurriculumByCno(Curriculum curriculum);
-	public int selectCurriculumRowBycno(int cno);
-	public int deleteCurriculumRowBycuorder(int cno, int cuorder);
+	public int selectCurriculumCountBycno(int cno);
+	public int deleteCurriculumCountBycuorder(int cno, int cuorder);
+	public int insertQna(Qna qna);
+	public List<Qna> selectQnaByCno(int cno);
+	public int updateQnaByQno(Qna qna);
+
 }
