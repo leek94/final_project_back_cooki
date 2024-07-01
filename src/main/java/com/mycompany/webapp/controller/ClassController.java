@@ -44,37 +44,52 @@ public class ClassController {
 	//PathVarialble로 bno 받음
 	@GetMapping("/classDetail/{cno}")
 	public Map<String, Object> classDetail(@PathVariable int cno, Authentication authentication) {
-		String mid = authentication.getName();
-		Classes classes = classService.getClasses(cno);
-		//클래스 마감 여부 가져오기
-		boolean overPeople = classService.isOverPeople(cno, classes.getCpersoncount());
-		Map<String, Object> map = new HashMap<>();
-		if(overPeople) {
-			map.put("result", "fail");
+		//로그인 시 신청 여부를 판단하여 가져오기
+		if(authentication == null) {
+			 
+			return null;
 		} else {
-			map.put("result","success");
+			String mid = authentication.getName();
+			// 클래스 값 받아오기
+			Classes classes = classService.getClasses(cno);
+			//클래스 인원 마감 여부 받아오기
+			Map<String,Object> overPeople = classService.isOverPeople(cno, classes.getCpersoncount());
+			
+			Map<String, Object> map = new HashMap<>();
+			log.info("lf"+overPeople.get("result"));
+			
+			if(overPeople.get("result").equals(false) ) {
+				log.info("실행실패");
+				map.put("result", "fail");
+			} else {
+				log.info("실행성공");
+				map.put("result","success");
+			}
+			log.info("ee"+overPeople.get("participants"));
+			// 클래스 신청 여부 가져오기 
+			Participant participant= new Participant();
+			participant.setCno(cno);
+			participant.setMid(mid);
+			Participant isParticipant = classService.getIsparticipant(participant);
+			map.put("classes", classes);
+			// 신청했는지 여부
+			map.put("isParticipant", isParticipant);
+			map.put("participants", overPeople.get("participants"));
+			return map;
 		}
 		
-		// 클래스 신청 여부 가져오기 
-		Participant participant= new Participant();
-		participant.setCno(cno);
-		participant.setMid(mid);
-		Participant isParticipant = classService.getIsparticipant(participant);
-		map.put("classes", classes);
-		map.put("isParticipant", isParticipant);
-		return map;
 	}
 	
 	//클래스 신청 여부 받아오기 (단순 문자열이나 숫자를 받을 때는 requestparam을 사용해야 함)
 	@PostMapping("/classApply")
 	public Map<String, Object> classApply(@RequestParam int cno, @RequestParam int cpersoncount, Authentication authentication) {
-		boolean overPeople = classService.isOverPeople(cno, cpersoncount);
+		Map<String,Object> overPeople = classService.isOverPeople(cno, cpersoncount);
 		String mid = authentication.getName();
 		Participant participant = new Participant();
 		participant.setCno(cno);
 		participant.setMid(mid);
 		Map<String, Object> map = new HashMap<>();
-		if(overPeople) {
+		if(overPeople.get("result").equals(false)) {
 			map.put("result", "fail");
 		} else {
 			map.put("result","success");
@@ -94,6 +109,7 @@ public class ClassController {
 		
 		classService.deleteClassApply(participant);
 	}
+	
 	//클래스 써메니일 갯수 받아오기
 	@GetMapping("/getThumbimgCount/{cno}")
 	public int getThumbimgCount(@PathVariable int cno) {

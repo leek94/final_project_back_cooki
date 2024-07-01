@@ -1,7 +1,9 @@
 package com.mycompany.webapp.service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +29,12 @@ public class ClassService {
 	public void createClass(Classes classes) {
 		// <front>에서 axios를 통해 넘겨받지 못한 not null 필드값들을 service에서 설정해줘야 함
 		log.info("서비스 createClass 메소드 실행");
+
 		// -------------------- classes insert --------------------
 		// 추후에 시큐리티로 받아올 예정
 		classes.setMid("test123@naver.com");
 		classes.setCtno(1);
+
 		classes.setCround(1);
 		classDao.insertClass(classes);
 		log.info("서비스 createClass insertClass");
@@ -190,7 +194,9 @@ public class ClassService {
 		}
 	}
 
+
 	// -------------------- curriculum update --------------------
+
 	public void updateCurriculum(Curriculum curriculum, int cno) {
 		log.info("서비스 updateCurriculum 실행");
 
@@ -276,13 +282,18 @@ public class ClassService {
 		}
 	}
 
-	public boolean isOverPeople(int cno, int cpersoncount) {
-		int participants = classDao.selectCpersoncountByCno(cno);
-		if (participants <= cpersoncount) {
-			return false;
-		} else {
-			return true;
-		}
-	}
 
+	public Map<String,Object> isOverPeople(int cno, int cpersoncount) {
+		Map<String, Object> map = new HashMap<>();
+		int participants = classDao.selectCpersoncountByCno(cno);
+		log.info("part"+participants);
+		log.info("cper"+cpersoncount);
+		map.put("participants", participants);
+		if(participants>=cpersoncount) {
+			map.put("result", false);
+		}else {
+			map.put("result", true); 
+		}
+		return map;
+	}
 }
