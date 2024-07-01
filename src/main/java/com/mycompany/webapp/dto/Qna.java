@@ -14,6 +14,6 @@ public class Qna { //문의하기
 	private String mid; //->회원 아이디
 	private Integer cno; //->클래스 번호
 	private Date qreplydate; //답변 날짜
-	
+
 	private String mnickname;
 }

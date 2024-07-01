@@ -393,6 +393,12 @@ public class ClassService {
 		log.info("서비스 getQnaList 실행");
 		return classDao.selectQnaByCno(cno);
 	}
+
+	public void updateQna(Qna qna) {
+		log.info("서비스 updateQna 실행");
+		classDao.updateQnaByQno(qna);
+		
+	}
 	
 	
 

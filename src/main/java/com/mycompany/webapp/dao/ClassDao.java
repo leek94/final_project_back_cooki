@@ -39,5 +39,6 @@ public interface ClassDao {
 	public int deleteCurriculumCountBycuorder(int cno, int cuorder);
 	public int insertQna(Qna qna);
 	public List<Qna> selectQnaByCno(int cno);
+	public int updateQnaByQno(Qna qna);
 
 }

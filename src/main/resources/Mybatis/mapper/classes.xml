@@ -176,8 +176,14 @@
 	
 	<!-- qna 읽기 -->
 	<select id="selectQnaByCno" parameterType="int" resultType="qna">
-	select qno, qtitle, qcontent, qdate, qna.mid, cno, mnickname
-	from qna, member
-	where cno=#{cno} and qna.mid = member.mid
+		select qno, qtitle, qcontent, qdate, qna.mid, cno, mnickname
+		from qna, member
+		where cno=#{cno} and qna.mid = member.mid
+		order by qdate desc
 	</select>
+	
+	<update id="updateQnaByQno" parameterType="qna">
+		update qna set qtitle=#{qtitle}, qcontent=#{qcontent}
+		where qno=#{qno}
+	</update>
 </mapper>

@@ -309,9 +309,11 @@ public class ClassController {
 		log.info("컨트롤러 qnaRegister qna 객체 생성");
 	}
 	
-	@PutMapping("/qnaUpdate/{qno}")
-	public void qnaUpdate() {
-		
+	@PutMapping("/qnaUpdate")
+	public void qnaUpdate(@RequestBody Qna qna) {
+		log.info("컨트롤러 qnaUpdate 메소드 실행");
+		classService.updateQna(qna);
+		log.info("컨트롤러 qnaUpdate 클래스 Q&A 정보 업데이트");
 	}
 	
 	//
