@@ -162,6 +162,16 @@
 	where cno=#{cno}
 	</select>
 	
+	<select id="selectCareerBymid" parameterType="String" resultType="career">
+		select * from career
+		where mid=#{mid}
+	</select>
+	
+	<select id="selectAwardsBymid" parameterType="String" resultType="awards">
+		select * from awards
+		where mid=#{mid}
+	</select>
+	
 	<!-- qna 등록 -->
 	<insert id="insertQna" parameterType="qna">
 		<selectKey keyProperty="qno" resultType="int" order="BEFORE">

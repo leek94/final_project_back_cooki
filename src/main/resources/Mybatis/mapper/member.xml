@@ -21,4 +21,16 @@
 		from member 
 		where mid=#{mid}
 	</select>
+	
+	<select id="selectCareerBymid" parameterType="String" resultType="Career">
+		select mid,cano,cacontent
+		from career 
+		where mid=#{mid}
+	</select>
+	
+	<select id="selectAwardsBymid" parameterType="String" resultType="Awards">
+		select mid,ano,acontent
+		from awards
+		where mid=#{mid}
+	</select>
 </mapper>

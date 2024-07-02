@@ -1,5 +1,7 @@
 package com.mycompany.webapp.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.mycompany.webapp.dto.Awards;
@@ -15,6 +17,10 @@ public interface MemberDao {
    public int update(Member member);
    public int insertCareer(Career career);
    public int insertAwards(Awards awards);
+   public List<Career> selectCareerBymid(String mid);
+   public List<Awards> selectAwardsBymid(String mid);
+
+
 
 
 }

@@ -96,6 +96,7 @@ public class RecipeService {
 			//만약 수정되기 전의 process의 길이가 더 길 경우
 			//(ex 수정 전의 길이가 6이고 rpOrder가 5까지 존재 한다면 5번째까지 값은 update 해주고 6번 째 값은 insert 해준다)
 			if(initLength>=rpOrder) {
+				
 				recipeDao.updateRecipeProcess(process);
 			} else {
 				recipeDao.insertRecipeProcess(process);
