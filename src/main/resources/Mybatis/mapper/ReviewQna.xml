@@ -16,7 +16,7 @@
 	
 	<!-- qna 읽기 -->
 	<select id="selectQnaByCno" parameterType="int" resultType="qna">
-		select qno, qtitle, qcontent, qdate, qna.mid, cno, mnickname
+		select qno, qtitle, qcontent, qdate, qna.mid, cno, mnickname, qreply, qreplydate
 		from qna, member
 		where cno=#{cno} and qna.mid = member.mid
 		order by qdate desc
@@ -34,4 +34,8 @@
 		where qno=#{qno}
 	</delete>
 	
+	<update id="updateQreplyByQno" parameterType="qna">
+		update qna set qreply=#{qreply}, qreplydate=sysdate
+		where qno=#{qno}
+	</update>
 </mapper>

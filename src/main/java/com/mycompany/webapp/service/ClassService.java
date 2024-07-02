@@ -406,4 +406,10 @@ public class ClassService {
 		reviewQnaDao.deleteQnaByQno(qno);
 	}
 
+	public void updateQreply(Qna qna) {
+		log.info("서비스 updateQreply 실행");
+		reviewQnaDao.updateQreplyByQno(qna);
+		
+	}
+
 }
