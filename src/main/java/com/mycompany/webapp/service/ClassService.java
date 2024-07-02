@@ -406,4 +406,8 @@ public class ClassService {
 		reviewQnaDao.deleteQnaByQno(qno);
 	}
 
+	public List<Classes> getClassList() {
+		return classDao.selectClassList();
+	}
+
 }
