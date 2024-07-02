@@ -40,5 +40,6 @@ public interface ClassDao {
 	public int insertQna(Qna qna);
 	public List<Qna> selectQnaByCno(int cno);
 	public int updateQnaByQno(Qna qna);
+	public int deleteQnaByQno(int qno);
 
 }
