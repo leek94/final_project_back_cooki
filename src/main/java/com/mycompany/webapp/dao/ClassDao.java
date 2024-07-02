@@ -9,7 +9,10 @@ import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.dto.Participant;
+<<<<<<< HEAD
 import com.mycompany.webapp.dto.Search;
+=======
+>>>>>>> refs/remotes/origin/main
 
 @Mapper
 public interface ClassDao {

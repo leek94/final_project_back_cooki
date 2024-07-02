@@ -13,5 +13,6 @@ public interface ReviewQnaDao {
 	public List<Qna> selectQnaByCno(int cno);
 	public int updateQnaByQno(Qna qna);
 	public int deleteQnaByQno(int qno);
+	public int updateQreplyByQno(Qna qna);
 	
 }

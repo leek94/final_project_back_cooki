@@ -317,6 +317,14 @@ public class ClassController {
 		log.info("컨트롤러 qnaDelete 클래스 Q&A 삭제");
 	}
 	
+	@PutMapping("/qreplyUpdate")
+	public void qreplyUpdate(@RequestBody Qna qna) {
+		log.info("컨트롤러 qreplyUpdate 메소드 실행");
+		classService.updateQreply(qna);
+		log.info("컨트롤러 qnaUpdate 클래스 Q&A qrely 정보 업데이트");
+		
+	}
+	
 	// 사진 다운로드
 
 }
