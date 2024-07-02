@@ -40,7 +40,7 @@ public class ClassController {
 	
 	@GetMapping("/classList")
 	public void classList() {
-		
+		 
 	}
 	
 	// 신청 인원을 서버에서 확인
