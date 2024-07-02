@@ -57,6 +57,7 @@ public class MemberController {
 			map.put("result", "success");
 			map.put("mid", member.getMid());
 			map.put("accessToken", accessToken);
+			map.put("mrole", userDetails.getMember().getMrole());
 			
 		}else {
 			map.put("result", "fail");
