@@ -38,9 +38,12 @@ public class ClassController {
 	@Autowired
 	private ClassService classService;
 	
-	@GetMapping("/classList")
-	public void classList() {
-		 
+	@GetMapping("/getClassList")
+	public Map<String, Object> getClassList() {
+		List<Classes> classes= classService.getClassList();
+		 Map<String, Object> map= new HashMap<>();
+		 map.put("classes", classes);
+		 return map;
 	}
 	
 	// 신청 인원을 서버에서 확인
@@ -93,6 +96,7 @@ public class ClassController {
 	//클래스 썸네일 이미지 다운로드
 	@GetMapping("/thumbattach/{cno}/{ctorder}")
 	public void downloadThumb(@PathVariable int cno, @PathVariable int ctorder, HttpServletResponse response) {
+		log.info("cno"+cno);
 		ClassThumbnail classThumb = new ClassThumbnail();
 		classThumb.setCno(cno);
 		classThumb.setCtorder(ctorder);

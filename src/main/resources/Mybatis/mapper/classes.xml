@@ -41,6 +41,15 @@
 		delete from classThumbnail where cno=#{cno}
 	</delete>
 	
+	<select id="selectClassList" resultType="classes">
+		<![CDATA[
+		select cno, ctitle, cpersoncount, cdday, chitcount, cround, classes.mid, mname
+		from classes, member
+		where classes.mid=member.mid 
+		and sysdate<cdday 
+		 ]]>
+	</select>
+	
 	<!-- classes 읽기 -->
 	<select id="selectByCno" parameterType="int" resultType="classes"> 
 	select cno, ctitle, ccontent, cpersoncount, cprice, 
@@ -141,12 +150,12 @@
 		where cno= #{cno}
 	</select>
 	
-	<!-- 클래스 참석 여부 -->
+	<!--클래스 신청 등록-->
 	<insert id="insertClassApply" parameterType="participant">
 	insert into Participant(cno, mid, isparticipant, pdate)
 	values(#{cno}, #{mid}, 1, systimestamp)
 	</insert>
-	
+	<!-- 클래스 참석 여부 -->
 	<select id="selectByisParticipant" parameterType="participant" resultType="participant">
 	select * from participant 
 	where cno=#{cno} and mid=#{mid}
@@ -157,9 +166,54 @@
 	where cno= #{cno} and mid=#{mid}
 	</delete>
 	
+	<!-- 클래스 현재 신청 인원 수 받기-->
 	<select id="selectParticipantsCounttByCno" parameterType="int" resultType="int">
 	select count(*) from participant
 	where cno=#{cno}
 	</select>
 	
+	<!--커리어 경력 받기 -->
+	<select id="selectCareerBymid" parameterType="String" resultType="career">
+		select * from career
+		where mid=#{mid}
+	</select>
+	
+	<!-- 수상 경력 받기 -->
+	<select id="selectAwardsBymid" parameterType="String" resultType="awards">
+		select * from awards
+		where mid=#{mid}
+	</select>
+	
+	<!-- qna 등록 -->
+	<insert id="insertQna" parameterType="qna">
+		<selectKey keyProperty="qno" resultType="int" order="BEFORE">
+	      select seq_qno.nextval from dual
+	    </selectKey>
+	   insert into qna (
+	      qno, qtitle, qcontent, qdate, mid, cno
+	   ) values (
+	      #{qno}, #{qtitle}, #{qcontent}, sysdate, #{mid}, #{cno}
+	   )	   
+	</insert>
+	
+	<!-- qna 읽기 -->
+	<select id="selectQnaByCno" parameterType="int" resultType="qna">
+		select qno, qtitle, qcontent, qdate, qna.mid, cno, mnickname
+		from qna, member
+		where cno=#{cno} and qna.mid = member.mid
+		order by qdate desc
+	</select>
+	
+	<!-- qna 수정 -->
+	<update id="updateQnaByQno" parameterType="qna">
+		update qna set qtitle=#{qtitle}, qcontent=#{qcontent}
+		where qno=#{qno}
+	</update>
+	
+	<!-- qna 삭제 -->
+	<delete id="deleteQnaByQno" parameterType="int">
+		delete from qna 
+		where qno=#{qno}
+	</delete>
+
 </mapper>
