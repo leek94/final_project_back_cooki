@@ -9,7 +9,7 @@ import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.dto.Participant;
-import com.mycompany.webapp.dto.Qna;
+import com.mycompany.webapp.dto.Search;
 
 @Mapper
 public interface ClassDao {
@@ -38,5 +38,6 @@ public interface ClassDao {
 	public int selectCurriculumCountBycno(int cno);
 	public int deleteCurriculumCountBycuorder(int cno, int cuorder);
 	public List<Classes> selectClassList();
+	public List<Classes> selectSearchClass(Search search);
 	
 }

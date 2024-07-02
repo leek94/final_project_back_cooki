@@ -41,6 +41,7 @@
 		delete from classThumbnail where cno=#{cno}
 	</delete>
 	
+	<!-- 클래스 리스트 받아오기 -->
 	<select id="selectClassList" resultType="classes">
 		<![CDATA[
 		select cno, ctitle, cpersoncount, cdday, chitcount, cround, classes.mid, mname
@@ -50,6 +51,40 @@
 		 ]]>
 	</select>
 	
+	<!-- 클래스 검색 결과 받아오기 -->
+	<select id="selectSearchClass" parameterType="search" resultType="classes">
+		<if test="searchTitle=='all'">
+			SELECT DISTINCT c.cno, ctitle, cpersoncount, cdday, cround, mname
+			FROM CLASSES c
+			INNER JOIN MEMBER m on m.mid=c.mid
+			INNER JOIN
+			(select Distinct CNO
+			from classitem ci
+			where ciname LIKE '%' || #{searchText} || '%'
+			)
+			ci on c.cno=ci.cno
+			WHERE ctitle LIKE '%' || #{searchText} || '%' OR ccontent LIKE '%' || #{searchText} ||'%';
+		</if>
+		<!--<if test="searchTitle=='titlecontent'">
+			WHERE ctitle LIKE '%#{searchText}%' OR ccontent LIKE '%#{searchText}%';
+		</if>-->
+		<if test="searchTitle=='ingredient'">
+			SELECT DISTINCT c.cno, ctitle, cpersoncount, cdday, cround, mname
+			FROM CLASSES c
+			INNER JOIN MEMBER m on m.mid=c.mid
+			INNER JOIN
+			(select Distinct CNO
+			from classitem ci
+			where ciname LIKE '%' || #{searchText} || '%'
+			)
+			ci on c.cno=ci.cno
+		</if>
+		<!--<if test="searchTitle=='category'">
+			WHERE ctitle LIKE '%#{searchText}%' OR ccontent LIKE '%#{searchText}%';
+		</if>-->
+	
+		
+	</select>
 	<!-- classes 읽기 -->
 	<select id="selectByCno" parameterType="int" resultType="classes"> 
 	select cno, ctitle, ccontent, cpersoncount, cprice, 
