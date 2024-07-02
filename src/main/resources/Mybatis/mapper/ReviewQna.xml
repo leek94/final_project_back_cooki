@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.webapp.dao.ReviewQnaDao">
+
+	<!-- qna 등록 -->
+	<insert id="insertQna" parameterType="qna">
+		<selectKey keyProperty="qno" resultType="int" order="BEFORE">
+	      select seq_qno.nextval from dual
+	    </selectKey>
+	   insert into qna (
+	      qno, qtitle, qcontent, qdate, mid, cno
+	   ) values (
+	      #{qno}, #{qtitle}, #{qcontent}, sysdate, #{mid}, #{cno}
+	   )	   
+	</insert>
+	
+	<!-- qna 읽기 -->
+	<select id="selectQnaByCno" parameterType="int" resultType="qna">
+		select qno, qtitle, qcontent, qdate, qna.mid, cno, mnickname
+		from qna, member
+		where cno=#{cno} and qna.mid = member.mid
+		order by qdate desc
+	</select>
+	
+	<!-- qna 수정 -->
+	<update id="updateQnaByQno" parameterType="qna">
+		update qna set qtitle=#{qtitle}, qcontent=#{qcontent}
+		where qno=#{qno}
+	</update>
+	
+	<!-- qna 삭제 -->
+	<delete id="deleteQnaByQno" parameterType="int">
+		delete from qna 
+		where qno=#{qno}
+	</delete>
+	
+</mapper>

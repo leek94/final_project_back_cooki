@@ -162,6 +162,7 @@
 	where cno=#{cno}
 	</select>
 	
+<<<<<<< HEAD
 	<select id="selectCareerBymid" parameterType="String" resultType="career">
 		select * from career
 		where mid=#{mid}
@@ -203,4 +204,6 @@
 		delete from qna 
 		where qno=#{qno}
 	</delete>
+=======
+>>>>>>> refs/remotes/origin/main
 </mapper>
