@@ -57,12 +57,13 @@ public class ClassController {
 	}
 	
 	// 신청인원이 마감되었는지 확인하는 메서드
-	@GetMapping("/classOverPerson")
-	public Map<String, Object> classOverPerson(@RequestParam int cno, @RequestParam int cpersoncount) {
+	@GetMapping("/classOverPerson/{cno}/{cpersoncount}")
+	public Map<String, Object> classOverPerson(@PathVariable int cno, @PathVariable int cpersoncount) {
 		log.info("cno 확인:" + cno);
 		log.info("cpersoncount 확인:" +cpersoncount);
 		Map<String, Object> map = new HashMap<>();
 		String result = classService.isOverPeople(cno, cpersoncount);
+		// 마감인원이 넘었는지 확인
 		
 		if(result.equals("true")){
 			map.put("result", "true");
@@ -81,7 +82,6 @@ public class ClassController {
 		
 		return map;
 	}
-
 
 	//클래스 써메니일 갯수 받아오기
 	@GetMapping("/getThumbimgCount/{cno}")
@@ -137,8 +137,8 @@ public class ClassController {
 	}
 	
 	// 신청했는지 아닌지 확인하는 메서드 - 나중에 secured를 붙여서 로그인 페이지로 보낼 예정
-	@GetMapping("/isParticipant")
-	public Map<String, Object> isParticipant(@RequestParam int cno, Authentication authentication) {
+	@GetMapping("/isParticipant/{cno}") 
+	public Map<String, Object> isParticipant(@PathVariable int cno, Authentication authentication) {
 		Map<String, Object> map = new HashMap<>();
 		if(authentication == null) {
 			log.info("로그인 없이 리턴");
@@ -152,7 +152,7 @@ public class ClassController {
 			
 			if(isParticipant != null) {
 				// 테이블에 값이 있으면 실패
-				map.put("result", "fail");
+				map.put("result", "false");
 			} else {
 				// 테이블에 값이 없으면 성공
 				map.put("result", "success");
@@ -164,6 +164,7 @@ public class ClassController {
 	//클래스 신청 여부 받아오기 (단순 문자열이나 숫자를 받을 때는 requestparam을 사용해야 함)
 	@PostMapping("/classApply")
 	public Map<String, Object> classApply(@RequestParam int cno, Authentication authentication) {
+		log.info("실행됨!!!:");
 		Map<String, Object> map = new HashMap<>();
 		if(authentication == null) { // 로그인 안했을 경우 로그인 페이지로 던짐
 			log.info("로그인 없이 리턴");
