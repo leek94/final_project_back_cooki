@@ -1,5 +1,7 @@
 package com.mycompany.webapp.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,15 @@ public class MemberService {
 public void setAwards(Awards awards) {
 	memberDao.insertAwards(awards);
 	}
+
+public List<Career> getCareer(String mid) {
+	List<Career> career = memberDao.selectCareerBymid(mid);
+	return career;
+}
+public List<Awards> getAwards(String mid) {
+	List<Awards> awards = memberDao.selectAwardsBymid(mid);
+	return awards;
+}
 	
 
 }

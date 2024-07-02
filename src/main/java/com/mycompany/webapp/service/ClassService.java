@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.webapp.dao.ClassDao;
 import com.mycompany.webapp.dao.MemberDao;
+import com.mycompany.webapp.dao.ReviewQnaDao;
 import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
@@ -30,7 +31,7 @@ public class ClassService {
 	private ClassDao classDao;
 	
 	@Autowired
-	private MemberDao memberDao;
+	private ReviewQnaDao reviewQnaDao;
 
 	// 클래스 기본 정보를 데이터베이스에 저장하기위한 로직
 	public void createClass(Classes classes) {
@@ -381,29 +382,38 @@ public class ClassService {
 		return classDao.selectParticipantsCounttByCno(cno);
 	}
 
+	
+	// -------------------- Q&A crud --------------------
+	
 	public void createQna(Qna qna) {
 		log.info("서비스 createQna 실행");
-		classDao.insertQna(qna);
+		reviewQnaDao.insertQna(qna);
 		log.info("서비스 createQna insertQna");
 	}
 
 	public List<Qna> getQnaList(int cno) {
 		log.info("서비스 getQnaList 실행");
-		return classDao.selectQnaByCno(cno);
+		return reviewQnaDao.selectQnaByCno(cno);
 	}
 
 	public void updateQna(Qna qna) {
 		log.info("서비스 updateQna 실행");
-		classDao.updateQnaByQno(qna);
-		
+		reviewQnaDao.updateQnaByQno(qna);
 	}
 
 	public void deleteQna(int qno) {
 		log.info("서비스 deleteQna 실행");
-		classDao.deleteQnaByQno(qno);
-		
+		reviewQnaDao.deleteQnaByQno(qno);
 	}
-	
-	
+
+
+	public void updateQreply(Qna qna) {
+		log.info("서비스 updateQreply 실행");
+		reviewQnaDao.updateQreplyByQno(qna);
+	}	
+
+	public List<Classes> getClassList() {
+		return classDao.selectClassList();
+	}
 
 }

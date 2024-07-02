@@ -1,6 +1,7 @@
 package com.mycompany.webapp.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.Awards;
 import com.mycompany.webapp.dto.Career;
+import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
 import com.mycompany.webapp.security.AppUserDetails;
 import com.mycompany.webapp.security.JwtProvider;
+import com.mycompany.webapp.service.ClassService;
 import com.mycompany.webapp.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private ClassService classService;
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -96,6 +101,22 @@ public class MemberController {
 	public void setAwards(@RequestBody Awards awards) {
 		awards.setMid(awards.getMid());
 		memberService.setAwards(awards);
+	}
+	
+	@GetMapping("/getCreatroInfo/{cno}")
+	public Map<String, Object> getCreatroInfo(@PathVariable int cno){
+		log.info("cno"+cno);
+		Classes classes = classService.getClasses(cno);
+		String mnickname= classes.getMnickname();
+		String mid= classes.getMid();
+		log.info("mid"+mid);
+		List<Career> career = memberService.getCareer(mid);
+		List<Awards> awards = memberService.getAwards(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("mnickname", mnickname);
+		map.put("career", career);
+		map.put("awards", awards);
+		return map;
 	}
 	
 	// 처음 마이페이지 화면
