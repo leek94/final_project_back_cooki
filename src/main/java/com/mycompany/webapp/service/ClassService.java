@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mycompany.webapp.dao.ClassDao;
 import com.mycompany.webapp.dao.ReviewQnaDao;
 import com.mycompany.webapp.dto.ClassItem;
+import com.mycompany.webapp.dto.ClassReview;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.CuList;
@@ -415,6 +416,15 @@ public class ClassService {
 
 	public List<Classes> getSearchClasses(Search search) {
 		return classDao.selectSearchClass(search);
+	}
+
+	// -------------------- ClassReview crud --------------------
+	
+	public void createClassReview(ClassReview classReview) {
+		log.info("서비스 insertClassReview 실행");
+		log.info(classReview.toString());
+		reviewQnaDao.insertClassReview(classReview);
+		
 	}
 
 }

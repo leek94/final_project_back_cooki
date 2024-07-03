@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.ClassItem;
+import com.mycompany.webapp.dto.ClassReview;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.CuList;
@@ -258,16 +259,20 @@ public class ClassController {
 		log.info("컨트롤러 curriculumUpdate 클래스 커리큘럼 정보 업데이트");
 	}
 	
-	/*댓글*/
+	// ----------------------------------- review -----------------------------------
 	
 	@GetMapping("/reviewList")
-	public void reviewList() {
-		
+	public void reviewList(@PathVariable int cno) {
+
 	}
 	
 	@PostMapping("/reviewRegister")
-	public void reviewRegister() {
-		
+	public void reviewRegister(@RequestBody ClassReview classReview, Authentication authentication) {
+		log.info("컨트롤러 reviewRegister 메소드 실행");
+		String mid = authentication.getName();
+		classReview.setMid(mid);
+		classService.createClassReview(classReview);
+		log.info("컨트롤러 reviewRegister 클래스리뷰 객체 생성");
 	}
 	
 	@PutMapping("/reviewUpdate/{rno}")
@@ -280,6 +285,9 @@ public class ClassController {
 	public void reviewDelete() {
 		
 	}
+	
+	
+	// ----------------------------------- Q&A -----------------------------------
 	
 	@GetMapping("/qnaList/{cno}")
 	public Map<String, Object> qnaList(@PathVariable int cno, Authentication authentication) {

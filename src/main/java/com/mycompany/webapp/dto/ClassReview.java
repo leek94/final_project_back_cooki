@@ -11,6 +11,6 @@ public class ClassReview { //클래스 리뷰
 	private String crcontent; //내용
 	private Integer crratio; //별점
 	private Date crdate; //작성일
-	private Integer classCno; //->클래스 번호
-	private String memberMid; //->회원 아이디
+	private Integer cno; //->클래스 번호
+	private String mid; //->회원 아이디
 }
