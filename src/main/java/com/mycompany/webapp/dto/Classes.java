@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.Data;
 
 @Data
-public class Classes { //클래스
+public class Classes { //클래스\
 	private Integer cno; //번호
 	private String ctitle; //제목
 	private String ccontent; //내용
