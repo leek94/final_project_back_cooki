@@ -38,4 +38,30 @@
 		update qna set qreply=#{qreply}, qreplydate=sysdate
 		where qno=#{qno}
 	</update>
+	
+		<!-- classreview 등록 -->
+	<insert id="insertClassReview" parameterType="classReview">
+		<selectKey keyProperty="crno" resultType="int" order="BEFORE">
+	      select seq_crno.nextval from dual
+	    </selectKey>
+	   insert into classReview (
+	      crno, crtitle, crratio, crcontent, crdate, cno, mid
+	   ) values (
+	      #{crno}, #{crtitle}, #{crratio}, #{crcontent}, sysdate, #{cno}, #{mid}
+	   )	   
+	</insert>
+	
+	<select id="selectClassReviewByCno" parameterType="int" resultType="classReview">
+		select crno, crtitle, crcontent, crratio, crdate, cno, classreview.mid, mnickname
+		from classreview, member
+		where cno=#{cno} and classreview.mid = member.mid
+		order by crdate desc
+	</select>
+	
+	<select id="selectAvgCrratioByCno" parameterType="int" resultType="float">
+		select round(avg(crratio), 1)
+		from classreview
+		where cno=#{cno}
+		group by cno
+	</select>
 </mapper>

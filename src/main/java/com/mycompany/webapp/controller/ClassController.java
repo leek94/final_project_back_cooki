@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.ClassItem;
+import com.mycompany.webapp.dto.ClassReview;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.CuList;
@@ -257,7 +258,7 @@ public class ClassController {
 		log.info("컨트롤러 curriculumUpdate 클래스 커리큘럼 정보 업데이트");
 	}
 	
-	/*댓글*/
+	// ----------------------------------- review -----------------------------------
 	
 	@GetMapping("/reviewCount/{cno}")
 	public int reviewCount(@PathVariable int cno) {
@@ -265,14 +266,26 @@ public class ClassController {
 		return reviewCount;
 	}
 	
-	@GetMapping("/reviewList")
-	public void reviewList() {
-		
+	@GetMapping("/reviewList/{cno}")
+	public Map<String, Object> reviewList(@PathVariable int cno, Authentication authentication) {
+		log.info("컨트롤러 classReviewList 메소드 실행");
+	    List<ClassReview> classReviewList = classService.getClassReviewList(cno);
+	    Float avgCrratio = classService.getAvgCrratio(cno);
+	    log.info("컨트롤러 avgCrratio 받아옴: " + avgCrratio);
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("classReviewList", classReviewList);
+	    map.put("avgCrratio", avgCrratio);
+	    log.info("컨트롤러 classReviewList 받아옴");
+	    return map;
 	}
 	
 	@PostMapping("/reviewRegister")
-	public void reviewRegister() {
-		
+	public void reviewRegister(@RequestBody ClassReview classReview, Authentication authentication) {
+		log.info("컨트롤러 reviewRegister 메소드 실행");
+		String mid = authentication.getName();
+		classReview.setMid(mid);
+		classService.createClassReview(classReview);
+		log.info("컨트롤러 reviewRegister 클래스리뷰 객체 생성");
 	}
 	
 	@PutMapping("/reviewUpdate/{rno}")
@@ -285,6 +298,9 @@ public class ClassController {
 	public void reviewDelete() {
 		
 	}
+	
+	
+	// ----------------------------------- Q&A -----------------------------------
 	
 	@GetMapping("/qnaList/{cno}")
 	public Map<String, Object> qnaList(@PathVariable int cno, Authentication authentication) {
@@ -327,7 +343,6 @@ public class ClassController {
 		log.info("컨트롤러 qreplyUpdate 메소드 실행");
 		classService.updateQreply(qna);
 		log.info("컨트롤러 qnaUpdate 클래스 Q&A qrely 정보 업데이트");
-		
 	}
 	
 	// 사진 다운로드

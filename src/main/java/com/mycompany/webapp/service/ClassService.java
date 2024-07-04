@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mycompany.webapp.dao.ClassDao;
 import com.mycompany.webapp.dao.ReviewQnaDao;
 import com.mycompany.webapp.dto.ClassItem;
+import com.mycompany.webapp.dto.ClassReview;
 import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.CuList;
@@ -420,6 +421,28 @@ public class ClassService {
 	public int getReviewCount(int cno) {
 		return classDao.selectReviewCount(cno);
 		
+	}
+
+	// -------------------- ClassReview crud --------------------
+	
+	public void createClassReview(ClassReview classReview) {
+		log.info("서비스 insertClassReview 실행");
+		log.info(classReview.toString());
+		reviewQnaDao.insertClassReview(classReview);
+		
+	}
+
+	public List<ClassReview> getClassReviewList(int cno) {
+		log.info("서비스 getClassReviewList 실행");
+		return reviewQnaDao.selectClassReviewByCno(cno);
+	}
+	
+	public Float getAvgCrratio(int cno) {
+		log.info("서비스 getAvgCrratio 실행");
+		//int avgCrratio = reviewQnaDao.selectAvgCrratioByCno(cno);
+		//log.info("서비스 getAvgCrratio 별점평균: " + avgCrratio);
+		log.info("서비스 getAvgCrratio 별점평균: " + reviewQnaDao.selectAvgCrratioByCno(cno));
+		return reviewQnaDao.selectAvgCrratioByCno(cno);
 	}
 
 }
