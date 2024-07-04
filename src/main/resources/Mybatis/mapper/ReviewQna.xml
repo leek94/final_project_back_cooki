@@ -64,4 +64,14 @@
 		where cno=#{cno}
 		group by cno
 	</select>
+	
+	<update id="updateClassReviewByCrno" parameterType="classReview">
+		update classreview set crtitle=#{crtitle}, crcontent=#{crcontent}, crratio=#{crratio}
+		where crno=#{crno}
+	</update>
+	
+	<delete id="deleteClassReviewByCrno" parameterType="int">
+		delete from classReview 
+		where crno=#{crno}
+	</delete>
 </mapper>
