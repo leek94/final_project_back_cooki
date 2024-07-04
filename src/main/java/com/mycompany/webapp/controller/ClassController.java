@@ -293,14 +293,21 @@ public class ClassController {
 		log.info("컨트롤러 reviewRegister 클래스리뷰 객체 생성");
 	}
 	
-	@PutMapping("/reviewUpdate/{rno}")
-	public void reviewUpdate() {
-		
+	@PutMapping("/reviewUpdate")
+	public void reviewUpdate(@RequestBody ClassReview classReview) {
+		log.info("컨트롤러 reviewUpdate 메소드 실행");
+		log.info("별점 확인: " + classReview);
+		classService.updateClassReview(classReview);
+		log.info("컨트롤러 reviewUpdate 클래스 리뷰 정보 업데이트");
 	}
 	
 	//
-	@DeleteMapping("/reviewDelete/{rno}")
-	public void reviewDelete() {
+	@DeleteMapping("/reviewDelete/{crno}")
+	public void reviewDelete(@PathVariable int crno) {
+		log.info("컨트롤러 reviewDelete 메소드 실행");
+		classService.deleteClassReview(crno);
+		log.info("컨트롤러 reviewDelete 클래스 리뷰 삭제");
+		
 		
 	}
 	

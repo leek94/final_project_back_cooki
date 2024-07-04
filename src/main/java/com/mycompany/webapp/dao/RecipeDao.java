@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.mycompany.webapp.dto.Likes;
 import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.RecipeItem;
 import com.mycompany.webapp.dto.RecipeProcess;
@@ -24,5 +25,8 @@ public interface RecipeDao {
 	public void deleteRecipeItemByRno(int rno);
 	public void updateRecipeProcess(RecipeProcess process);
 	public void deleteRecipeProcessByRporder(@Param("rno")int rno, @Param("rporder") int rporder);
+	public Likes selectLikesByMidRno(Likes likes);
+	public int insertLikes(Likes likes);
+	public int deleteLikes(Likes likes);
 	
 }

@@ -23,8 +23,13 @@
 	      <typeAlias alias="recipeItem" type="com.mycompany.webapp.dto.RecipeItem"/>
 	      <typeAlias alias="recipeProcess" type="com.mycompany.webapp.dto.RecipeProcess"/>
 	      <typeAlias alias="recipeReview" type="com.mycompany.webapp.dto.RecipeReview"/>
+	      <typeAlias alias="likes" type="com.mycompany.webapp.dto.Likes"/>
 	      <typeAlias alias="participant" type="com.mycompany.webapp.dto.Participant"/>
 	      <typeAlias alias="search" type="com.mycompany.webapp.dto.Search"/>
+<<<<<<< HEAD
 	      <typeAlias alias="pager" type="com.mycompany.webapp.dto.Pager"/>
+=======
+	     
+>>>>>>> refs/remotes/origin/main
 	 </typeAliases> 
 </configuration>

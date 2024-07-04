@@ -439,14 +439,23 @@ public class ClassService {
 	
 	public Float getAvgCrratio(int cno) {
 		log.info("서비스 getAvgCrratio 실행");
-		//int avgCrratio = reviewQnaDao.selectAvgCrratioByCno(cno);
-		//log.info("서비스 getAvgCrratio 별점평균: " + avgCrratio);
-		log.info("서비스 getAvgCrratio 별점평균: " + reviewQnaDao.selectAvgCrratioByCno(cno));
 		return reviewQnaDao.selectAvgCrratioByCno(cno);
 	}
 
 	public int getCount() {
 		return classDao.getCount();
+	}
+
+	public void updateClassReview(ClassReview classReview) {
+		log.info("서비스 updateClassReview 실행");
+		reviewQnaDao.updateClassReviewByCrno(classReview);
+		
+	}
+
+	public void deleteClassReview(int crno) {
+		log.info("서비스 deleteClassReview 실행");
+		reviewQnaDao.deleteClassReviewByCrno(crno);
+		
 	}
 
 }

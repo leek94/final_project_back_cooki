@@ -18,5 +18,7 @@ public interface ReviewQnaDao {
 	public int insertClassReview(ClassReview classReview);
 	public List<ClassReview> selectClassReviewByCno(int cno);
 	public float selectAvgCrratioByCno(int cno);
+	public int updateClassReviewByCrno(ClassReview classReview);
+	public int deleteClassReviewByCrno(int crno);
 	
 }
