@@ -417,4 +417,9 @@ public class ClassService {
 		return classDao.selectSearchClass(search);
 	}
 
+	public int getReviewCount(int cno) {
+		return classDao.selectReviewCount(cno);
+		
+	}
+
 }

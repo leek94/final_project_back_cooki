@@ -96,7 +96,6 @@ public class ClassController {
 	//클래스 썸네일 이미지 다운로드
 	@GetMapping("/thumbattach/{cno}/{ctorder}")
 	public void downloadThumb(@PathVariable int cno, @PathVariable int ctorder, HttpServletResponse response) {
-		log.info("cno"+cno);
 		ClassThumbnail classThumb = new ClassThumbnail();
 		classThumb.setCno(cno);
 		classThumb.setCtorder(ctorder);
@@ -259,6 +258,12 @@ public class ClassController {
 	}
 	
 	/*댓글*/
+	
+	@GetMapping("/reviewCount/{cno}")
+	public int reviewCount(@PathVariable int cno) {
+		int reviewCount = classService.getReviewCount(cno);
+		return reviewCount;
+	}
 	
 	@GetMapping("/reviewList")
 	public void reviewList() {

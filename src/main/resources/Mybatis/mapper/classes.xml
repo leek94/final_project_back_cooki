@@ -47,44 +47,57 @@
 		select cno, ctitle, cpersoncount, cdday, chitcount, cround, classes.mid, mname
 		from classes, member
 		where classes.mid=member.mid 
-		and sysdate<cdday 
+		and sysdate<cdday
+		order by  cdday
 		 ]]>
 	</select>
 	
 	<!-- 클래스 검색 결과 받아오기 -->
 	<select id="selectSearchClass" parameterType="search" resultType="classes">
-		<if test="searchTitle=='all'">
-			SELECT DISTINCT c.cno, ctitle, cpersoncount, cdday, cround, mname
-			FROM CLASSES c
-			INNER JOIN MEMBER m on m.mid=c.mid
-			INNER JOIN
-			(select Distinct CNO
-			from classitem ci
-			where ciname LIKE '%' || #{searchText} || '%'
-			)
-			ci on c.cno=ci.cno
-			WHERE ctitle LIKE '%' || #{searchText} || '%' OR ccontent LIKE '%' || #{searchText} ||'%';
+		select c.cno, ctitle, cpersoncount, cdday, cround, mname, reviewRatio
+		from classes c
+		left join
+		(select cr.cno,count(cr.cno), avg(crratio) as reviewRatio
+		 from classreview cr 
+		 group by cr.cno )
+		 cr on cr.cno=c.cno
+		join member m ON m.mid = c.mid
+		join category ct on ct.ctno = c.ctno
+		 <![CDATA[WHERE SYSDATE<CDDAY]]>
+			
+		<if test="searchTitle=='all' || searchTitle=='ingredient'">
+				and( c.cno
+				in(
+				select distinct c.cno from classitem where ciname like '%'||#{searchText} ||'%')
+			<if test="searchTitle=='all'">
+				or (c.ctitle like '%'||#{searchText} ||'%')
+			    or (c.ccontent like '%'||#{searchText} ||'%'))
+			</if>
 		</if>
-		<!--<if test="searchTitle=='titlecontent'">
-			WHERE ctitle LIKE '%#{searchText}%' OR ccontent LIKE '%#{searchText}%';
-		</if>-->
-		<if test="searchTitle=='ingredient'">
-			SELECT DISTINCT c.cno, ctitle, cpersoncount, cdday, cround, mname
-			FROM CLASSES c
-			INNER JOIN MEMBER m on m.mid=c.mid
-			INNER JOIN
-			(select Distinct CNO
-			from classitem ci
-			where ciname LIKE '%' || #{searchText} || '%'
-			)
-			ci on c.cno=ci.cno
-		</if>
-		<!--<if test="searchTitle=='category'">
-			WHERE ctitle LIKE '%#{searchText}%' OR ccontent LIKE '%#{searchText}%';
-		</if>-->
-	
 		
+		<if test="searchTitle=='titlecontent'">
+			and ((ctitle like '%' || #{searchText} || '%') or (ccontent like '%' || #{searchText} || '%'))
+		</if>
+		
+		<if test="searchTitle=='category'">
+			and ctname=#{searchText}
+		</if>
+		
+		<if test="searchSort==0">
+			order by cdday
+		</if>
+		<if test="searchSort==1">
+			order by chitcount desc
+		</if>
+		<if test="searchSort==2">
+			order by cr.cno desc nulls last
+		</if>
+		<if test="searchSort==3">
+			order by reviewRatio desc nulls last
+		</if>
 	</select>
+	
+	
 	<!-- classes 읽기 -->
 	<select id="selectByCno" parameterType="int" resultType="classes"> 
 	select cno, ctitle, ccontent, cpersoncount, cprice, 
@@ -250,5 +263,12 @@
 		delete from qna 
 		where qno=#{qno}
 	</delete>
+	
+	<!-- 클래스 리뷰 갯수 받아오기-->
+	<select id="selectReviewCount" parameterType="int" resultType="int">
+		select count(*)
+		from classReview
+		where cno=#{cno}
+	</select>
 
 </mapper>

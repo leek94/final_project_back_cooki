@@ -6,5 +6,5 @@ import lombok.Data;
 public class Search {
 	private String searchTitle;
 	private String searchText;
-
+	private int searchSort;
 }
