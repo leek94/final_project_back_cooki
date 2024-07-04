@@ -2,4 +2,75 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mycompany.webapp.dao.RecipeDao">
 
+	<insert id="insertRecipe" parameterType="recipe">
+		<selectKey keyProperty="rno" resultType="int" order="BEFORE">
+			select seq_rno.nextval from dual
+		</selectKey>
+		insert into Recipe(rno, mid, rtitle, rcontent,rhitcount,rdate, rimgoname,rimgdata,rimgtype,ctno)
+		values(#{rno},#{mid},#{rtitle},#{rcontent},0,sysdate,#{rimgoname},#{rimgdata},#{rimgtype},#{ctno})
+	</insert>
+	
+	<insert id="insertRecipItems" parameterType="recipeItem">
+		insert into RecipeItem(rno, rino, riname)
+		values(#{rno},#{rino},#{riname})
+	</insert>
+	
+	<insert id="insertRecipeProcess" parameterType="recipeProcess">
+		insert into RecipeProcess(rporder,rptitle,rpcontent,rpimgoname,rpimgdata,rpimgtype,rno)
+		values(#{rporder},#{rptitle},#{rpcontent},#{rpimgoname},#{rpimgdata},#{rpimgtype},#{rno})
+	</insert>
+	
+	<select id="selectRecipeByRno" resultType="recipe">
+		select rno, rtitle, rcontent, rhitcount, rdate, mid, rimgdata, rimgtype, rimgoname, ctno
+		from recipe
+		where rno = #{rno}
+	</select>
+	
+	<select id="selectRecipeProcessByRnoRporder" resultType="recipeProcess">
+		select rpimgoname, rpimgdata, rpimgtype
+		from recipeprocess
+		where rno = #{rno} and rporder = #{rporder}  
+	</select>
+	
+	<select id="selectRecipeItemListByRno" resultType="recipeItem">
+		select rino, riname
+		from recipeitem
+		where rno = #{rno}
+		order by rino
+	</select>
+	
+	<select id="selectRecipeProcessListByRno" resultType="recipeProcess">
+		select rporder, rptitle, rpcontent
+		from recipeprocess
+		where rno = #{rno}
+		order by rporder
+	</select>
+	
+	<update id="updateRecipeByRno" parameterType="recipe">
+		update Recipe set rtitle=#{rtitle}, rcontent=#{rcontent}
+		<if test="rimgoname!=null">
+			,rimgoname=#{rimgoname}
+			,rimgdata=#{rimgdata}
+			,rimgtype=#{rimgtype}
+		</if>
+		where rno=#{rno}
+	</update>
+	
+	<delete id="deleteRecipeItemByRno" parameterType="recipeItem">
+		delete from recipeItem where rno=#{rno}
+	</delete>
+	
+	<update id="updateRecipeProcess" parameterType="recipeProcess">
+		update RecipeProcess set rptitle=#{rptitle},rpcontent=#{rpcontent}
+		<if test="rpimgoname!=null">
+			,rpimgoname=#{rpimgoname}
+			,rpimgtype=#{rpimgtype}
+			,rpimgdata=#{rpimgdata}
+		</if>
+		where rno=#{rno} and rporder=#{rporder}
+	</update>
+	
+	<delete id="deleteRecipeProcessByRporder" parameterType="recipeProcess"> 
+		delete from RecipeProcess where rno=#{rno} and rporder=#{rporder}
+	</delete>
 </mapper>

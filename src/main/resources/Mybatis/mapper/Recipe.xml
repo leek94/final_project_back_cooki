@@ -73,4 +73,19 @@
 	<delete id="deleteRecipeProcessByRporder" parameterType="recipeProcess"> 
 		delete from RecipeProcess where rno=#{rno} and rporder=#{rporder}
 	</delete>
+	
+	<select id="selectLikesByMidRno" parameterType="likes" resultType="likes">
+		select *
+		from likes
+		where rno = #{rno} and mid = #{mid}
+	</select>
+	
+	<insert id="insertLikes" parameterType="likes">
+		insert into likes(rno, mid)
+		values (#{rno}, #{mid})
+	</insert>
+	
+	<delete id="deleteLikes" parameterType="likes">
+		delete from likes where rno= #{rno} and mid = #{mid}
+	</delete>
 </mapper>

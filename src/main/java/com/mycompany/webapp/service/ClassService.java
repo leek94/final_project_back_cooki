@@ -418,6 +418,11 @@ public class ClassService {
 		return classDao.selectSearchClass(search);
 	}
 
+	public int getReviewCount(int cno) {
+		return classDao.selectReviewCount(cno);
+		
+	}
+
 	// -------------------- ClassReview crud --------------------
 	
 	public void createClassReview(ClassReview classReview) {

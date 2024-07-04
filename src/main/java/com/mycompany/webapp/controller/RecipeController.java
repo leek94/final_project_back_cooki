@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mycompany.webapp.dto.Likes;
 import com.mycompany.webapp.dto.PrList;
 import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.RecipeItem;
@@ -39,11 +41,19 @@ public class RecipeController {
 		
 	}
 	
-	//PathVarialble로 bno 받음
+	//PathVarialble로 rno 받음
 	@GetMapping("/recipeDetail/{rno}")
-	public Recipe recipeDetail(@PathVariable int rno) {
+	public Recipe recipeDetail(@PathVariable int rno ,Authentication authentication) {
 		Recipe recipe = recipeService.getRecipe(rno);
-		log.info("레시피 조회" + recipe);
+		
+		if(authentication != null) {
+			String mid = authentication.getName();
+			Likes likes = new Likes();
+			likes.setMid(mid);
+			likes.setRno(rno);
+			likes = recipeService.getIsLike(likes);
+			recipe.setIslike((likes != null)? true : false );
+		}
 		recipe.setRimgdata(null);
 		recipe.setRimgoname(null);
 		recipe.setRimgtype(null);
@@ -131,13 +141,15 @@ public class RecipeController {
 	}
 	
 	@PostMapping("/addLike")
-	public void addLike() {
-		
+	public void addLike(@RequestBody Likes likes) {
+		log.info(likes.toString());
+		int result = recipeService.createLike(likes);
 	}
 	
-	@DeleteMapping("/deleteLike")
-	public void deleteLike() {
-		
+	@PostMapping("/deleteLike")
+	public void deleteLike(@RequestBody Likes likes) {
+		log.info(likes.toString());
+		int result = recipeService.deleteLike(likes);
 	}
 	
 	/*댓글*/

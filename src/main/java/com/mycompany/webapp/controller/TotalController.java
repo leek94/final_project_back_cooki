@@ -7,7 +7,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,13 +30,14 @@ public class TotalController {
 		return "restapi";
 	}
 	
-	@GetMapping("/ClassSearch/{searchTitle}/{searchText}")
-	public Map<String,Object> ClassSearch(@PathVariable String searchTitle, @PathVariable String searchText) {
-		Search search= new Search();
-		search.setSearchText(searchText);
-		search.setSearchTitle(searchTitle);
+	@PostMapping("/ClassSearch")
+	public Map<String,Object> ClassSearch(@RequestBody Search search) {
+		log.info("searchs"+search.getSearchText());
+		log.info("정렬"+search.getSearchSort());
 		List<Classes> searchClasses = classService.getSearchClasses(search);
+
 		Map<String, Object> map = new HashMap<>();
+		map.put("searchClass", searchClasses);
 		return map;
 	}
 	
