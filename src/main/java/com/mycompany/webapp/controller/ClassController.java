@@ -261,9 +261,17 @@ public class ClassController {
 	
 	// ----------------------------------- review -----------------------------------
 	
-	@GetMapping("/reviewList")
-	public void reviewList(@PathVariable int cno) {
-
+	@GetMapping("/reviewList/{cno}")
+	public Map<String, Object> reviewList(@PathVariable int cno, Authentication authentication) {
+		log.info("컨트롤러 classReviewList 메소드 실행");
+	    List<ClassReview> classReviewList = classService.getClassReviewList(cno);
+	    Integer avgCrratio = classService.getAvgCrratio(cno);
+	    log.info("컨트롤러 avgCrratio 받아옴: " + avgCrratio);
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("classReviewList", classReviewList);
+	    map.put("avgCrratio", avgCrratio);
+	    log.info("컨트롤러 classReviewList 받아옴");
+	    return map;
 	}
 	
 	@PostMapping("/reviewRegister")
@@ -330,7 +338,6 @@ public class ClassController {
 		log.info("컨트롤러 qreplyUpdate 메소드 실행");
 		classService.updateQreply(qna);
 		log.info("컨트롤러 qnaUpdate 클래스 Q&A qrely 정보 업데이트");
-		
 	}
 	
 	// 사진 다운로드

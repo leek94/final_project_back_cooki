@@ -16,5 +16,7 @@ public interface ReviewQnaDao {
 	public int deleteQnaByQno(int qno);
 	public int updateQreplyByQno(Qna qna);
 	public int insertClassReview(ClassReview classReview);
+	public List<ClassReview> selectClassReviewByCno(int cno);
+	public int selectAvgCrratioByCno(int cno);
 	
 }

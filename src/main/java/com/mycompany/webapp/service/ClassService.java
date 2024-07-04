@@ -427,4 +427,17 @@ public class ClassService {
 		
 	}
 
+	public List<ClassReview> getClassReviewList(int cno) {
+		log.info("서비스 getClassReviewList 실행");
+		return reviewQnaDao.selectClassReviewByCno(cno);
+	}
+	
+	public int getAvgCrratio(int cno) {
+		log.info("서비스 getAvgCrratio 실행");
+		//int avgCrratio = reviewQnaDao.selectAvgCrratioByCno(cno);
+		//log.info("서비스 getAvgCrratio 별점평균: " + avgCrratio);
+		log.info("서비스 getAvgCrratio 별점평균: " + reviewQnaDao.selectAvgCrratioByCno(cno));
+		return reviewQnaDao.selectAvgCrratioByCno(cno);
+	}
+
 }

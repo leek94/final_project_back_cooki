@@ -13,4 +13,7 @@ public class ClassReview { //클래스 리뷰
 	private Date crdate; //작성일
 	private Integer cno; //->클래스 번호
 	private String mid; //->회원 아이디
+	
+	private String mnickname;
+	private Integer avgCrratio; //별점 평균(정수로 반올림)
 }

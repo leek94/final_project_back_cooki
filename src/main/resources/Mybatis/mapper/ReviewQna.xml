@@ -50,4 +50,17 @@
 	      #{crno}, #{crtitle}, #{crratio}, #{crcontent}, sysdate, #{cno}, #{mid}
 	   )	   
 	</insert>
+	
+	<select id="selectClassReviewByCno" parameterType="int" resultType="classReview">
+		select crno, crtitle, crcontent, crratio, crdate, cno, classreview.mid, mnickname
+		from classreview, member
+		where cno=#{cno} and classreview.mid = member.mid
+		order by crdate desc
+	</select>
+	
+	<select id="selectAvgCrratioByCno" parameterType="int" resultType="int">
+		select round(avg(crratio), 1)
+		from classreview
+		group by cno
+	</select>
 </mapper>
