@@ -26,6 +26,7 @@ import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.CuList;
 import com.mycompany.webapp.dto.Curriculum;
+import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Participant;
 import com.mycompany.webapp.dto.Qna;
 import com.mycompany.webapp.service.ClassService;
@@ -40,10 +41,14 @@ public class ClassController {
 	private ClassService classService;
 	
 	@GetMapping("/getClassList")
-	public Map<String, Object> getClassList() {
-		List<Classes> classes= classService.getClassList();
+	public Map<String, Object> getClassList(@RequestParam(defaultValue="1") int pageNo) {
+		int totalRows= classService.getCount();
+		log.info("tt"+totalRows);
+		Pager pager= new Pager(12,5,totalRows, pageNo);
+		List<Classes> classes= classService.getClassList(pageNo);
 		 Map<String, Object> map= new HashMap<>();
 		 map.put("classes", classes);
+		 map.put("pager", pager);
 		 return map;
 	}
 	

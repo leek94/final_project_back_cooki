@@ -410,8 +410,8 @@ public class ClassService {
 		reviewQnaDao.updateQreplyByQno(qna);
 	}	
 
-	public List<Classes> getClassList() {
-		return classDao.selectClassList();
+	public List<Classes> getClassList(int pageNo) {
+		return classDao.selectClassList(pageNo);
 	}
 
 	public List<Classes> getSearchClasses(Search search) {
@@ -443,6 +443,10 @@ public class ClassService {
 		//log.info("서비스 getAvgCrratio 별점평균: " + avgCrratio);
 		log.info("서비스 getAvgCrratio 별점평균: " + reviewQnaDao.selectAvgCrratioByCno(cno));
 		return reviewQnaDao.selectAvgCrratioByCno(cno);
+	}
+
+	public int getCount() {
+		return classDao.getCount();
 	}
 
 }

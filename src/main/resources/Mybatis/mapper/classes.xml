@@ -42,13 +42,22 @@
 	</delete>
 	
 	<!-- 클래스 리스트 받아오기 -->
-	<select id="selectClassList" resultType="classes">
+	<select id="selectClassList" parameterType="pager" resultType="classes">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, chitcount, cround, classes.mid, mname
-		from classes, member
-		where classes.mid=member.mid 
+		select rnum,cno, ctitle, cpersoncount, cdday, chitcount, mname
+		from 
+			(select rownum as rnum, cno, ctitle, cpersoncount, cdday, chitcount, mname
+			 from (
+			 	select cno, ctitle, cpersoncount, cdday, chitcount, mname
+				from classes,member
+				where classes.mid=member.mid 
+				order by cno desc
+			 )
+			 where rownum<=#{endRowNo}
+		)
+		where rownum>=#{startRowNo} 
 		and sysdate<cdday
-		order by  cdday
+		order by cdday
 		 ]]>
 	</select>
 	
@@ -97,6 +106,10 @@
 		</if>
 	</select>
 	
+	<!-- 클래스리스트 페이지 네이션-->
+	<select id="getCount" resultType="int">
+		select count(*) from classes 
+	</select>
 	
 	<!-- classes 읽기 -->
 	<select id="selectByCno" parameterType="int" resultType="classes"> 

@@ -39,8 +39,9 @@ public interface ClassDao {
 	public int updateCurriculumByCno(Curriculum curriculum);
 	public int selectCurriculumCountBycno(int cno);
 	public int deleteCurriculumCountBycuorder(int cno, int cuorder);
-	public List<Classes> selectClassList();
+	public List<Classes> selectClassList(int pageNo);
 	public List<Classes> selectSearchClass(Search search);
 	public int selectReviewCount(int cno);
+	public int getCount();
 	
 }
