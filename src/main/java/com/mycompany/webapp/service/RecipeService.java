@@ -1,16 +1,14 @@
 package com.mycompany.webapp.service;
 
-import java.io.Console;
 import java.io.IOException;
 import java.util.List;
-
-import javax.swing.plaf.multi.MultiPanelUI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.webapp.dao.RecipeDao;
+import com.mycompany.webapp.dto.Likes;
 import com.mycompany.webapp.dto.PrList;
 import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.RecipeItem;
@@ -20,7 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class RecipeService {
-	@Autowired RecipeDao recipeDao;
+	@Autowired 
+	RecipeDao recipeDao;
 	
 	public int insertRecipe(Recipe recipe) {
 		return recipeDao.insertRecipe(recipe);
@@ -108,5 +107,18 @@ public class RecipeService {
 			}
 		}
 	}
+
+	public Likes getIsLike(Likes likes) {
+		return recipeDao.selectLikesByMidRno(likes);
+	}
+
+	public int createLike(Likes likes) {
+		return recipeDao.insertLikes(likes);
+	}
+
+	public int deleteLike(Likes likes) {
+		return recipeDao.deleteLikes(likes);
+	}
+
 
 }

@@ -21,6 +21,7 @@ public class Recipe { //레시피
 	
 	//category dto 삭제 
 	private Integer ctname; //카테고리 이름
+	private Boolean islike;
 	
 	private MultipartFile rAttach;
 
