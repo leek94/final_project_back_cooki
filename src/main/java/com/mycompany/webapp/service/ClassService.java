@@ -432,7 +432,7 @@ public class ClassService {
 		return reviewQnaDao.selectClassReviewByCno(cno);
 	}
 	
-	public int getAvgCrratio(int cno) {
+	public Float getAvgCrratio(int cno) {
 		log.info("서비스 getAvgCrratio 실행");
 		//int avgCrratio = reviewQnaDao.selectAvgCrratioByCno(cno);
 		//log.info("서비스 getAvgCrratio 별점평균: " + avgCrratio);

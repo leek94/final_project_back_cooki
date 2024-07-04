@@ -265,7 +265,7 @@ public class ClassController {
 	public Map<String, Object> reviewList(@PathVariable int cno, Authentication authentication) {
 		log.info("컨트롤러 classReviewList 메소드 실행");
 	    List<ClassReview> classReviewList = classService.getClassReviewList(cno);
-	    Integer avgCrratio = classService.getAvgCrratio(cno);
+	    Float avgCrratio = classService.getAvgCrratio(cno);
 	    log.info("컨트롤러 avgCrratio 받아옴: " + avgCrratio);
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("classReviewList", classReviewList);

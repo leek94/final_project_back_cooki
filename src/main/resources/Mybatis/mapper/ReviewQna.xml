@@ -58,9 +58,10 @@
 		order by crdate desc
 	</select>
 	
-	<select id="selectAvgCrratioByCno" parameterType="int" resultType="int">
+	<select id="selectAvgCrratioByCno" parameterType="int" resultType="float">
 		select round(avg(crratio), 1)
 		from classreview
+		where cno=#{cno}
 		group by cno
 	</select>
 </mapper>
