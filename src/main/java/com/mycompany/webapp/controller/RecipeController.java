@@ -215,4 +215,9 @@ public class RecipeController {
 			e.printStackTrace();
 		}
 	}
+	
+	@GetMapping("/recipeIncreaseHitcount/{rno}")
+	public void recipeIncreaseHitcount(@PathVariable int rno) {
+		int result = recipeService.increaseHitcount(rno);
+	}
 }

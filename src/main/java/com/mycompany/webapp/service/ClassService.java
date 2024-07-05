@@ -458,4 +458,8 @@ public class ClassService {
 		
 	}
 
+	public List<Classes> getBestClass() {
+		return classDao.selectBestClass();
+	}
+
 }

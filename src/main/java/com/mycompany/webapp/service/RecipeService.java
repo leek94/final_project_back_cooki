@@ -120,5 +120,13 @@ public class RecipeService {
 		return recipeDao.deleteLikes(likes);
 	}
 
+	public int increaseHitcount(int rno) {
+		return recipeDao.updateHitcount(rno);
+	}
+
+	public List<Recipe> getBestRecipe() {
+		return recipeDao.selectBestRecipe();
+	}
+
 
 }
