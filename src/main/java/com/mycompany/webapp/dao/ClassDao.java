@@ -45,5 +45,6 @@ public interface ClassDao {
 	public int selectReviewCount(int cno);
 	public int getCount();
 	public int getSearchCount(Search search);
+	public List<Classes> selectBestClass();
 	
 }

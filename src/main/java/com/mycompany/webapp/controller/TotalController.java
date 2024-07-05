@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Pager;
+import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.Search;
 import com.mycompany.webapp.service.ClassService;
+import com.mycompany.webapp.service.RecipeService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 public class TotalController {
 	@Autowired
 	private ClassService classService;
+	@Autowired
+	private RecipeService recipeService;
 	
 	@RequestMapping("/")
 	public String home() {
@@ -51,15 +55,15 @@ public class TotalController {
 		
 	}
 	
-	@GetMapping("/bestClass")
-	public void bestClass() {
+	@GetMapping("/bestClassesRecipe")
+	public Map<String,Object> bestClasses() {
+		List<Classes> classes = classService.getBestClass();
+		List<Recipe> recipe = recipeService.getBestRecipe();
 		
+		Map<String, Object> map = new HashMap<>();
+		map.put("classes", classes);
+		map.put("recipe", recipe);
+		return map;
 	}
-	
-	@GetMapping("/bestRecipe")
-	public void bestRecipe() {
 		
-	}
-	
-	
 }

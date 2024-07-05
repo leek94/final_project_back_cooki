@@ -459,4 +459,8 @@ public class ClassService {
 		return classDao.getSearchCount(search);
 	}
 
+	public List<Classes> getBestClass() {
+		return classDao.selectBestClass();
+	}
+
 }

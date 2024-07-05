@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.webapp.dao.RecipeDao;
+import com.mycompany.webapp.dao.ReviewQnaDao;
 import com.mycompany.webapp.dto.Likes;
 import com.mycompany.webapp.dto.PrList;
 import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.RecipeItem;
 import com.mycompany.webapp.dto.RecipeProcess;
+import com.mycompany.webapp.dto.RecipeReview;
 
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
@@ -20,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 public class RecipeService {
 	@Autowired 
 	RecipeDao recipeDao;
+	@Autowired
+	ReviewQnaDao reviewQnaDao;
 	
 	public int insertRecipe(Recipe recipe) {
 		return recipeDao.insertRecipe(recipe);
@@ -120,5 +124,27 @@ public class RecipeService {
 		return recipeDao.deleteLikes(likes);
 	}
 
+	public int increaseHitcount(int rno) {
+		return recipeDao.updateHitcount(rno);
+	}
 
+	public List<Recipe> getBestRecipe() {
+		return recipeDao.selectBestRecipe();
+	}
+
+	public int createRecipeReview(RecipeReview recipeReview) {
+		return reviewQnaDao.insertRecipeReview(recipeReview);
+	}
+
+	public int updateRecipeRevie(RecipeReview recipeReview) {
+		return reviewQnaDao.updateRecipeReview(recipeReview);
+	}
+
+	public int removeRecipeReview(int rrno) {
+		return reviewQnaDao.deleteRecipeReview(rrno);
+	}
+
+	public List<RecipeReview> getRecipeReviews(int rno) {
+		return reviewQnaDao.selectRecipeReviewsByRno(rno);
+	}
 }

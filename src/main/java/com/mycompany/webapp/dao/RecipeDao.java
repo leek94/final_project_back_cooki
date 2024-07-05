@@ -9,6 +9,7 @@ import com.mycompany.webapp.dto.Likes;
 import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.RecipeItem;
 import com.mycompany.webapp.dto.RecipeProcess;
+import com.mycompany.webapp.dto.RecipeReview;
 
 
 @Mapper
@@ -28,5 +29,6 @@ public interface RecipeDao {
 	public Likes selectLikesByMidRno(Likes likes);
 	public int insertLikes(Likes likes);
 	public int deleteLikes(Likes likes);
-	
+	public int updateHitcount(int rno);
+	public List<Recipe> selectBestRecipe();	
 }

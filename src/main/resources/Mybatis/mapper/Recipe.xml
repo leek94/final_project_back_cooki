@@ -88,4 +88,21 @@
 	<delete id="deleteLikes" parameterType="likes">
 		delete from likes where rno= #{rno} and mid = #{mid}
 	</delete>
+	
+	<update id="updateHitcount">
+		update recipe set rhitcount = rhitcount + 1
+		where rno = #{rno}
+	</update>
+	
+	<select id="selectBestRecipe" resultType="recipe">
+		select rnum, rno, rtitle, rhitcount
+		from
+			(
+				select rownum as rnum, rno, rtitle, rhitcount
+				from recipe
+				where <![CDATA[to_date(sysdate,'YYYY--MM-DD')-to_date(rdate,'YYYY--MM-DD') < 30]]>
+				order by rhitcount desc
+			)
+		where <![CDATA[rnum <= 5]]>
+	</select>
 </mapper>

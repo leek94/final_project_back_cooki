@@ -324,5 +324,16 @@
 		from classReview
 		where cno=#{cno}
 	</select>
-
+	
+	<select id="selectBestClass" resultType="classes">
+		select rnum, cno, ctitle, chitcount
+		from
+			(
+				select rownum as rnum, cno, ctitle, chitcount
+				from classes 
+				where <![CDATA[SYSDATE<CDDAY]]>
+				order by chitcount desc
+			)
+		where <![CDATA[rnum <= 5]]>
+	</select>
 </mapper>
