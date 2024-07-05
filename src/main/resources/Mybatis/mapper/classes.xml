@@ -50,65 +50,106 @@
 			 from (
 			 	select cno, ctitle, cpersoncount, cdday, chitcount, mname
 				from classes,member
-				where classes.mid=member.mid 
-				order by cno desc
+				where classes.mid=member.mid
+				order by cdday
 			 )
 			 where rownum<=#{endRowNo}
 		)
-		where rownum>=#{startRowNo} 
+		where rnum>=#{startRowNo} 
 		and sysdate<cdday
-		order by cdday
 		 ]]>
 	</select>
 	
 	<!-- 클래스 검색 결과 받아오기 -->
-	<select id="selectSearchClass" parameterType="search" resultType="classes">
-		select c.cno, ctitle, cpersoncount, cdday, cround, mname, reviewRatio
-		from classes c
-		left join
-		(select cr.cno,count(cr.cno), avg(crratio) as reviewRatio
-		 from classreview cr 
-		 group by cr.cno )
-		 cr on cr.cno=c.cno
-		join member m ON m.mid = c.mid
-		join category ct on ct.ctno = c.ctno
-		 <![CDATA[WHERE SYSDATE<CDDAY]]>
-			
-		<if test="searchTitle=='all' || searchTitle=='ingredient'">
-				and( c.cno
-				in(
-				select distinct c.cno from classitem where ciname like '%'||#{searchText} ||'%')
-			<if test="searchTitle=='all'">
-				or (c.ctitle like '%'||#{searchText} ||'%')
-			    or (c.ccontent like '%'||#{searchText} ||'%'))
-			</if>
-		</if>
-		
-		<if test="searchTitle=='titlecontent'">
-			and ((ctitle like '%' || #{searchText} || '%') or (ccontent like '%' || #{searchText} || '%'))
-		</if>
-		
-		<if test="searchTitle=='category'">
-			and ctname=#{searchText}
-		</if>
-		
-		<if test="searchSort==0">
-			order by cdday
-		</if>
-		<if test="searchSort==1">
-			order by chitcount desc
-		</if>
-		<if test="searchSort==2">
-			order by cr.cno desc nulls last
-		</if>
-		<if test="searchSort==3">
-			order by reviewRatio desc nulls last
-		</if>
+	<select id="selectSearchClass" resultType="classes">
+		select cno, ctitle, cpersoncount, cdday, cround, mname, reviewRatio,ccontent, reviewCount,ctname,rnum
+				from(
+					select cno, ctitle, cpersoncount, cdday, cround, mname, reviewRatio,ccontent, reviewCount,ctname, rownum as rnum
+					from(
+					        select c.cno as cno, ctitle, cpersoncount, cdday, cround, mname, reviewRatio,ccontent, reviewCount,ctname
+					            from classes c
+					            left join (
+					                select cr.cno as cno, count(cr.cno) as reviewCount, avg(cr.crratio) as reviewRatio
+					                from classreview cr
+					                group by cr.cno
+					            ) cr on cr.cno = c.cno
+					            join member m on m.mid = c.mid
+					            join category ct on ct.ctno = c.ctno
+					           <![CDATA[ where sysdate<cdday ]]>
+					        <if test="search.searchTitle=='all' || search.searchTitle=='ingredient'">
+									 and(c.cno
+							            in(
+							            select distinct cno from classitem where ciname like '%'||#{search.searchText} ||'%')
+								<if test="search.searchTitle=='all'">
+									or (ctitle like '%'||#{search.searchText} ||'%')
+								    or (ccontent like '%'||#{search.searchText} ||'%'))
+								</if>
+							</if>
+							
+							<if test="search.searchTitle=='titlecontent'">
+								and ((ctitle like '%' || #{search.searchText} || '%') or (ccontent like '%' || #{search.searchText} || '%'))
+							</if>
+							
+							<if test="search.searchTitle=='category'">
+								and ctname=#{search.searchText}
+							</if>
+							<if test="search.searchSort==0">
+								order by cdday
+							</if>
+						<!--	<if test="search.searchSort==1">
+								order by chitcount desc
+							</if>-->
+							<if test="search.searchSort==2">
+								order by  reviewCount desc nulls last
+							</if>
+							<if test="search.searchSort==3">
+								order by reviewRatio desc nulls last
+							</if>
+					    )
+					    <![CDATA[ where rownum<=#{pager.endRowNo}]]>
+				)
+				<![CDATA[ where rnum>=#{pager.startRowNo}]]>
 	</select>
 	
 	<!-- 클래스리스트 페이지 네이션-->
 	<select id="getCount" resultType="int">
 		select count(*) from classes 
+	</select>
+	
+	<select id="getSearchCount" parameterType="search" resultType="int">
+		select count(*) 
+		from(
+			select cno, ctitle, cpersoncount, cdday, cround, mname, reviewRatio,ccontent, reviewCount,ctname
+			from(
+			        select c.cno as cno, ctitle, cpersoncount, cdday, cround, mname, reviewRatio,ccontent, reviewCount,ctname
+			            from classes c
+			            left join (
+			                select cr.cno as cno, count(cr.cno) as reviewCount, avg(cr.crratio) as reviewRatio
+			                from classreview cr
+			                group by cr.cno
+			            ) cr on cr.cno = c.cno
+			            join member m on m.mid = c.mid
+			            join category ct on ct.ctno = c.ctno
+			           <![CDATA[ where sysdate<cdday ]]>
+			        <if test="searchTitle=='all' || searchTitle=='ingredient'">
+							 and(c.cno
+					            in( 
+					            select distinct cno from classitem where ciname like '%'||#{searchText} ||'%')
+						<if test="searchTitle=='all'">
+							or (ctitle like '%'||#{searchText} ||'%')
+						    or (ccontent like '%'||#{searchText} ||'%'))
+						</if>
+					</if>
+					
+					<if test="searchTitle=='titlecontent'">
+						and ((ctitle like '%' || #{searchText} || '%') or (ccontent like '%' || #{searchText} || '%'))
+					</if>
+					
+					<if test="searchTitle=='category'">
+						and ctname=#{searchText}
+					</if>
+			    )
+		)
 	</select>
 	
 	<!-- classes 읽기 -->

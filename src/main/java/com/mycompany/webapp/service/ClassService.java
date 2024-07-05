@@ -15,6 +15,7 @@ import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.CuList;
 import com.mycompany.webapp.dto.Curriculum;
+import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Participant;
 import com.mycompany.webapp.dto.Qna;
 import com.mycompany.webapp.dto.Search;
@@ -410,12 +411,8 @@ public class ClassService {
 		reviewQnaDao.updateQreplyByQno(qna);
 	}	
 
-	public List<Classes> getClassList(int pageNo) {
-		return classDao.selectClassList(pageNo);
-	}
-
-	public List<Classes> getSearchClasses(Search search) {
-		return classDao.selectSearchClass(search);
+	public List<Classes> getSearchClasses(Search search, Pager pager) {
+		return classDao.selectSearchClass(search, pager);
 	}
 
 	public int getReviewCount(int cno) {
@@ -456,6 +453,10 @@ public class ClassService {
 		log.info("서비스 deleteClassReview 실행");
 		reviewQnaDao.deleteClassReviewByCrno(crno);
 		
+	}
+
+	public int getSearchCount(Search search) {
+		return classDao.getSearchCount(search);
 	}
 
 }

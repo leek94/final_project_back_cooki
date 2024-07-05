@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.Classes;
+import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Search;
 import com.mycompany.webapp.service.ClassService;
 
@@ -31,13 +33,16 @@ public class TotalController {
 	}
 	
 	@PostMapping("/ClassSearch")
-	public Map<String,Object> ClassSearch(@RequestBody Search search) {
-		log.info("searchs"+search.getSearchText());
-		log.info("정렬"+search.getSearchSort());
-		List<Classes> searchClasses = classService.getSearchClasses(search);
-
+	public Map<String,Object> ClassSearch(@RequestBody Search search, @RequestParam(defaultValue = "1") int pageNo) {
+		
+		int totalRows =classService.getSearchCount(search);
+		log.info("갯수"+totalRows);
+		//페이저 객체 생성
+		Pager pager = new Pager(12, 5, totalRows, pageNo);
+		List<Classes> searchClasses = classService.getSearchClasses(search, pager);
 		Map<String, Object> map = new HashMap<>();
 		map.put("searchClass", searchClasses);
+		map.put("pager", pager);
 		return map;
 	}
 	
