@@ -38,7 +38,6 @@ public class TotalController {
 	
 	@PostMapping("/ClassSearch")
 	public Map<String,Object> ClassSearch(@RequestBody Search search, @RequestParam(defaultValue = "1") int pageNo) {
-		
 		int totalRows =classService.getSearchCount(search);
 		log.info("갯수"+totalRows);
 		//페이저 객체 생성

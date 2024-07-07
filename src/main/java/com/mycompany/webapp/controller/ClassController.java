@@ -74,8 +74,9 @@ public class ClassController {
 	@GetMapping("/classDetail/{cno}")
 	public Map<String, Object> classDetail(@PathVariable int cno) {
 		Map<String, Object> map = new HashMap<>();
-		log.info("클래스 디테일 실행");
 		Classes classes = classService.getClasses(cno);
+		classes.setChitcount(classes.getChitcount()+1);
+		classService.updateChitcount(classes);
 		map.put("classes", classes);
 		
 		return map;
@@ -254,11 +255,6 @@ public class ClassController {
 	
 	// ----------------------------------- review -----------------------------------
 	
-	@GetMapping("/reviewCount/{cno}")
-	public int reviewCount(@PathVariable int cno) {
-		int reviewCount = classService.getReviewCount(cno);
-		return reviewCount;
-	}
 	
 	@GetMapping("/reviewList/{cno}")
 	public Map<String, Object> reviewList(@PathVariable int cno, Authentication authentication) {

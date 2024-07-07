@@ -119,8 +119,6 @@ public class ClassService {
 
 	// 클래스 디테일 정보 받기
 	public Classes getClasses(int cno) {
-		//hitcount service 따로 빼기
-		classDao.updateBhitcount(cno);
 		Classes classes = classDao.selectByCno(cno);
 		return classes;
 	}
@@ -415,10 +413,6 @@ public class ClassService {
 		return classDao.selectSearchClass(search, pager);
 	}
 
-	public int getReviewCount(int cno) {
-		return classDao.selectReviewCount(cno);
-		
-	}
 
 	// -------------------- ClassReview crud --------------------
 	
@@ -461,6 +455,11 @@ public class ClassService {
 
 	public List<Classes> getBestClass() {
 		return classDao.selectBestClass();
+	}
+
+	public void updateChitcount(Classes classes) {
+		classDao.updateChitcount(classes);
+		
 	}
 
 }

@@ -21,7 +21,6 @@ public interface ClassDao {
 	public int insertClassThumbnail(ClassThumbnail classThumbnail);
 	public int insertItem(ClassItem classItem);
 	public int insertCurriculum(Curriculum curriculum); 
-	public int updateBhitcount(int cno);
 	public Classes selectByCno(int cno);
 	public List<Curriculum> selectCurriculumByCno(int cno);
 	public List<ClassItem> selectClassItemByCno(int cno);
@@ -42,9 +41,9 @@ public interface ClassDao {
 	public int deleteCurriculumCountBycuorder(int cno, int cuorder);
 	public List<Classes> selectClassList(Pager pager);
 	public List<Classes> selectSearchClass(@Param("search") Search search,@Param("pager") Pager pager);
-	public int selectReviewCount(int cno);
 	public int getCount();
 	public int getSearchCount(Search search);
 	public List<Classes> selectBestClass();
+	public void updateChitcount(Classes classes);
 	
 }
