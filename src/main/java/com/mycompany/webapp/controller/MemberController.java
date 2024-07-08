@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -93,9 +94,19 @@ public class MemberController {
 	@PostMapping("/setCareers")
 	//return된 값을 front로 다시 전달해 줄 필요가 없기 때문에 void로 설정
 	public void setCareers(@RequestBody Career career ) {
+		log.info("커리어 아이디"+career.getMid());
+		log.info("커리어 번호"+career.getCano());
+		log.info("커리어 내용"+career.getCacontent());
+		
 		career.setMid(career.getMid());
 		//커리어 값 insert
 		memberService.setCareer(career);
+	}
+	
+	@DeleteMapping("/careers/{mid}")
+	public void careers(@PathVariable String mid) {
+		memberService.deleteCareers(mid);
+		log.info("커리어 삭제");
 	}
 	
 	@PostMapping("/setAwards")
@@ -158,24 +169,20 @@ public class MemberController {
 		return map;
 	}	
 	
+	// 마이페이지 닉네임 업데이트
 	@PutMapping("/updateNickname")
 	public void updateNickname(@RequestBody Member member) {
-		log.info("변경된 닉네임 확인" +member.getMnickname());
 		memberService.updateNickname(member);
-		log.info("닉네임 변경 완료");
 	}
 	
+	// 마이페이지 패스워드 업데이트
 	@PutMapping("/updatePassword")
 	public void updatePassword(@RequestBody Member member) {
-		log.info("변경된 비밀번호 값 : " + member.getMpassword());
-		log.info("변경된 비밀번호 값 : " + member.getMid());
-		
 		// 비밀번호 인코딩하여 저장
 		PasswordEncoder passwordEncoder =PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		member.setMpassword(passwordEncoder.encode(member.getMpassword()));
 		
 		memberService.updatePassword(member);
-		
 	}
 	
 	@PutMapping("/myProfile/update")

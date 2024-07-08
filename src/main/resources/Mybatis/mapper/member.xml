@@ -66,6 +66,10 @@
 		order by cdday
 		]]>
 	</select>
+	
+	<delete id="deleteCareers" parameterType="String">
+		delete from career where mid = #{mid}
+	</delete>
 
 	
 </mapper>

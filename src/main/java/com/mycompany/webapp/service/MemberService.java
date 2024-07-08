@@ -82,4 +82,9 @@ public List<Classes> getEditorNowClass(String mid) {
 	return classes;
 }
 
+public void deleteCareers(String mid) {
+	memberDao.deleteCareers(mid);
+	
+}
+
 }

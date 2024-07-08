@@ -25,4 +25,5 @@ public interface MemberDao {
    public void updatePassword(Member member);
    public List<Classes> selectPastClassesByMid(String mid);
    public List<Classes> selectNowClassesByMid(String mid);
+   public void deleteCareers(String mid);
 }
