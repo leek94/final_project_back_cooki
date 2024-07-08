@@ -120,10 +120,43 @@ public class MemberController {
 	}
 	
 	// 처음 마이페이지 화면
-	@GetMapping("/myProfile")
-	public void myProfile() {
+	@GetMapping("/myProfile/{mid}")
+	public Map<String, Object> myProfile(@PathVariable String mid) {
+		log.info("마이프로필 mid: " + mid);
 		
+		Member member = memberService.getMyProfile(mid);
+		log.info("유저 콘솔: " + member.getMid());
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("member", member);
+		log.info("콘솔1");
+		return map;
 	}
+	
+	// 에디터 마이페이지 화면
+	@GetMapping("/editorProfile/{mid}/{mrole}")
+	public Map<String, Object> editorProfile(@PathVariable String mid, @PathVariable String mrole){
+		log.info("에디터 마이프로필 mid: " + mid);
+		log.info("에디터 롤 : " + mrole);
+		Member member = memberService.getMyProfile(mid);
+		log.info("에디터 콘솔: " + member.getMid());
+		
+		List<Career> career = null;
+		List<Awards> awards = null;
+		
+		if(mrole.equals("ROLE_EDITOR")) {
+			career = memberService.getCareer(mid);
+			awards = memberService.getAwards(mid);
+		}
+		log.info("콘솔2");
+		log.info("career" + career.get(1).getCacontent());
+		Map<String, Object> map = new HashMap<>();
+		map.put("member", member);
+		map.put("career", career);
+		map.put("awards", awards);
+		
+		return map;
+	}	
 	
 	@PutMapping("/myProfile/update")
 	public void profileUpdate() {

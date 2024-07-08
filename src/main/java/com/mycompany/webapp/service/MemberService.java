@@ -36,6 +36,11 @@ public List<Awards> getAwards(String mid) {
 	List<Awards> awards = memberDao.selectAwardsBymid(mid);
 	return awards;
 }
+
+public Member getMyProfile(String mid) {
+	return memberDao.selectMyProfile(mid);
+	
+}
 	
 
 }

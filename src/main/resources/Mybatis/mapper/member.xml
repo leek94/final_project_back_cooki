@@ -33,4 +33,12 @@
 		from awards
 		where mid=#{mid}
 	</select>
+	
+	<select id="selectMyProfile" parameterType="String" resultType="Member">
+		select mid, mphonenum, mnickname
+		from member
+		where mid=#{mid}
+	</select>
+	
+	
 </mapper>
