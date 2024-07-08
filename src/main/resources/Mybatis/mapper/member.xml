@@ -49,6 +49,23 @@
 		update member set mpassword = #{mpassword}
 		where mid = #{mid}
 	</update>
+
+	<select id="selectPastClassesByMid" parameterType="String" resultType="Classes">
+		<![CDATA[
+		select *
+		from classes
+		where mid=#{mid} and cdday < sysdate
+		]]>
+	</select>
 	
+	<select id="selectNowClassesByMid" parameterType="String" resultType="Classes">
+		<![CDATA[
+		select *
+		from classes
+		where mid=#{mid} and cdday >= sysdate
+		order by cdday
+		]]>
+	</select>
+
 	
 </mapper>

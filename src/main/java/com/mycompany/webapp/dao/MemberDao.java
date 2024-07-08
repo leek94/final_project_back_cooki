@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.mycompany.webapp.dto.Awards;
 import com.mycompany.webapp.dto.Career;
+import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
 
 @Mapper
@@ -23,4 +24,6 @@ public interface MemberDao {
    public void updateNickname(Member member);
    public void updatePassword(Member member);
 
+   public List<Classes> selectPastClassesByMid(String mid);
+   public List<Classes> selectNowClassesByMid(String mid);
 }
