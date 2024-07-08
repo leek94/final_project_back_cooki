@@ -25,6 +25,7 @@ import com.mycompany.webapp.dto.PrList;
 import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.RecipeItem;
 import com.mycompany.webapp.dto.RecipeProcess;
+import com.mycompany.webapp.dto.RecipeReview;
 import com.mycompany.webapp.service.RecipeService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -154,25 +155,26 @@ public class RecipeController {
 	
 	/*댓글*/
 	
-	@GetMapping("/reviewList")
-	public void reviewList() {
-		
+	@GetMapping("/reviewList/{rno}")
+	public List<RecipeReview> reviewList(@PathVariable int rno) {
+		List<RecipeReview> recipeReviews = recipeService.getRecipeReviews(rno);
+		return recipeReviews;
 	}
 	
 	@PostMapping("/reviewRegister")
-	public void reviewRegister() {
-		
+	public void reviewRegister(@RequestBody RecipeReview recipeReview) {
+		int result = recipeService.createRecipeReview(recipeReview);
 	}
 	
-	@PutMapping("/reviewUpdate/{cno}")
-	public void reviewUpdate() {
-		
+	@PostMapping("/reviewUpdate")
+	public void reviewUpdate(@RequestBody RecipeReview recipeReview) {
+		int result = recipeService.updateRecipeRevie(recipeReview);
 	}
 	
 	//
-	@DeleteMapping("/reviewDelete/{cno}")
-	public void reviewDelete() {
-		
+	@GetMapping("/reviewDelete/{rrno}")
+	public void reviewDelete(@PathVariable int rrno) {
+		int result = recipeService.removeRecipeReview(rrno);
 	}
 	
 	@GetMapping("/thumbattach/{rno}")
@@ -214,5 +216,10 @@ public class RecipeController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@GetMapping("/recipeIncreaseHitcount/{rno}")
+	public void recipeIncreaseHitcount(@PathVariable int rno) {
+		int result = recipeService.increaseHitcount(rno);
 	}
 }

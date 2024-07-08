@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.mycompany.webapp.dto.ClassReview;
 import com.mycompany.webapp.dto.Qna;
+import com.mycompany.webapp.dto.RecipeReview;
 
 @Mapper
 public interface ReviewQnaDao {
@@ -20,5 +21,9 @@ public interface ReviewQnaDao {
 	public float selectAvgCrratioByCno(int cno);
 	public int updateClassReviewByCrno(ClassReview classReview);
 	public int deleteClassReviewByCrno(int crno);
+	public int insertRecipeReview(RecipeReview recipeReview);
+	public int updateRecipeReview(RecipeReview recipeReview);
+	public int deleteRecipeReview(int rrno);
+	public List<RecipeReview> selectRecipeReviewsByRno(int rno);
 	
 }

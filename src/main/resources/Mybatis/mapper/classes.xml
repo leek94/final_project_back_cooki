@@ -42,7 +42,7 @@
 	</delete>
 	
 	<!-- 클래스 리스트 받아오기 -->
-	<select id="selectClassList" parameterType="pager" resultType="classes">
+<!--	<select id="selectClassList" parameterType="pager" resultType="classes">
 		<![CDATA[
 		select rnum,cno, ctitle, cpersoncount, cdday, chitcount, mname
 		from 
@@ -50,65 +50,106 @@
 			 from (
 			 	select cno, ctitle, cpersoncount, cdday, chitcount, mname
 				from classes,member
-				where classes.mid=member.mid 
-				order by cno desc
+				where classes.mid=member.mid
+				order by cdday
 			 )
 			 where rownum<=#{endRowNo}
 		)
-		where rownum>=#{startRowNo} 
+		where rnum>=#{startRowNo} 
 		and sysdate<cdday
-		order by cdday
 		 ]]>
-	</select>
+	</select>-->
 	
 	<!-- 클래스 검색 결과 받아오기 -->
-	<select id="selectSearchClass" parameterType="search" resultType="classes">
-		select c.cno, ctitle, cpersoncount, cdday, cround, mname, reviewRatio
-		from classes c
-		left join
-		(select cr.cno,count(cr.cno), avg(crratio) as reviewRatio
-		 from classreview cr 
-		 group by cr.cno )
-		 cr on cr.cno=c.cno
-		join member m ON m.mid = c.mid
-		join category ct on ct.ctno = c.ctno
-		 <![CDATA[WHERE SYSDATE<CDDAY]]>
-			
-		<if test="searchTitle=='all' || searchTitle=='ingredient'">
-				and( c.cno
-				in(
-				select distinct c.cno from classitem where ciname like '%'||#{searchText} ||'%')
-			<if test="searchTitle=='all'">
-				or (c.ctitle like '%'||#{searchText} ||'%')
-			    or (c.ccontent like '%'||#{searchText} ||'%'))
-			</if>
-		</if>
-		
-		<if test="searchTitle=='titlecontent'">
-			and ((ctitle like '%' || #{searchText} || '%') or (ccontent like '%' || #{searchText} || '%'))
-		</if>
-		
-		<if test="searchTitle=='category'">
-			and ctname=#{searchText}
-		</if>
-		
-		<if test="searchSort==0">
-			order by cdday
-		</if>
-		<if test="searchSort==1">
-			order by chitcount desc
-		</if>
-		<if test="searchSort==2">
-			order by cr.cno desc nulls last
-		</if>
-		<if test="searchSort==3">
-			order by reviewRatio desc nulls last
-		</if>
+	<select id="selectSearchClass" resultType="classes">
+		select cno, ctitle, chitcount, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname,rnum
+				from(
+					select cno, ctitle, chitcount, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname, rownum as rnum
+					from(
+					        select c.cno as cno, ctitle, chitcount, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname
+					            from classes c
+					            left join (
+					                select cr.cno as cno, count(cr.cno) as reviewCount, avg(cr.crratio) as crratio
+					                from classreview cr
+					                group by cr.cno
+					            ) cr on cr.cno = c.cno
+					            join member m on m.mid = c.mid
+					            join category ct on ct.ctno = c.ctno
+					           <![CDATA[ where sysdate<cdday ]]>
+					        <if test="search.searchTitle=='all' || search.searchTitle=='ingredient'">
+									 and(c.cno
+							            in(
+							            select distinct cno from classitem where ciname like '%'||#{search.searchText} ||'%')
+								<if test="search.searchTitle=='all'">
+									or (ctitle like '%'||#{search.searchText} ||'%')
+								    or (ccontent like '%'||#{search.searchText} ||'%'))
+								</if>
+							</if>
+							
+							<if test="search.searchTitle=='titlecontent'">
+								and ((ctitle like '%' || #{search.searchText} || '%') or (ccontent like '%' || #{search.searchText} || '%'))
+							</if>
+							
+							<if test="search.searchTitle=='category'">
+								and ctname=#{search.searchText}
+							</if>
+							<if test="search.searchSort==0">
+								order by cdday
+							</if>
+							<if test="search.searchSort==1">
+								order by chitcount desc
+							</if>
+							<if test="search.searchSort==2">
+								order by  reviewCount desc nulls last
+							</if>
+							<if test="search.searchSort==3">
+								order by crratio desc nulls last
+							</if>
+					    )
+					    <![CDATA[ where rownum<=#{pager.endRowNo}]]>
+				)
+				<![CDATA[ where rnum>=#{pager.startRowNo}]]>
 	</select>
 	
 	<!-- 클래스리스트 페이지 네이션-->
 	<select id="getCount" resultType="int">
 		select count(*) from classes 
+	</select>
+	
+	<select id="getSearchCount" parameterType="search" resultType="int">
+		select count(*) 
+		from(
+			select cno, ctitle, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname
+			from(
+			        select c.cno as cno, ctitle, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname
+			            from classes c
+			            left join (
+			                select cr.cno as cno, count(cr.cno) as reviewCount, avg(cr.crratio) as crratio
+			                from classreview cr
+			                group by cr.cno
+			            ) cr on cr.cno = c.cno
+			            join member m on m.mid = c.mid
+			            join category ct on ct.ctno = c.ctno
+			           <![CDATA[ where sysdate<cdday ]]>
+			        <if test="searchTitle=='all' || searchTitle=='ingredient'">
+							 and(c.cno
+					            in( 
+					            select distinct cno from classitem where ciname like '%'||#{searchText} ||'%')
+						<if test="searchTitle=='all'">
+							or (ctitle like '%'||#{searchText} ||'%')
+						    or (ccontent like '%'||#{searchText} ||'%'))
+						</if>
+					</if>
+					
+					<if test="searchTitle=='titlecontent'">
+						and ((ctitle like '%' || #{searchText} || '%') or (ccontent like '%' || #{searchText} || '%'))
+					</if>
+					
+					<if test="searchTitle=='category'">
+						and ctname=#{searchText}
+					</if>
+			    )
+		)
 	</select>
 	
 	<!-- classes 읽기 -->
@@ -120,8 +161,8 @@
 	</select>
 	
 	<!-- hitcount 세기 -->
-	<update id="updateBhitcount" parameterType="int">
-	update classes set chitcount=chitcount+1 
+	<update id="updateChitcount" parameterType="classes">
+	update classes set chitcount=#{chitcount}
 	where cno=#{cno}
 	</update>
 	
@@ -252,4 +293,49 @@
 		where cno=#{cno}
 	</select>
 
+	<!-- qna 등록 -->
+	<insert id="insertQna" parameterType="qna">
+		<selectKey keyProperty="qno" resultType="int" order="BEFORE">
+	      select seq_qno.nextval from dual
+	    </selectKey>
+	   insert into qna (
+	      qno, qtitle, qcontent, qdate, mid, cno
+	   ) values (
+	      #{qno}, #{qtitle}, #{qcontent}, sysdate, #{mid}, #{cno}
+	   )	   
+	</insert>
+	
+	<!-- qna 읽기 -->
+	<select id="selectQnaByCno" parameterType="int" resultType="qna">
+		select qno, qtitle, qcontent, qdate, qna.mid, cno, mnickname
+		from qna, member
+		where cno=#{cno} and qna.mid = member.mid
+		order by qdate desc
+	</select>
+	
+	<!-- qna 수정 -->
+	<update id="updateQnaByQno" parameterType="qna">
+		update qna set qtitle=#{qtitle}, qcontent=#{qcontent}
+		where qno=#{qno}
+	</update>
+	
+	<!-- qna 삭제 -->
+	<delete id="deleteQnaByQno" parameterType="int">
+		delete from qna 
+		where qno=#{qno}
+	</delete>
+	
+	
+	<select id="selectBestClass" resultType="classes">
+		select rnum, cno, ctitle, chitcount
+		from
+			(
+				select rownum as rnum, cno, ctitle, chitcount
+				from classes 
+				where <![CDATA[SYSDATE<CDDAY]]>
+				order by chitcount desc
+			)
+		where <![CDATA[rnum <= 5]]>
+	</select>
+	
 </mapper>

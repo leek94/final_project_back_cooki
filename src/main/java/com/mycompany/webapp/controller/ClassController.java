@@ -40,17 +40,6 @@ public class ClassController {
 	@Autowired
 	private ClassService classService;
 	
-	@GetMapping("/getClassList")
-	public Map<String, Object> getClassList(@RequestParam(defaultValue="1") int pageNo) {
-		int totalRows= classService.getCount();
-		log.info("tt"+totalRows);
-		Pager pager= new Pager(12,5,totalRows, pageNo);
-		List<Classes> classes= classService.getClassList(pageNo);
-		 Map<String, Object> map= new HashMap<>();
-		 map.put("classes", classes);
-		 map.put("pager", pager);
-		 return map;
-	}
 	
 	// 신청 인원을 서버에서 확인
 	@GetMapping("/classNowPerson/{cno}")
@@ -85,8 +74,9 @@ public class ClassController {
 	@GetMapping("/classDetail/{cno}")
 	public Map<String, Object> classDetail(@PathVariable int cno) {
 		Map<String, Object> map = new HashMap<>();
-		log.info("클래스 디테일 실행");
 		Classes classes = classService.getClasses(cno);
+		classes.setChitcount(classes.getChitcount()+1);
+		classService.updateChitcount(classes);
 		map.put("classes", classes);
 		
 		return map;
@@ -265,11 +255,6 @@ public class ClassController {
 	
 	// ----------------------------------- review -----------------------------------
 	
-	@GetMapping("/reviewCount/{cno}")
-	public int reviewCount(@PathVariable int cno) {
-		int reviewCount = classService.getReviewCount(cno);
-		return reviewCount;
-	}
 	
 	@GetMapping("/reviewList/{cno}")
 	public Map<String, Object> reviewList(@PathVariable int cno, Authentication authentication) {

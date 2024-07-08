@@ -74,4 +74,29 @@
 		delete from classReview 
 		where crno=#{crno}
 	</delete>
+	
+	<insert id="insertRecipeReview" parameterType="recipeReview">
+		<selectKey keyProperty="rrno" resultType="int" order="BEFORE">
+			select seq_rrno.nextval from dual
+		</selectKey>
+		insert into recipereview ( rrno, rrtitle, rrcontent, rrdate, mid, rno )
+		values(#{rrno}, #{rrtitle}, #{rrcontent}, sysdate, #{mid}, #{rno})
+	</insert>
+	
+	<select id="selectRecipeReviewsByRno" resultType="recipeReview">
+		select rrno, rrtitle, rrcontent, rrdate, mnickname
+		from recipereview, member
+		where recipereview.mid = member.mid
+		and rno = #{rno}
+		order by rrno desc
+	</select>
+	
+	<update id="updateRecipeReview" parameterType="recipeReview">
+		update recipereview set rrtitle = #{rrtitle}, rrcontent = #{rrcontent}
+		where rrno = #{rrno}
+	</update>
+	
+	<delete id="deleteRecipeReview">
+		delete from recipereview where rrno = #{rrno}
+	</delete>
 </mapper>

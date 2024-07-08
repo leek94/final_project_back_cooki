@@ -33,8 +33,10 @@ public class Classes { //클래스\
 	//클래스 디테일에서 크리에이터명을 받아오기
 	private String mnickname;
 	
+	private int reviewCount;
+	
+	private float crratio;
 	private String mname;
-
 	
 	private MultipartFile[] cthumbnailimgs; //썸네일 이미지 배열
 }
