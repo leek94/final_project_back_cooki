@@ -34,6 +34,22 @@
 		where mid=#{mid}
 	</select>
 	
+	<select id="selectMyProfile" parameterType="String" resultType="Member">
+		select mid, mphonenum, mnickname, mrole
+		from member
+		where mid=#{mid}
+	</select>
+	
+	<update id="updateNickname" parameterType="Member">
+		update member set mnickname = #{mnickname}
+		where mid = #{mid}
+	</update>
+	
+	<update id="updatePassword" parameterType="Member">
+		update member set mpassword = #{mpassword}
+		where mid = #{mid}
+	</update>
+
 	<select id="selectPastClassesByMid" parameterType="String" resultType="Classes">
 		<![CDATA[
 		select cno, ctitle, cpersoncount, cdday, mname
@@ -64,8 +80,8 @@
 		order by cdday
 		]]>
 	</select>
-	
-		<select id="selectNowClassesByMidCno" parameterType="String" resultType="Classes">
+
+	<select id="selectNowClassesByMidCno" parameterType="String" resultType="Classes">
 		<![CDATA[
 		select cno, ctitle, cpersoncount, cdday, mname 
 		from classes, member
@@ -77,5 +93,6 @@
 		order by cdday
 		]]>
 	</select>
+
 	
 </mapper>

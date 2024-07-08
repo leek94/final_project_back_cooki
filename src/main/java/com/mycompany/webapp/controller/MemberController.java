@@ -121,8 +121,60 @@ public class MemberController {
 	}
 	
 	// 처음 마이페이지 화면
-	@GetMapping("/myProfile")
-	public void myProfile() {
+	@GetMapping("/myProfile/{mid}")
+	public Map<String, Object> myProfile(@PathVariable String mid) {
+		log.info("마이프로필 mid: " + mid);
+		
+		Member member = memberService.getMyProfile(mid);
+		log.info("유저 콘솔: " + member.getMid());
+		log.info("닉네임 확인: " + member.getMnickname());
+		Map<String, Object> map = new HashMap<>();
+		map.put("member", member);
+		log.info("콘솔1");
+		return map;
+	}
+	
+	// 에디터 마이페이지 화면
+	@GetMapping("/editorProfile/{mid}/{mrole}")
+	public Map<String, Object> editorProfile(@PathVariable String mid, @PathVariable String mrole){
+		log.info("에디터 마이프로필 mid: " + mid);
+		log.info("에디터 롤 : " + mrole);
+		
+		List<Career> career = null;
+		List<Awards> awards = null;
+		
+		if(mrole.equals("ROLE_EDITOR")) {
+			career = memberService.getCareer(mid);
+			awards = memberService.getAwards(mid);
+		}
+		
+		log.info("콘솔2");
+		log.info("career" + career.get(1).getCacontent());
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("career", career);
+		map.put("awards", awards);
+		
+		return map;
+	}	
+	
+	@PutMapping("/updateNickname")
+	public void updateNickname(@RequestBody Member member) {
+		log.info("변경된 닉네임 확인" +member.getMnickname());
+		memberService.updateNickname(member);
+		log.info("닉네임 변경 완료");
+	}
+	
+	@PutMapping("/updatePassword")
+	public void updatePassword(@RequestBody Member member) {
+		log.info("변경된 비밀번호 값 : " + member.getMpassword());
+		log.info("변경된 비밀번호 값 : " + member.getMid());
+		
+		// 비밀번호 인코딩하여 저장
+		PasswordEncoder passwordEncoder =PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		member.setMpassword(passwordEncoder.encode(member.getMpassword()));
+		
+		memberService.updatePassword(member);
 		
 	}
 	

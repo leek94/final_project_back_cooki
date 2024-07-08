@@ -20,6 +20,9 @@ public interface MemberDao {
    public int insertAwards(Awards awards);
    public List<Career> selectCareerBymid(String mid);
    public List<Awards> selectAwardsBymid(String mid);
+   public Member selectMyProfile(String mid);
+   public void updateNickname(Member member);
+   public void updatePassword(Member member);
    public List<Classes> selectPastClassesByMid(String mid);
    public List<Classes> selectNowClassesByMid(String mid);
    public List<Classes> selectPastClassesByMidCno(String mid);

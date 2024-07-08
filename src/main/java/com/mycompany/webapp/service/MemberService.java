@@ -41,12 +41,24 @@ public List<Awards> getAwards(String mid) {
 	return awards;
 }
 
+public Member getMyProfile(String mid) {
+	return memberDao.selectMyProfile(mid);
+	
+}
+
+public void updateNickname(Member member) {
+	memberDao.updateNickname(member);
+	
+}
+
+public void updatePassword(Member member) {
+	memberDao.updatePassword(member);
+}
 // 일반 유저가 수강했었던 클래스 가져오기
 public List<Classes> getMyPastClass(String mid) {
 	List<Classes> classes = memberDao.selectPastClassesByMidCno(mid);
 	log.info("class리스트" + classes);
 	return classes;
-	
 }
 
 // 일반 유저가 수강 신청한 클래스 가져오기
