@@ -41,11 +41,12 @@ public class RecipeController {
 	private RecipeService recipeService;
 	
 	@PostMapping("/recipeList")
-	public Map<String,Object> RecipeList(@RequestBody Search search, @RequestParam(defaultValue = "1") int pageNo, Authentication authentication) {
+	public Map<String,Object> RecipeList(@RequestBody Search search, 
+			@RequestParam(defaultValue = "1") int pageNo, Authentication authentication, @RequestParam(defaultValue = "12") int perPage) {
 		int totalCount = recipeService.getTotalCount(search);
 		log.info("갯수"+totalCount);
 		//페이저 객체 생성
-		Pager pager = new Pager(12, 5, totalCount, pageNo);
+		Pager pager = new Pager(perPage, 5, totalCount, pageNo);
 		List<Recipe> searchRecipe = recipeService.getSearchRecipe(search, pager);
 		if(authentication != null) {
 			String mid = authentication.getName();
