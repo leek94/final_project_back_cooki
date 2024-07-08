@@ -33,4 +33,23 @@
 		from awards
 		where mid=#{mid}
 	</select>
+	
+	<select id="selectPastClassesByMid" parameterType="String" resultType="Classes">
+		<![CDATA[
+		select *
+		from classes
+		where mid=#{mid} and cdday < sysdate
+		]]>
+	</select>
+	
+	<select id="selectNowClassesByMid" parameterType="String" resultType="Classes">
+		<![CDATA[
+		select *
+		from classes
+		where mid=#{mid} and cdday >= sysdate
+		order by cdday
+		]]>
+	</select>
+	
+	
 </mapper>

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.Awards;
 import com.mycompany.webapp.dto.Career;
+import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
 import com.mycompany.webapp.security.AppUserDetails;
@@ -150,24 +151,36 @@ public class MemberController {
 		
 	}
 	
-	@GetMapping("/myClassHistory")
-	public void myClassHistory() {
-		
+	@GetMapping("/myClassHistory/{mid}")
+	public void myClassHistory(@PathVariable String mid) {
+
 	}
 	
-	@GetMapping("/myNowClass")
-	public void myNowClass() {
-		
+	@GetMapping("/myNowClass/{mid}")
+	public void myNowClass(@PathVariable String mid) {
+
 	}
 	
-	@GetMapping("/EditorNowRecruit")
-	public void EditorNowRecruit() {
-		
+	@GetMapping("/editorNowRecruit/{mid}")
+	public Map<String, Object> editorNowRecruit(@PathVariable String mid) {
+		log.info("컨트롤러 editorNowRecruit 메소드 실행");
+		List<Classes> myClassList = memberService.getEditorNowClass(mid);
+		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("myClassList", myClassList);
+		log.info("컨트롤러 editorNowRecruit 내가 모집하고 있는 클래스 리스트 받아옴");
+		return map;
 	}
 	
-	@GetMapping("/EditorRecruitHistory")
-	public void EditorRecruitHistory() {
-		
+	@GetMapping("/editorRecruitHistory/{mid}")
+	public Map<String, Object> editorRecruitHistory(@PathVariable String mid) {
+		log.info("컨트롤러 editorRecruitHistory 메소드 실행");
+		List<Classes> myClassList = memberService.getEditorPastClass(mid);
+		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("myClassList", myClassList);
+		log.info("컨트롤러 editorRecruitHistory 에디터 모집했던 클래스 리스트 받아옴");
+		return map;
 	}
 	
 	
