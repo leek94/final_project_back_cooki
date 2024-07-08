@@ -26,4 +26,6 @@ public interface MemberDao {
    public List<Classes> selectPastClassesByMid(String mid);
    public List<Classes> selectNowClassesByMid(String mid);
    public void deleteCareers(String mid);
+   public List<Classes> selectPastClassesByMidCno(String mid);
+   public List<Classes> selectNowClassesByMidCno(String mid);
 }

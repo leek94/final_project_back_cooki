@@ -211,13 +211,25 @@ public class MemberController {
 	}
 	
 	@GetMapping("/myClassHistory/{mid}")
-	public void myClassHistory(@PathVariable String mid) {
-
+	public Map<String, Object> myClassHistory(@PathVariable String mid) {
+		log.info("컨트롤러 myClassHistory 메소드 실행");
+		List<Classes> myClassList = memberService.getMyPastClass(mid);
+		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("myClassList", myClassList);
+		log.info("컨트롤러 myClassHistory 내가 수강했던 클래스 리스트 받아옴");
+		return map;
 	}
 	
 	@GetMapping("/myNowClass/{mid}")
-	public void myNowClass(@PathVariable String mid) {
-
+	public Map<String, Object> myNowClass(@PathVariable String mid) {
+		log.info("컨트롤러 myNowClass 메소드 실행");
+		List<Classes> myClassList = memberService.getMyNowClass(mid);
+		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("myClassList", myClassList);
+		log.info("컨트롤러 myNowClass 내가 수강 신청한 클래스 리스트 받아옴");
+		return map;
 	}
 	
 	@GetMapping("/editorNowRecruit/{mid}")
