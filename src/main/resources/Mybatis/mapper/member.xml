@@ -35,10 +35,20 @@
 	</select>
 	
 	<select id="selectMyProfile" parameterType="String" resultType="Member">
-		select mid, mphonenum, mnickname
+		select mid, mphonenum, mnickname, mrole
 		from member
 		where mid=#{mid}
 	</select>
+	
+	<update id="updateNickname" parameterType="Member">
+		update member set mnickname = #{mnickname}
+		where mid = #{mid}
+	</update>
+	
+	<update id="updatePassword" parameterType="Member">
+		update member set mpassword = #{mpassword}
+		where mid = #{mid}
+	</update>
 	
 	
 </mapper>

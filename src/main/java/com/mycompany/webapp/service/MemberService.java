@@ -41,6 +41,15 @@ public Member getMyProfile(String mid) {
 	return memberDao.selectMyProfile(mid);
 	
 }
+
+public void updateNickname(Member member) {
+	memberDao.updateNickname(member);
+	
+}
+
+public void updatePassword(Member member) {
+	memberDao.updatePassword(member);
+}
 	
 
 }
