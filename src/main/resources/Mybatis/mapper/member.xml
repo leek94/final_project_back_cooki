@@ -54,17 +54,17 @@
 		<![CDATA[
 		select cno, ctitle, cpersoncount, cdday, mname
 		from classes, member
-		where mid=#{mid} and cdday < sysdate and classes.mid = member.mid
+		where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
 		order by cdday
 		]]>
 	</select>
 	
 	<select id="selectNowClassesByMid" parameterType="String" resultType="Classes">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, mname
+		select cno, ctitle, cpersoncount, cdday, member.mname
 		from classes, member
-		where mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
-		
+		where classes.mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
+		order by cdday
 		]]>
 	</select>
 	
