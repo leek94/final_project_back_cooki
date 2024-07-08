@@ -112,9 +112,6 @@
 	</select>
 	
 	<!-- 클래스리스트 페이지 네이션-->
-	<select id="getCount" resultType="int">
-		select count(*) from classes 
-	</select>
 	
 	<select id="getSearchCount" parameterType="search" resultType="int">
 		select count(*) 
@@ -285,7 +282,14 @@
 		select * from awards
 		where mid=#{mid}
 	</select>
-	
+
+	<!-- 클래스 리뷰 갯수 받아오기-->
+	<select id="selectReviewCount" parameterType="int" resultType="int">
+		select count(*)
+		from classReview
+		where cno=#{cno}
+	</select>
+
 	<!-- qna 등록 -->
 	<insert id="insertQna" parameterType="qna">
 		<selectKey keyProperty="qno" resultType="int" order="BEFORE">
@@ -330,4 +334,5 @@
 			)
 		where <![CDATA[rnum <= 5]]>
 	</select>
+	
 </mapper>

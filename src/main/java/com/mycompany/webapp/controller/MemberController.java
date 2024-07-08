@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.Awards;
 import com.mycompany.webapp.dto.Career;
+import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
 import com.mycompany.webapp.security.AppUserDetails;
@@ -89,18 +91,27 @@ public class MemberController {
 		return map;
 	}
 	
-	@PostMapping("/setCareers")
 	//return된 값을 front로 다시 전달해 줄 필요가 없기 때문에 void로 설정
-	public void setCareers(@RequestBody Career career ) {
-		career.setMid(career.getMid());
-		//커리어 값 insert
+	@PostMapping("/setCareers")
+	public void setCareers(@RequestBody Career career) {
 		memberService.setCareer(career);
+	}
+	
+	@DeleteMapping("/careers/{mid}")
+	public void careers(@PathVariable String mid) {
+		memberService.deleteCareers(mid);
+		log.info("커리어 삭제");
 	}
 	
 	@PostMapping("/setAwards")
 	public void setAwards(@RequestBody Awards awards) {
-		awards.setMid(awards.getMid());
 		memberService.setAwards(awards);
+	}
+	
+	@DeleteMapping("/awards/{mid}")
+	public void awards(@PathVariable String mid) {
+		memberService.deleteAwards(mid);
+		log.info("수상경력 삭제");
 	}
 	
 	@GetMapping("/getCreatroInfo/{cno}")
@@ -120,9 +131,57 @@ public class MemberController {
 	}
 	
 	// 처음 마이페이지 화면
-	@GetMapping("/myProfile")
-	public void myProfile() {
+	@GetMapping("/myProfile/{mid}")
+	public Map<String, Object> myProfile(@PathVariable String mid) {
+		log.info("마이프로필 mid: " + mid);
 		
+		Member member = memberService.getMyProfile(mid);
+		log.info("유저 콘솔: " + member.getMid());
+		log.info("닉네임 확인: " + member.getMnickname());
+		Map<String, Object> map = new HashMap<>();
+		map.put("member", member);
+		log.info("콘솔1");
+		return map;
+	}
+	
+	// 에디터 마이페이지 화면
+	@GetMapping("/editorProfile/{mid}/{mrole}")
+	public Map<String, Object> editorProfile(@PathVariable String mid, @PathVariable String mrole){
+		log.info("에디터 마이프로필 mid: " + mid);
+		log.info("에디터 롤 : " + mrole);
+		
+		List<Career> career = null;
+		List<Awards> awards = null;
+		
+		if(mrole.equals("ROLE_EDITOR")) {
+			career = memberService.getCareer(mid);
+			awards = memberService.getAwards(mid);
+		}
+		
+		log.info("콘솔2");
+		log.info("career" + career.get(1).getCacontent());
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("career", career);
+		map.put("awards", awards);
+		
+		return map;
+	}	
+	
+	// 마이페이지 닉네임 업데이트
+	@PutMapping("/updateNickname")
+	public void updateNickname(@RequestBody Member member) {
+		memberService.updateNickname(member);
+	}
+	
+	// 마이페이지 패스워드 업데이트
+	@PutMapping("/updatePassword")
+	public void updatePassword(@RequestBody Member member) {
+		// 비밀번호 인코딩하여 저장
+		PasswordEncoder passwordEncoder =PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		member.setMpassword(passwordEncoder.encode(member.getMpassword()));
+		
+		memberService.updatePassword(member);
 	}
 	
 	@PutMapping("/myProfile/update")
@@ -150,24 +209,48 @@ public class MemberController {
 		
 	}
 	
-	@GetMapping("/myClassHistory")
-	public void myClassHistory() {
-		
+	@GetMapping("/myClassHistory/{mid}")
+	public Map<String, Object> myClassHistory(@PathVariable String mid) {
+		log.info("컨트롤러 myClassHistory 메소드 실행");
+		List<Classes> myClassList = memberService.getMyPastClass(mid);
+		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("myClassList", myClassList);
+		log.info("컨트롤러 myClassHistory 내가 수강했던 클래스 리스트 받아옴");
+		return map;
 	}
 	
-	@GetMapping("/myNowClass")
-	public void myNowClass() {
-		
+	@GetMapping("/myNowClass/{mid}")
+	public Map<String, Object> myNowClass(@PathVariable String mid) {
+		log.info("컨트롤러 myNowClass 메소드 실행");
+		List<Classes> myClassList = memberService.getMyNowClass(mid);
+		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("myClassList", myClassList);
+		log.info("컨트롤러 myNowClass 내가 수강 신청한 클래스 리스트 받아옴");
+		return map;
 	}
 	
-	@GetMapping("/EditorNowRecruit")
-	public void EditorNowRecruit() {
-		
+	@GetMapping("/editorNowRecruit/{mid}")
+	public Map<String, Object> editorNowRecruit(@PathVariable String mid) {
+		log.info("컨트롤러 editorNowRecruit 메소드 실행");
+		List<Classes> myClassList = memberService.getEditorNowClass(mid);
+		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("myClassList", myClassList);
+		log.info("컨트롤러 editorNowRecruit 내가 모집하고 있는 클래스 리스트 받아옴");
+		return map;
 	}
 	
-	@GetMapping("/EditorRecruitHistory")
-	public void EditorRecruitHistory() {
-		
+	@GetMapping("/editorRecruitHistory/{mid}")
+	public Map<String, Object> editorRecruitHistory(@PathVariable String mid) {
+		log.info("컨트롤러 editorRecruitHistory 메소드 실행");
+		List<Classes> myClassList = memberService.getEditorPastClass(mid);
+		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("myClassList", myClassList);
+		log.info("컨트롤러 editorRecruitHistory 에디터 모집했던 클래스 리스트 받아옴");
+		return map;
 	}
 	
 	
