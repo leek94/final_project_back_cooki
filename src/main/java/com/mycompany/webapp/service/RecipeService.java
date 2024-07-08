@@ -9,12 +9,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.webapp.dao.RecipeDao;
 import com.mycompany.webapp.dao.ReviewQnaDao;
+import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Likes;
+import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.PrList;
 import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.RecipeItem;
 import com.mycompany.webapp.dto.RecipeProcess;
 import com.mycompany.webapp.dto.RecipeReview;
+import com.mycompany.webapp.dto.Search;
 
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
@@ -147,4 +150,13 @@ public class RecipeService {
 	public List<RecipeReview> getRecipeReviews(int rno) {
 		return reviewQnaDao.selectRecipeReviewsByRno(rno);
 	}
+
+	public int getTotalCount(Search search) {
+		return recipeDao.selectTotalCount(search);
+	}
+
+	public List<Recipe> getSearchRecipe(Search search, Pager pager) {
+		return recipeDao.selectRecipeList(search, pager);
+	}
+
 }

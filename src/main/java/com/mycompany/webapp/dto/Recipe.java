@@ -19,10 +19,11 @@ public class Recipe { //레시피
 	private String rimgoname; //이미지 파일 이릅
 	private Integer ctno; //카테고리 번호
 	
-	//category dto 삭제 
-	private Integer ctname; //카테고리 이름
-	private Boolean islike;
-	
 	private MultipartFile rAttach;
-
+	
+	//category dto 삭제 
+	private String ctname; //카테고리 이름
+	private Boolean islike;
+	private int reviewcount;
+	private int likecount;
 }
