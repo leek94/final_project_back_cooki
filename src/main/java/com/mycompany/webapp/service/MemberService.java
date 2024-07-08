@@ -87,4 +87,9 @@ public void deleteCareers(String mid) {
 	
 }
 
+public void deleteAwards(String mid) {
+	memberDao.deleteAwards(mid);
+	
+}
+
 }

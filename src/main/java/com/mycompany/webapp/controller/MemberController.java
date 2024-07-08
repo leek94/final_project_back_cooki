@@ -91,15 +91,9 @@ public class MemberController {
 		return map;
 	}
 	
-	@PostMapping("/setCareers")
 	//return된 값을 front로 다시 전달해 줄 필요가 없기 때문에 void로 설정
-	public void setCareers(@RequestBody Career career ) {
-		log.info("커리어 아이디"+career.getMid());
-		log.info("커리어 번호"+career.getCano());
-		log.info("커리어 내용"+career.getCacontent());
-		
-		career.setMid(career.getMid());
-		//커리어 값 insert
+	@PostMapping("/setCareers")
+	public void setCareers(@RequestBody Career career) {
 		memberService.setCareer(career);
 	}
 	
@@ -111,8 +105,13 @@ public class MemberController {
 	
 	@PostMapping("/setAwards")
 	public void setAwards(@RequestBody Awards awards) {
-		awards.setMid(awards.getMid());
 		memberService.setAwards(awards);
+	}
+	
+	@DeleteMapping("/awards/{mid}")
+	public void awards(@PathVariable String mid) {
+		memberService.deleteAwards(mid);
+		log.info("수상경력 삭제");
 	}
 	
 	@GetMapping("/getCreatroInfo/{cno}")

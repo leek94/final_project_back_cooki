@@ -97,6 +97,10 @@
 	<delete id="deleteCareers" parameterType="String">
 		delete from career where mid = #{mid}
 	</delete>
+	
+	<delete id="deleteAwards" parameterType="String">
+		delete from awards where mid = #{mid}
+	</delete>
 
 	
 </mapper>
