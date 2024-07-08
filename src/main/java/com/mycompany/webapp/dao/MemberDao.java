@@ -23,7 +23,6 @@ public interface MemberDao {
    public Member selectMyProfile(String mid);
    public void updateNickname(Member member);
    public void updatePassword(Member member);
-
    public List<Classes> selectPastClassesByMid(String mid);
    public List<Classes> selectNowClassesByMid(String mid);
 }
