@@ -43,7 +43,7 @@ public List<Awards> getAwards(String mid) {
 
 // 일반 유저가 수강했었던 클래스 가져오기
 public List<Classes> getMyPastClass(String mid) {
-	List<Classes> classes = memberDao.selectPastClassesByMid(mid);
+	List<Classes> classes = memberDao.selectPastClassesByMidCno(mid);
 	log.info("class리스트" + classes);
 	return classes;
 	
@@ -51,7 +51,7 @@ public List<Classes> getMyPastClass(String mid) {
 
 // 일반 유저가 수강 신청한 클래스 가져오기
 public List<Classes> getMyNowClass(String mid) {
-	List<Classes> classes = memberDao.selectNowClassesByMid(mid);
+	List<Classes> classes = memberDao.selectNowClassesByMidCno(mid);
 	log.info("class리스트" + classes);
 	return classes;
 }

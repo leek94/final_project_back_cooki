@@ -36,20 +36,46 @@
 	
 	<select id="selectPastClassesByMid" parameterType="String" resultType="Classes">
 		<![CDATA[
-		select *
-		from classes
-		where mid=#{mid} and cdday < sysdate
+		select cno, ctitle, cpersoncount, cdday, mname
+		from classes, member
+		where mid=#{mid} and cdday < sysdate and classes.mid = member.mid
+		order by cdday
 		]]>
 	</select>
 	
 	<select id="selectNowClassesByMid" parameterType="String" resultType="Classes">
 		<![CDATA[
-		select *
-		from classes
-		where mid=#{mid} and cdday >= sysdate
+		select cno, ctitle, cpersoncount, cdday, mname
+		from classes, member
+		where mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
+		
+		]]>
+	</select>
+	
+	<select id="selectPastClassesByMidCno" parameterType="String" resultType="Classes">
+		<![CDATA[
+		select cno, ctitle, cpersoncount, cdday, mname
+		from classes, member
+		where cno in (
+			select cno
+			from Participant
+			where mid=#{mid}
+		) and cdday < sysdate and classes.mid = member.mid
 		order by cdday
 		]]>
 	</select>
 	
+		<select id="selectNowClassesByMidCno" parameterType="String" resultType="Classes">
+		<![CDATA[
+		select cno, ctitle, cpersoncount, cdday, mname 
+		from classes, member
+		where cno in (
+			select cno
+			from Participant
+			where mid=#{mid}
+		) and cdday >= sysdate and classes.mid = member.mid
+		order by cdday
+		]]>
+	</select>
 	
 </mapper>
