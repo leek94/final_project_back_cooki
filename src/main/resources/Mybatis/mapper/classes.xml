@@ -323,7 +323,7 @@
 	</delete>
 	
 	
-	<select id="selectBestClass" resultType="classes">
+	<select id="selectBestClass" parameterType="int" resultType="classes">
 		select rnum, cno, ctitle, chitcount
 		from
 			(
@@ -332,7 +332,7 @@
 				where <![CDATA[SYSDATE<CDDAY]]>
 				order by chitcount desc
 			)
-		where <![CDATA[rnum <= 5]]>
+		where <![CDATA[rnum <= #{number}]]>
 	</select>
 	
 	<select id="selectParticipantList" parameterType="Int" resultType="ParticipantList">

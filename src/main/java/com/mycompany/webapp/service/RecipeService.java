@@ -131,8 +131,8 @@ public class RecipeService {
 		return recipeDao.updateHitcount(rno);
 	}
 
-	public List<Recipe> getBestRecipe() {
-		return recipeDao.selectBestRecipe();
+	public List<Recipe> getBestRecipe(int number) {
+		return recipeDao.selectBestRecipe(number);
 	}
 
 	public int createRecipeReview(RecipeReview recipeReview) {

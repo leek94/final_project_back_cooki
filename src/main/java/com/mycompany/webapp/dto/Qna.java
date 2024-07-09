@@ -16,4 +16,5 @@ public class Qna { //문의하기
 	private Date qreplydate; //답변 날짜
 
 	private String mnickname;
+	private String ctitle;
 }

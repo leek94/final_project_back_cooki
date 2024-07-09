@@ -102,6 +102,13 @@
 		delete from awards where mid = #{mid}
 	</delete>
 	
+	<select id="selectQnaByMid" parameterType="String" resultType="qna">
+		select qno, qtitle, qcontent, qdate, qreply, qna.cno, classes.ctitle
+		from qna, classes
+		where qna.mid=#{mid} and qna.cno = classes.cno
+		order by qdate
+	</select>
+
 	<update id="updateimage" parameterType="Member">
 		update member 
 		set mimgoname=#{mimgoname}, mimgtype = #{mimgtype}, mimgdata = #{mimgdata}

@@ -28,6 +28,7 @@ import com.mycompany.webapp.dto.Awards;
 import com.mycompany.webapp.dto.Career;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
+import com.mycompany.webapp.dto.Qna;
 import com.mycompany.webapp.security.AppUserDetails;
 import com.mycompany.webapp.security.JwtProvider;
 import com.mycompany.webapp.service.ClassService;
@@ -236,9 +237,14 @@ public class MemberController {
 		
 	}
 	
-	@GetMapping("/myQAndA")
-	public void myQAndA() {
-		
+	@GetMapping("/myQAndA/{mid}")
+	public Map<String, Object> myQAndA(@PathVariable String mid) {
+		log.info("컨트롤러 myQAndA 메소드 실행");
+		List<Qna> myQnaList = memberService.getMyQna(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("myQnaList", myQnaList);
+		log.info("컨트롤러 myQAndA 나의 문의 내역 리스트 받아옴");
+		return map;
 	}
 	
 	@GetMapping("/myClassHistory/{mid}")
@@ -284,5 +290,5 @@ public class MemberController {
 		log.info("컨트롤러 editorRecruitHistory 에디터 모집했던 클래스 리스트 받아옴");
 		return map;
 	}
-	
+
 }

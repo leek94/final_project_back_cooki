@@ -66,9 +66,9 @@ public class TotalController {
 	}
 	
 	@GetMapping("/bestClassesRecipe")
-	public Map<String,Object> bestClasses() {
-		List<Classes> classes = classService.getBestClass();
-		List<Recipe> recipe = recipeService.getBestRecipe();
+	public Map<String,Object> bestClassesRecipe(@RequestParam int number) {
+		List<Classes> classes = classService.getBestClass(number);
+		List<Recipe> recipe = recipeService.getBestRecipe(number);
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("classes", classes);

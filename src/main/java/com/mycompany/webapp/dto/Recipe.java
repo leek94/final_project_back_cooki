@@ -26,4 +26,5 @@ public class Recipe { //레시피
 	private Boolean islike;
 	private int reviewcount;
 	private int likecount;
+	private String mnickname;
 }

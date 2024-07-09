@@ -44,7 +44,7 @@ public interface ClassDao {
 	public List<Classes> selectSearchClass(@Param("search") Search search,@Param("pager") Pager pager);
 	public int getCount();
 	public int getSearchCount(Search search);
-	public List<Classes> selectBestClass();
+	public List<Classes> selectBestClass(int number);
 	public void updateChitcount(Classes classes);
 	public List<ParticipantList> selectParticipantList(int cno);
 	public void updateParticipant(Participant participant);

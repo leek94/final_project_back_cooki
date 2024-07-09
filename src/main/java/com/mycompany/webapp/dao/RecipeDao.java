@@ -32,7 +32,7 @@ public interface RecipeDao {
 	public int insertLikes(Likes likes);
 	public int deleteLikes(Likes likes);
 	public int updateHitcount(int rno);
-	public List<Recipe> selectBestRecipe();
+	public List<Recipe> selectBestRecipe(int number);
 	public int selectTotalCount(Search search);
 	public List<Recipe> selectRecipeList(Search search, Pager pager);	
 }
