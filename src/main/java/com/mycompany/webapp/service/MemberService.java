@@ -152,4 +152,15 @@ public class MemberService {
 		log.info("recipe리스트" + recipeList);
 		return recipeList;
 	}
+	
+	public List<Recipe> getLikeRecipe(String mid) {
+		List<Recipe> likeRecipeList = memberDao.selectRecipeByMidLikes(mid);
+		//레시피 번호에 맞는 좋아요수를 레시피리스트의 인덱스마다 저장해주기
+		for(Recipe recipe : likeRecipeList) {
+			int rno = recipe.getRno();
+			int likesCount = memberDao.selectLikesCountByRno(rno);
+			recipe.setLikecount(likesCount);
+		}
+		return likeRecipeList;
+	}
 }

@@ -239,8 +239,13 @@ public class MemberController {
 	}
 	
 	@GetMapping("/myLikeRecipe/{mid}")
-	public void myLikeRecipe() {
-		
+	public Map<String, Object> myLikeRecipe(@PathVariable String mid) {
+		log.info("컨트롤러 myLikeRecipe 메소드 실행");
+		List<Recipe> myLikeRecipe = memberService.getLikeRecipe(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("myLikeRecipe", myLikeRecipe);
+		log.info("컨트롤러 myLikeRecipe 내가 작성한 레시피 리스트 받아옴");
+		return map;
 	}
 	
 	@GetMapping("/myQAndA/{mid}")

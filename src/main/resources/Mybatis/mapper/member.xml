@@ -136,4 +136,10 @@
 		from likes
 		where rno=#{rno}
 	</select>
+	
+	<select id="selectRecipeByMidLikes" parameterType="String" resultType="recipe">
+		select recipe.rno, rtitle, rhitcount, rdate, mnickname
+		from recipe, likes, member
+		where likes.mid=#{mid} and likes.rno = recipe.rno and recipe.mid = member.mid
+	</select>
 </mapper>

@@ -37,4 +37,5 @@ public interface MemberDao {
    public void updateMrole(Member member);
    public List<Recipe> selectRecipeByMid(String mid);
    public int selectLikesCountByRno(int rno);
+   public List<Recipe> selectRecipeByMidLikes(String mid);
 }
