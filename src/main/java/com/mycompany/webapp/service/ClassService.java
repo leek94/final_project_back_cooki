@@ -453,8 +453,8 @@ public class ClassService {
 		return classDao.getSearchCount(search);
 	}
 
-	public List<Classes> getBestClass() {
-		return classDao.selectBestClass();
+	public List<Classes> getBestClass(int number) {
+		return classDao.selectBestClass(number);
 	}
 
 	public void updateChitcount(Classes classes) {

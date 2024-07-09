@@ -94,16 +94,17 @@
 		where rno = #{rno}
 	</update>
 	
-	<select id="selectBestRecipe" resultType="recipe">
-		select rnum, rno, rtitle, rcontent, rhitcount
+	<select id="selectBestRecipe" parameterType="int" resultType="recipe">
+		select rnum, rno, rtitle, rcontent, rdate, rhitcount, mnickname
 		from
 			(
-				select rownum as rnum, rno, rtitle, rcontent, rhitcount
-				from recipe
-				where <![CDATA[to_date(sysdate,'YYYY--MM-DD')-to_date(rdate,'YYYY--MM-DD') < 30]]>
+				select rownum as rnum, rno, rtitle, rcontent, rdate, rhitcount, mnickname
+				from recipe, member
+				where recipe.mid = member.mid 
+				and <![CDATA[to_date(sysdate,'YYYY--MM-DD')-to_date(rdate,'YYYY--MM-DD') < 30]]>
 				order by rhitcount desc
 			)
-		where <![CDATA[rnum <= 5]]>
+		where <![CDATA[rnum <= #{number}]]>
 	</select>
 	
 	<select id="selectTotalCount" parameterType="search" resultType="int">
