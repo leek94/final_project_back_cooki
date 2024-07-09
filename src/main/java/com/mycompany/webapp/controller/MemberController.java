@@ -190,7 +190,7 @@ public class MemberController {
 	@PostMapping("/updateImg")
 	public void updateImg(Member member) {
 		log.info("mid느는: " + member.getMid());
-		memberService.updateimage(member);
+		memberService.updateimage(member); 
 	}
 	
 	@GetMapping("/mattach/{mid}")
