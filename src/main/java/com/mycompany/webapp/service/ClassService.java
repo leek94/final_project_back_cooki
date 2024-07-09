@@ -17,6 +17,7 @@ import com.mycompany.webapp.dto.CuList;
 import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Participant;
+import com.mycompany.webapp.dto.ParticipantList;
 import com.mycompany.webapp.dto.Qna;
 import com.mycompany.webapp.dto.Search;
 
@@ -460,6 +461,15 @@ public class ClassService {
 	public void updateChitcount(Classes classes) {
 		classDao.updateChitcount(classes);
 		
+	}
+
+	public List<ParticipantList> getParticipantList(int cno) {
+		return classDao.selectParticipantList(cno);
+		
+	}
+
+	public void updateIsParticipant(Participant participant) {
+		classDao.updateParticipant(participant);
 	}
 
 }

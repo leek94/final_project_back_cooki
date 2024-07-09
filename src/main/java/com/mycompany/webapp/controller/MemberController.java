@@ -96,9 +96,7 @@ public class MemberController {
 	
 	//return된 값을 front로 다시 전달해 줄 필요가 없기 때문에 void로 설정
 	@PostMapping("/setCareers")
-	public void setCareers(@RequestBody Career career) {
-		log.info("경력 로그 확인 아이디: " + career.getMid());
-		log.info("경력 로그 확인 내용: " + career.getCacontent());
+		public void setCareers(@RequestBody Career career) {
 		memberService.setCareer(career);
 	}
 	
@@ -110,8 +108,6 @@ public class MemberController {
 	
 	@PostMapping("/setAwards")
 	public void setAwards(@RequestBody Awards awards) {
-		log.info("수상 로그 확인 아이디: " + awards.getMid());
-		log.info("경력 로그 확인 내용: " + awards.getAcontent());
 		memberService.setAwards(awards);
 	}
 	
@@ -123,11 +119,9 @@ public class MemberController {
 	
 	@GetMapping("/getCreatroInfo/{cno}")
 	public Map<String, Object> getCreatroInfo(@PathVariable int cno){
-		log.info("cno"+cno);
 		Classes classes = classService.getClasses(cno);
 		String mnickname= classes.getMnickname();
 		String mid= classes.getMid();
-		log.info("mid"+mid);
 		List<Career> career = memberService.getCareer(mid);
 		List<Awards> awards = memberService.getAwards(mid);
 		Map<String, Object> map = new HashMap<>();
@@ -140,23 +134,15 @@ public class MemberController {
 	// 처음 마이페이지 화면
 	@GetMapping("/myProfile/{mid}")
 	public Map<String, Object> myProfile(@PathVariable String mid) {
-		log.info("마이프로필 mid: " + mid);
-		
 		Member member = memberService.getMyProfile(mid);
-		log.info("유저 콘솔: " + member.getMid());
-		log.info("닉네임 확인: " + member.getMnickname());
 		Map<String, Object> map = new HashMap<>();
 		map.put("member", member);
-		log.info("콘솔1");
 		return map;
 	}
 	
 	// 에디터 마이페이지 화면
 	@GetMapping("/editorProfile/{mid}/{mrole}")
 	public Map<String, Object> editorProfile(@PathVariable String mid, @PathVariable String mrole){
-		log.info("에디터 마이프로필 mid: " + mid);
-		log.info("에디터 롤 : " + mrole);
-		
 		List<Career> career = null;
 		List<Awards> awards = null;
 		
@@ -164,9 +150,6 @@ public class MemberController {
 			career = memberService.getCareer(mid);
 			awards = memberService.getAwards(mid);
 		}
-		
-		log.info("콘솔2");
-		log.info("career" + career.get(1).getCacontent());
 		Map<String, Object> map = new HashMap<>();
 		
 		map.put("career", career);
@@ -193,13 +176,11 @@ public class MemberController {
 	
 	@PostMapping("/updateImg")
 	public void updateImg(Member member) {
-		log.info("mid느는: " + member.getMid());
 		memberService.updateimage(member); 
 	}
 	
 	@GetMapping("/mattach/{mid}")
 	public void mattach(@PathVariable String mid, HttpServletResponse response) {
-		log.info("멤버 사진 다운로드");
 		Member member = memberService.getMember(mid);
 		
 			try {
@@ -226,7 +207,6 @@ public class MemberController {
 		
 		memberService.updateMrole(member);
 		log.info("에디터로 값 변경 성공");
-		
 	}
 	
 	@PutMapping("deleteImg/{mid}")

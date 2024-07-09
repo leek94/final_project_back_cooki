@@ -252,7 +252,7 @@
 	<!--클래스 신청 등록-->
 	<insert id="insertClassApply" parameterType="participant">
 	insert into Participant(cno, mid, isparticipant, pdate)
-	values(#{cno}, #{mid}, 1, systimestamp)
+	values(#{cno}, #{mid}, 0, systimestamp)
 	</insert>
 	<!-- 클래스 참석 여부 -->
 	<select id="selectByisParticipant" parameterType="participant" resultType="participant">
@@ -335,4 +335,16 @@
 		where <![CDATA[rnum <= 5]]>
 	</select>
 	
+	<select id="selectParticipantList" parameterType="Int" resultType="ParticipantList">
+		select m.mid, m.mname, c.ctitle, c.cdday, c.cstarttime, p.isparticipant
+		from classes c
+		join participant p on c.cno = p.cno
+		join member m on m.mid = p.mid
+		where c.cno = #{cno}
+	</select>
+	
+	<update id="updateParticipant" parameterType="Participant">
+		update participant set isParticipant = #{isParticipant}
+		where mid = #{mid} and cno = #{cno}
+	</update>
 </mapper>
