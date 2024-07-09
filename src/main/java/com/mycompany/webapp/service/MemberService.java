@@ -123,6 +123,16 @@ public void updateimage(Member member) {
 	
 }
 
+public void deleteImg(String mid) {
+	memberDao.deleteImg(mid);
+	
+}
+
+public void updateMrole(Member member) {
+	memberDao.updateMrole(member);
+	
+}
+
 
 
 }

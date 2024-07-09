@@ -35,7 +35,7 @@
 	</select>
 	
 	<select id="selectMyProfile" parameterType="String" resultType="Member">
-		select mid, mphonenum, mnickname, mrole
+		select mid, mphonenum, mnickname, mrole, mimgoname
 		from member
 		where mid=#{mid}
 	</select>
@@ -107,6 +107,15 @@
 		set mimgoname=#{mimgoname}, mimgtype = #{mimgtype}, mimgdata = #{mimgdata}
 		where mid = #{mid}
 	</update>
-
+	
+	<update id="deleteImg" parameterType="String">
+		update member set mimgtype = null, mimgdata = null, mimgoname = null
+		where mid = #{mid}
+	</update>
+	
+	<update id="updateMrole" parameterType="Member">
+		update member set mrole = #{mrole}
+		where mid = #{mid}
+	</update>
 	
 </mapper>

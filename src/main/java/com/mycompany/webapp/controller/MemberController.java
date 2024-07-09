@@ -97,6 +97,8 @@ public class MemberController {
 	//return된 값을 front로 다시 전달해 줄 필요가 없기 때문에 void로 설정
 	@PostMapping("/setCareers")
 	public void setCareers(@RequestBody Career career) {
+		log.info("경력 로그 확인 아이디: " + career.getMid());
+		log.info("경력 로그 확인 내용: " + career.getCacontent());
 		memberService.setCareer(career);
 	}
 	
@@ -108,6 +110,8 @@ public class MemberController {
 	
 	@PostMapping("/setAwards")
 	public void setAwards(@RequestBody Awards awards) {
+		log.info("수상 로그 확인 아이디: " + awards.getMid());
+		log.info("경력 로그 확인 내용: " + awards.getAcontent());
 		memberService.setAwards(awards);
 	}
 	
@@ -197,7 +201,7 @@ public class MemberController {
 	public void mattach(@PathVariable String mid, HttpServletResponse response) {
 		log.info("멤버 사진 다운로드");
 		Member member = memberService.getMember(mid);
-		if (member.getMattach() != null && !member.getMattach().isEmpty()) {
+		
 			try {
 				String fileName = new String(member.getMimgoname().getBytes("UTF-8"), "ISO-8859-1");
 				response.setHeader("content-Disposition", "attachment; filename=\"" + fileName + "\"");
@@ -210,7 +214,26 @@ public class MemberController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
+		
+	}
+	
+	@PutMapping("/updateMrole/{mid}")
+	public void updateMrole(@PathVariable String mid) {
+		// 객체 생성 및 에디터로 값 변경
+		Member member = new Member();
+		member.setMrole("ROLE_EDITOR");
+		member.setMid(mid);
+		
+		memberService.updateMrole(member);
+		log.info("에디터로 값 변경 성공");
+		
+	}
+	
+	@PutMapping("deleteImg/{mid}")
+	public void deleteImg(@PathVariable String mid) {
+		// 이름은 delete지만 update로 값을 null로 변경할 예정
+		memberService.deleteImg(mid);
+		
 	}
 	
 	@PutMapping("/myProfile/update")
