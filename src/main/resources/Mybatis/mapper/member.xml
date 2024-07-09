@@ -125,4 +125,15 @@
 		where mid = #{mid}
 	</update>
 	
+	<select id="selectRecipeByMid" parameterType="String" resultType="recipe">
+		select rno, rtitle, rhitcount, rdate, mnickname
+		from recipe, member
+		where recipe.mid=#{mid} and recipe.mid = member.mid
+	</select>
+	
+	<select id="selectLikesCountByRno" parameterType="int" resultType="int">
+		select count(*)
+		from likes
+		where rno=#{rno}
+	</select>
 </mapper>

@@ -14,6 +14,7 @@ import com.mycompany.webapp.dto.Career;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
 import com.mycompany.webapp.dto.Qna;
+import com.mycompany.webapp.dto.Recipe;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -139,4 +140,16 @@ public class MemberService {
 		memberDao.updateMrole(member);
 	}
 
+	public List<Recipe> getMyRecipe(String mid) {
+		List<Recipe> recipeList = memberDao.selectRecipeByMid(mid);
+	
+		for(Recipe recipe : recipeList) {
+			int rno = recipe.getRno();
+			int likesCount = memberDao.selectLikesCountByRno(rno);
+			recipe.setLikecount(likesCount);
+		}
+		log.info("recipe리스트: " + recipeList.size());
+		log.info("recipe리스트" + recipeList);
+		return recipeList;
+	}
 }

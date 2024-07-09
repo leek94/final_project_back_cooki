@@ -29,6 +29,7 @@ import com.mycompany.webapp.dto.Career;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
 import com.mycompany.webapp.dto.Qna;
+import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.security.AppUserDetails;
 import com.mycompany.webapp.security.JwtProvider;
 import com.mycompany.webapp.service.ClassService;
@@ -247,12 +248,17 @@ public class MemberController {
 		
 	}
 	
-	@GetMapping("/myRecipe")
-	public void myRecipe() {
-		
+	@GetMapping("/myRecipe/{mid}")
+	public Map<String, Object> myRecipe(@PathVariable String mid) {
+		log.info("컨트롤러 myRecipe 메소드 실행");
+		List<Recipe> myRecipeList = memberService.getMyRecipe(mid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("myRecipeList", myRecipeList);
+		log.info("컨트롤러 myRecipe 내가 작성한 레시피 리스트 받아옴");
+		return map;
 	}
 	
-	@GetMapping("/myLikeRecipe")
+	@GetMapping("/myLikeRecipe/{mid}")
 	public void myLikeRecipe() {
 		
 	}
