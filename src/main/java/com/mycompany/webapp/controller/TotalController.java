@@ -37,11 +37,12 @@ public class TotalController {
 	}
 	
 	@PostMapping("/ClassSearch")
-	public Map<String,Object> ClassSearch(@RequestBody Search search, @RequestParam(defaultValue = "1") int pageNo) {
+	public Map<String,Object> ClassSearch(@RequestBody Search search, @RequestParam(defaultValue = "1") int pageNo,
+			@RequestParam(defaultValue = "12") int perPage) {
 		int totalRows =classService.getSearchCount(search);
 		log.info("갯수"+totalRows);
 		//페이저 객체 생성
-		Pager pager = new Pager(12, 5, totalRows, pageNo);
+		Pager pager = new Pager(perPage, 5, totalRows, pageNo);
 		List<Classes> searchClasses = classService.getSearchClasses(search, pager);
 		Map<String, Object> map = new HashMap<>();
 		map.put("searchClass", searchClasses);
@@ -52,6 +53,16 @@ public class TotalController {
 	@GetMapping("/recipeSearch")
 	public void recipeSearch() {
 		
+	}
+	
+	@PostMapping("/getTotalCount")
+	public Map<String, Integer> getTotalCount(@RequestBody Search search){
+		int searchClasses = classService.getSearchCount(search);
+		int searchRecipes= recipeService.getTotalCount(search);
+		Map<String, Integer> map = new HashMap<>();
+		map.put("searchClasses", searchClasses);
+		map.put("searchRecipes", searchRecipes);
+		return map;
 	}
 	
 	@GetMapping("/bestClassesRecipe")

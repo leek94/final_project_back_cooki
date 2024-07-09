@@ -112,9 +112,6 @@
 	</select>
 	
 	<!-- 클래스리스트 페이지 네이션-->
-	<select id="getCount" resultType="int">
-		select count(*) from classes 
-	</select>
 	
 	<select id="getSearchCount" parameterType="search" resultType="int">
 		select count(*) 

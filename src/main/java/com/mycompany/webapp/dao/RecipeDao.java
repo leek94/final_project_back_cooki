@@ -6,10 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.mycompany.webapp.dto.Likes;
+import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.RecipeItem;
 import com.mycompany.webapp.dto.RecipeProcess;
 import com.mycompany.webapp.dto.RecipeReview;
+import com.mycompany.webapp.dto.Search;
 
 
 @Mapper
@@ -30,5 +32,7 @@ public interface RecipeDao {
 	public int insertLikes(Likes likes);
 	public int deleteLikes(Likes likes);
 	public int updateHitcount(int rno);
-	public List<Recipe> selectBestRecipe();	
+	public List<Recipe> selectBestRecipe();
+	public int selectTotalCount(Search search);
+	public List<Recipe> selectRecipeList(Search search, Pager pager);	
 }

@@ -17,15 +17,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.webapp.dto.Likes;
+import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.PrList;
 import com.mycompany.webapp.dto.Recipe;
 import com.mycompany.webapp.dto.RecipeItem;
 import com.mycompany.webapp.dto.RecipeProcess;
 import com.mycompany.webapp.dto.RecipeReview;
+import com.mycompany.webapp.dto.Search;
 import com.mycompany.webapp.service.RecipeService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,9 +40,28 @@ public class RecipeController {
 	@Autowired
 	private RecipeService recipeService;
 	
-	@GetMapping("/recipeList")
-	public void recipeList() {
-		
+	@PostMapping("/recipeList")
+	public Map<String,Object> RecipeList(@RequestBody Search search, 
+			@RequestParam(defaultValue = "1") int pageNo, Authentication authentication, @RequestParam(defaultValue = "12") int perPage) {
+		int totalCount = recipeService.getTotalCount(search);
+		log.info("갯수"+totalCount);
+		//페이저 객체 생성
+		Pager pager = new Pager(perPage, 5, totalCount, pageNo);
+		List<Recipe> searchRecipe = recipeService.getSearchRecipe(search, pager);
+		if(authentication != null) {
+			String mid = authentication.getName();
+			for(Recipe recipe : searchRecipe) {
+				Likes likes = new Likes();
+				likes.setMid(mid);
+				likes.setRno(recipe.getRno());
+				likes = recipeService.getIsLike(likes);
+				recipe.setIslike((likes != null)? true : false );
+			}
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("searchRecipe", searchRecipe);
+		map.put("pager", pager);
+		return map;
 	}
 	
 	//PathVarialble로 rno 받음
@@ -80,11 +102,13 @@ public class RecipeController {
 		map.put("rno",rno);
 		return map;
 	}
+	
 	//레시피 아이템 등록
 	@PostMapping("/recipeItemRegister")
 	public void recipeItemRegister(@RequestBody List<RecipeItem> recipeItem) {
 		recipeService.insertRecipeItems(recipeItem);
 	}
+	
 	//레시피 프로세스만 등록
 	@PostMapping("/recipeProcessRegister")
 	public void recipeProcessRegister(RecipeProcess recipeProcess) {
