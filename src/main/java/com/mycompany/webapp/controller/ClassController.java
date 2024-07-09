@@ -317,7 +317,7 @@ public class ClassController {
 		log.info("컨트롤러 qnaDelete 클래스 Q&A 삭제");
 	}
 	
-	@PutMapping("/qreplyUpdate")
+	@PutMapping("/qreplyUpdate") 
 	public void qreplyUpdate(@RequestBody Qna qna) {
 		log.info("컨트롤러 qreplyUpdate 메소드 실행");
 		classService.updateQreply(qna);
