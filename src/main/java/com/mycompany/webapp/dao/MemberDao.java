@@ -31,4 +31,7 @@ public interface MemberDao {
    public List<Classes> selectNowClassesByMidCno(String mid);
    public void deleteAwards(String mid);
    public List<Qna> selectQnaByMid(String mid);
+   public void updateimage(Member member);
+   public void deleteImg(String mid);
+   public void updateMrole(Member member);
 }

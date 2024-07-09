@@ -1,8 +1,12 @@
 package com.mycompany.webapp.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.Awards;
 import com.mycompany.webapp.dto.Career;
-import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
 import com.mycompany.webapp.dto.Qna;
@@ -95,6 +98,8 @@ public class MemberController {
 	//return된 값을 front로 다시 전달해 줄 필요가 없기 때문에 void로 설정
 	@PostMapping("/setCareers")
 	public void setCareers(@RequestBody Career career) {
+		log.info("경력 로그 확인 아이디: " + career.getMid());
+		log.info("경력 로그 확인 내용: " + career.getCacontent());
 		memberService.setCareer(career);
 	}
 	
@@ -106,6 +111,8 @@ public class MemberController {
 	
 	@PostMapping("/setAwards")
 	public void setAwards(@RequestBody Awards awards) {
+		log.info("수상 로그 확인 아이디: " + awards.getMid());
+		log.info("경력 로그 확인 내용: " + awards.getAcontent());
 		memberService.setAwards(awards);
 	}
 	
@@ -185,6 +192,51 @@ public class MemberController {
 		memberService.updatePassword(member);
 	}
 	
+	@PostMapping("/updateImg")
+	public void updateImg(Member member) {
+		log.info("mid느는: " + member.getMid());
+		memberService.updateimage(member); 
+	}
+	
+	@GetMapping("/mattach/{mid}")
+	public void mattach(@PathVariable String mid, HttpServletResponse response) {
+		log.info("멤버 사진 다운로드");
+		Member member = memberService.getMember(mid);
+		
+			try {
+				String fileName = new String(member.getMimgoname().getBytes("UTF-8"), "ISO-8859-1");
+				response.setHeader("content-Disposition", "attachment; filename=\"" + fileName + "\"");
+				response.setContentType(member.getMimgtype());
+				OutputStream os;
+				os = response.getOutputStream();
+				os.write(member.getMimgdata());
+				os.flush();
+				os.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		
+	}
+	
+	@PutMapping("/updateMrole/{mid}")
+	public void updateMrole(@PathVariable String mid) {
+		// 객체 생성 및 에디터로 값 변경
+		Member member = new Member();
+		member.setMrole("ROLE_EDITOR");
+		member.setMid(mid);
+		
+		memberService.updateMrole(member);
+		log.info("에디터로 값 변경 성공");
+		
+	}
+	
+	@PutMapping("deleteImg/{mid}")
+	public void deleteImg(@PathVariable String mid) {
+		// 이름은 delete지만 update로 값을 null로 변경할 예정
+		memberService.deleteImg(mid);
+		
+	}
+	
 	@PutMapping("/myProfile/update")
 	public void profileUpdate() {
 		
@@ -258,5 +310,5 @@ public class MemberController {
 		log.info("컨트롤러 editorRecruitHistory 에디터 모집했던 클래스 리스트 받아옴");
 		return map;
 	}
-		
+
 }
