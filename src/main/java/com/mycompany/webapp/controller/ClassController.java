@@ -26,8 +26,8 @@ import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.CuList;
 import com.mycompany.webapp.dto.Curriculum;
-import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Participant;
+import com.mycompany.webapp.dto.ParticipantList;
 import com.mycompany.webapp.dto.Qna;
 import com.mycompany.webapp.service.ClassService;
 
@@ -44,10 +44,8 @@ public class ClassController {
 	// 신청 인원을 서버에서 확인
 	@GetMapping("/classNowPerson/{cno}")
 	public Map<String, Object> classNowPerson(@PathVariable int cno){
-		log.info("cno 확인:" + cno);
 		// 현재 인원 수 몇명인 바로 리턴하기 위해서 서버에서 인원 확인
 		int nowPerson = classService.getNowPerson(cno);
-		log.info("현재 인원 확인"+ nowPerson);
 		Map<String, Object> map = new HashMap<>();
 		map.put("nowPerson", nowPerson);
 		
@@ -57,8 +55,6 @@ public class ClassController {
 	// 신청인원이 마감되었는지 확인하는 메서드
 	@GetMapping("/classOverPerson/{cno}/{cpersoncount}")
 	public Map<String, Object> classOverPerson(@PathVariable int cno, @PathVariable int cpersoncount) {
-		log.info("cno 확인:" + cno);
-		log.info("cpersoncount 확인:" +cpersoncount);
 		Map<String, Object> map = new HashMap<>();
 		String result = classService.isOverPeople(cno, cpersoncount);
 		// 마감인원이 넘었는지 확인
@@ -140,7 +136,6 @@ public class ClassController {
 	public Map<String, Object> isParticipant(@PathVariable int cno, Authentication authentication) {
 		Map<String, Object> map = new HashMap<>();
 		if(authentication == null) {
-			log.info("로그인 없이 리턴");
 			map.put("result", "backToLogin");
 		} else {
 			String mid = authentication.getName();
@@ -163,7 +158,6 @@ public class ClassController {
 	//클래스 신청 여부 받아오기 (단순 문자열이나 숫자를 받을 때는 requestparam을 사용해야 함)
 	@PostMapping("/classApply")
 	public Map<String, Object> classApply(@RequestParam int cno, Authentication authentication) {
-		log.info("실행됨!!!:");
 		Map<String, Object> map = new HashMap<>();
 		if(authentication == null) { // 로그인 안했을 경우 로그인 페이지로 던짐
 			log.info("로그인 없이 리턴");
@@ -192,9 +186,7 @@ public class ClassController {
 	
 	@PostMapping("/classRegister")
 	public Map<String, Integer> classRegister(Classes classes) {	
-		log.info("컨트롤러 classRegister 메소드 실행");
 		classService.createClass(classes);
-		log.info("컨트롤러 classRegister 클래스 객체 생성");
 		
 		//cno를 <front>로 전달하기 위해 map에 JSON 객체 형태로 저장해서 보내줌
 		Map<String, Integer> map = new HashMap<>();
@@ -206,16 +198,12 @@ public class ClassController {
 	
 	@PostMapping("/itemRegister")
 	public void itemRegister(@RequestBody List<ClassItem> classItems) {
-		log.info("컨트롤러 itemRegister 메소드 실행");
 		classService.createItem(classItems);
-		log.info("컨트롤러 itemRegister 클래스아이템 객체 생성");
 	}
 	
 	@PostMapping("/curriculumRegister")
 	public void curriculumRegister(CuList cuList) {
-		log.info("컨트롤러 curriculumRegister 메소드 실행");
 		classService.createCurriculum(cuList);
-		log.info("컨트롤러 curriculumRegister 커리큘럼 객체 생성");
 	}
 	
 	// 삭제하기 고민중 - 모집 7일전까지만 삭제 가능하게
@@ -234,23 +222,17 @@ public class ClassController {
 	
 	@PutMapping("/classUpdate")
 	public void classUpdate(Classes classes) {
-		log.info("컨트롤러 classUpdate 메소드 실행");
 		classService.updateClass(classes);
-		log.info("컨트롤러 classUpdate 클래스 기본 정보 업데이트");
 	}
 	
 	@PutMapping("/itemUpdate")
 	public void itemUpdate(@RequestBody List<ClassItem> classItems) {
-		log.info("컨트롤러 itemUpdate 메소드 실행");
 		classService.updateItem(classItems); 
-		log.info("컨트롤러 itemUpdate 클래스 재료 정보 업데이트");
 	}
 	
 	@PutMapping("/curriculumUpdate")
 	public void curriculumUpdate(Curriculum curriculum) {
-		log.info("컨트롤러 curriculumUpdate 메소드 실행");
 		classService.updateCurriculum(curriculum);
-		log.info("컨트롤러 curriculumUpdate 클래스 커리큘럼 정보 업데이트");
 	}
 	
 	// ----------------------------------- review -----------------------------------
@@ -335,11 +317,38 @@ public class ClassController {
 		log.info("컨트롤러 qnaDelete 클래스 Q&A 삭제");
 	}
 	
-	@PutMapping("/qreplyUpdate")
+	@PutMapping("/qreplyUpdate") 
 	public void qreplyUpdate(@RequestBody Qna qna) {
 		log.info("컨트롤러 qreplyUpdate 메소드 실행");
 		classService.updateQreply(qna);
 		log.info("컨트롤러 qnaUpdate 클래스 Q&A qrely 정보 업데이트");
+	}
+	
+	@GetMapping("/getParticipantList/{cno}")
+	public Map<String, Object> getParticipantList(@PathVariable int cno) {
+		log.info("cno값 확인"+ cno);
+		List<ParticipantList> participantList = classService.getParticipantList(cno);
+		log.info("리스트 값 받기"+ participantList);
+		
+		for(ParticipantList pl: participantList) {
+			log.info("isparticipant 초기값: "+ pl.getIsParticipant());
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("participantList", participantList);
+		return map;
+		
+	}
+	
+	@PutMapping("/updateParticipant")
+	public void updateParticipant(@RequestBody Participant participant) {
+		log.info("출석 확인: " + participant.getCno());
+		log.info("출석 확인: " + participant.getMid());
+		log.info("출석 확인: " + participant.getIsParticipant());
+		
+		classService.updateIsParticipant(participant);
+		
+		
 	}
 	
 	// 사진 다운로드

@@ -11,6 +11,7 @@ import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Curriculum;
 import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Participant;
+import com.mycompany.webapp.dto.ParticipantList;
 import com.mycompany.webapp.dto.Search;
 
 
@@ -45,5 +46,7 @@ public interface ClassDao {
 	public int getSearchCount(Search search);
 	public List<Classes> selectBestClass(int number);
 	public void updateChitcount(Classes classes);
+	public List<ParticipantList> selectParticipantList(int cno);
+	public void updateParticipant(Participant participant);
 	
 }
