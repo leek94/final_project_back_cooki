@@ -29,4 +29,5 @@ public interface MemberDao {
    public List<Classes> selectPastClassesByMidCno(String mid);
    public List<Classes> selectNowClassesByMidCno(String mid);
    public void deleteAwards(String mid);
+   public void updateimage(Member member);
 }

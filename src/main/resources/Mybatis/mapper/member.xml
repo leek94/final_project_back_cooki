@@ -17,8 +17,8 @@
 	</insert>
 	
 	<select id="selectByMid" parameterType="String" resultType="Member">
-		select mid, mname, mrole, menabled, mphonenum, mnickname,mpassword
-		from member 
+		select mid, mname, mrole, menabled, mphonenum, mnickname,mpassword, mimgdata, mimgoname, mimgtype
+		from member
 		where mid=#{mid}
 	</select>
 	
@@ -101,6 +101,12 @@
 	<delete id="deleteAwards" parameterType="String">
 		delete from awards where mid = #{mid}
 	</delete>
+	
+	<update id="updateimage" parameterType="Member">
+		update member 
+		set mimgoname=#{mimgoname}, mimgtype = #{mimgtype}, mimgdata = #{mimgdata}
+		where mid = #{mid}
+	</update>
 
 	
 </mapper>

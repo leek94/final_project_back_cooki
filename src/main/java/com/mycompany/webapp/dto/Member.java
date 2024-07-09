@@ -1,6 +1,8 @@
 package com.mycompany.webapp.dto;
 
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -15,4 +17,6 @@ public class Member { //회원
    private byte[] mimgdata; //이미지 파일
    private String mimgoname; //이미지 파일 이름
    private String mimgtype; //이미지 파일 타입
+   
+   private MultipartFile mattach;
 }

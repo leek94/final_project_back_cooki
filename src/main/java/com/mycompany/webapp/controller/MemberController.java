@@ -1,8 +1,12 @@
 package com.mycompany.webapp.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.Awards;
 import com.mycompany.webapp.dto.Career;
-import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
 import com.mycompany.webapp.security.AppUserDetails;
@@ -184,6 +187,32 @@ public class MemberController {
 		memberService.updatePassword(member);
 	}
 	
+	@PostMapping("/updateImg")
+	public void updateImg(Member member) {
+		log.info("mid느는: " + member.getMid());
+		memberService.updateimage(member);
+	}
+	
+	@GetMapping("/mattach/{mid}")
+	public void mattach(@PathVariable String mid, HttpServletResponse response) {
+		log.info("멤버 사진 다운로드");
+		Member member = memberService.getMember(mid);
+		if (member.getMattach() != null && !member.getMattach().isEmpty()) {
+			try {
+				String fileName = new String(member.getMimgoname().getBytes("UTF-8"), "ISO-8859-1");
+				response.setHeader("content-Disposition", "attachment; filename=\"" + fileName + "\"");
+				response.setContentType(member.getMimgtype());
+				OutputStream os;
+				os = response.getOutputStream();
+				os.write(member.getMimgdata());
+				os.flush();
+				os.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	@PutMapping("/myProfile/update")
 	public void profileUpdate() {
 		
@@ -252,14 +281,5 @@ public class MemberController {
 		log.info("컨트롤러 editorRecruitHistory 에디터 모집했던 클래스 리스트 받아옴");
 		return map;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
