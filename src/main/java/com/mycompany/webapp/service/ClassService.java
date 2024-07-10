@@ -472,4 +472,8 @@ public class ClassService {
 		classDao.updateParticipant(participant);
 	}
 
+	public int classDelete(int cno) {
+		return classDao.deleteClass(cno);
+	}
+
 }

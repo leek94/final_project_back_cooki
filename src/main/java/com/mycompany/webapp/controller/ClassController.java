@@ -352,5 +352,9 @@ public class ClassController {
 	}
 	
 	// 사진 다운로드
-
+	
+	@GetMapping("classDelete/{cno}")
+	public void classDelete(@PathVariable int cno) {
+		int result = classService.classDelete(cno);
+	}
 }

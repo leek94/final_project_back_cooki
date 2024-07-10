@@ -347,4 +347,8 @@
 		update participant set isParticipant = #{isParticipant}
 		where mid = #{mid} and cno = #{cno}
 	</update>
+	
+	<delete id="deleteClass">
+		delete from classes where cno = #{cno}
+	</delete>
 </mapper>

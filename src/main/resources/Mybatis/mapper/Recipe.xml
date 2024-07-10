@@ -201,4 +201,8 @@
 				)
 		<![CDATA[ where rnum>=#{pager.startRowNo}]]>
 	</select>
+	
+	<delete id="deleteRecipe">
+		delete from recipe where rno = #{rno}
+	</delete>
 </mapper>

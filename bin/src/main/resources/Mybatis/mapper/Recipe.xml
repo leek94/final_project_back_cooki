@@ -73,4 +73,132 @@
 	<delete id="deleteRecipeProcessByRporder" parameterType="recipeProcess"> 
 		delete from RecipeProcess where rno=#{rno} and rporder=#{rporder}
 	</delete>
+	
+	<select id="selectLikesByMidRno" parameterType="likes" resultType="likes">
+		select *
+		from likes
+		where rno = #{rno} and mid = #{mid}
+	</select>
+	
+	<insert id="insertLikes" parameterType="likes">
+		insert into likes(rno, mid)
+		values (#{rno}, #{mid})
+	</insert>
+	
+	<delete id="deleteLikes" parameterType="likes">
+		delete from likes where rno= #{rno} and mid = #{mid}
+	</delete>
+	
+	<update id="updateHitcount">
+		update recipe set rhitcount = rhitcount + 1
+		where rno = #{rno}
+	</update>
+	
+	<select id="selectBestRecipe" parameterType="int" resultType="recipe">
+		select rnum, rno, rtitle, rcontent, rdate, rhitcount, mnickname
+		from
+			(
+				select rownum as rnum, rno, rtitle, rcontent, rdate, rhitcount, mnickname
+				from recipe, member
+				where recipe.mid = member.mid 
+				and <![CDATA[to_date(sysdate,'YYYY--MM-DD')-to_date(rdate,'YYYY--MM-DD') < 30]]>
+				order by rhitcount desc
+			)
+		where <![CDATA[rnum <= #{number}]]>
+	</select>
+	
+	<select id="selectTotalCount" parameterType="search" resultType="int">
+		select count(*) 
+		from(
+			select rno, rtitle, rcontent, rhitcount, rdate, mname, reviewCount, ctname, likecount
+			from(
+			        select r.rno as rno, rtitle, rcontent, rhitcount, rdate, mname, reviewCount, ctname, likecount
+			            from recipe r
+			            left join (
+			                select rno , count(rno) as reviewCount
+			                from recipereview
+			                group by rno
+			            ) rr on rr.rno = r.rno
+			            left join(
+			            	select rno, count(rno) as likecount
+			            	from likes
+			            	group by rno
+			            ) l on l.rno = r.rno
+			            join member m on m.mid = r.mid
+			            join category ct on ct.ctno = r.ctno
+			      	 where 
+			        <if test="searchTitle=='all' || searchTitle=='ingredient'">
+							  (r.rno
+					            in( 
+					            select distinct rno from recipeitem where riname like '%'||#{searchText} ||'%')
+						<if test="searchTitle=='all'">
+							or (rtitle like '%'||#{searchText} ||'%')
+						    or (rcontent like '%'||#{searchText} ||'%'))
+						</if>
+					</if>
+					
+					<if test="searchTitle=='titlecontent'">
+						((rtitle like '%' || #{searchText} || '%') or (rcontent like '%' || #{searchText} || '%'))
+					</if>
+					
+					<if test="searchTitle=='category'">
+						ctname=#{searchText}
+					</if>
+			    )
+		)
+	</select>
+	
+	<select id="selectRecipeList" resultType="recipe">
+		select rnum, rno, rtitle, rcontent, rhitcount, rdate, mname, reviewcount, ctname, likecount
+				from(
+					select rownum as rnum, rno, rtitle, rcontent, rhitcount, rdate, mname, reviewcount, ctname, likecount
+					from(
+					       select r.rno as rno, rtitle, rcontent, rhitcount, rdate, mname, reviewcount, ctname, likecount
+			            	from recipe r
+			            	left join (
+			                	select rno , count(rno) as reviewcount
+			                	from recipereview
+			                	group by rno
+			            	) rr on rr.rno = r.rno
+			            	left join(
+			            		select rno, count(rno) as likecount
+			            		from likes
+			            		group by rno
+			            	) l on l.rno = r.rno
+			            	join member m on m.mid = r.mid
+			            	join category ct on ct.ctno = r.ctno
+			      	 		where 
+					        <if test="search.searchTitle=='all' || search.searchTitle=='ingredient'">
+								   (r.rno in( 
+							        select distinct rno from recipeitem where riname like '%'||#{search.searchText} ||'%')
+								<if test="search.searchTitle=='all'">
+									or (rtitle like '%'||#{search.searchText} ||'%')
+								    or (rcontent like '%'||#{search.searchText} ||'%'))
+								</if>
+							</if>
+							
+							<if test="search.searchTitle=='titlecontent'">
+								((rtitle like '%' || #{search.searchText} || '%') or (rcontent like '%' || #{search.searchText} || '%'))
+							</if>
+							
+							<if test="search.searchTitle=='category'">
+								ctname=#{search.searchText}
+							</if>
+							<if test="search.searchSort==0">
+								order by rdate desc
+							</if>
+							<if test="search.searchSort==1">
+								order by rhitcount desc
+							</if>
+							<if test="search.searchSort==2">
+								order by  reviewcount desc nulls last
+							</if>
+							<if test="search.searchSort==3">
+								order by likecount desc nulls last
+							</if>
+					)
+					<![CDATA[ where rownum<=#{pager.endRowNo}]]>
+				)
+		<![CDATA[ where rnum>=#{pager.startRowNo}]]>
+	</select>
 </mapper>

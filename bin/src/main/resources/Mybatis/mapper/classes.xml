@@ -42,49 +42,113 @@
 	</delete>
 	
 	<!-- 클래스 리스트 받아오기 -->
-	<select id="selectClassList" resultType="classes">
+<!--	<select id="selectClassList" parameterType="pager" resultType="classes">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, chitcount, cround, classes.mid, mname
-		from classes, member
-		where classes.mid=member.mid 
-		and sysdate<cdday 
+		select rnum,cno, ctitle, cpersoncount, cdday, chitcount, mname
+		from 
+			(select rownum as rnum, cno, ctitle, cpersoncount, cdday, chitcount, mname
+			 from (
+			 	select cno, ctitle, cpersoncount, cdday, chitcount, mname
+				from classes,member
+				where classes.mid=member.mid
+				order by cdday
+			 )
+			 where rownum<=#{endRowNo}
+		)
+		where rnum>=#{startRowNo} 
+		and sysdate<cdday
 		 ]]>
-	</select>
+	</select>-->
 	
 	<!-- 클래스 검색 결과 받아오기 -->
-	<select id="selectSearchClass" parameterType="search" resultType="classes">
-		<if test="searchTitle=='all'">
-			SELECT DISTINCT c.cno, ctitle, cpersoncount, cdday, cround, mname
-			FROM CLASSES c
-			INNER JOIN MEMBER m on m.mid=c.mid
-			INNER JOIN
-			(select Distinct CNO
-			from classitem ci
-			where ciname LIKE '%' || #{searchText} || '%'
-			)
-			ci on c.cno=ci.cno
-			WHERE ctitle LIKE '%' || #{searchText} || '%' OR ccontent LIKE '%' || #{searchText} ||'%';
-		</if>
-		<!--<if test="searchTitle=='titlecontent'">
-			WHERE ctitle LIKE '%#{searchText}%' OR ccontent LIKE '%#{searchText}%';
-		</if>-->
-		<if test="searchTitle=='ingredient'">
-			SELECT DISTINCT c.cno, ctitle, cpersoncount, cdday, cround, mname
-			FROM CLASSES c
-			INNER JOIN MEMBER m on m.mid=c.mid
-			INNER JOIN
-			(select Distinct CNO
-			from classitem ci
-			where ciname LIKE '%' || #{searchText} || '%'
-			)
-			ci on c.cno=ci.cno
-		</if>
-		<!--<if test="searchTitle=='category'">
-			WHERE ctitle LIKE '%#{searchText}%' OR ccontent LIKE '%#{searchText}%';
-		</if>-->
-	
-		
+	<select id="selectSearchClass" resultType="classes">
+		select cno, ctitle, chitcount, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname,rnum
+				from(
+					select cno, ctitle, chitcount, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname, rownum as rnum
+					from(
+					        select c.cno as cno, ctitle, chitcount, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname
+					            from classes c
+					            left join (
+					                select cr.cno as cno, count(cr.cno) as reviewCount, avg(cr.crratio) as crratio
+					                from classreview cr
+					                group by cr.cno
+					            ) cr on cr.cno = c.cno
+					            join member m on m.mid = c.mid
+					            join category ct on ct.ctno = c.ctno
+					           <![CDATA[ where sysdate<cdday ]]>
+					        <if test="search.searchTitle=='all' || search.searchTitle=='ingredient'">
+									 and(c.cno
+							            in(
+							            select distinct cno from classitem where ciname like '%'||#{search.searchText} ||'%')
+								<if test="search.searchTitle=='all'">
+									or (ctitle like '%'||#{search.searchText} ||'%')
+								    or (ccontent like '%'||#{search.searchText} ||'%'))
+								</if>
+							</if>
+							
+							<if test="search.searchTitle=='titlecontent'">
+								and ((ctitle like '%' || #{search.searchText} || '%') or (ccontent like '%' || #{search.searchText} || '%'))
+							</if>
+							
+							<if test="search.searchTitle=='category'">
+								and ctname=#{search.searchText}
+							</if>
+							<if test="search.searchSort==0">
+								order by cdday
+							</if>
+							<if test="search.searchSort==1">
+								order by chitcount desc
+							</if>
+							<if test="search.searchSort==2">
+								order by  reviewCount desc nulls last
+							</if>
+							<if test="search.searchSort==3">
+								order by crratio desc nulls last
+							</if>
+					    )
+					    <![CDATA[ where rownum<=#{pager.endRowNo}]]>
+				)
+				<![CDATA[ where rnum>=#{pager.startRowNo}]]>
 	</select>
+	
+	<!-- 클래스리스트 페이지 네이션-->
+	
+	<select id="getSearchCount" parameterType="search" resultType="int">
+		select count(*) 
+		from(
+			select cno, ctitle, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname
+			from(
+			        select c.cno as cno, ctitle, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname
+			            from classes c
+			            left join (
+			                select cr.cno as cno, count(cr.cno) as reviewCount, avg(cr.crratio) as crratio
+			                from classreview cr
+			                group by cr.cno
+			            ) cr on cr.cno = c.cno
+			            join member m on m.mid = c.mid
+			            join category ct on ct.ctno = c.ctno
+			           <![CDATA[ where sysdate<cdday ]]>
+			        <if test="searchTitle=='all' || searchTitle=='ingredient'">
+							 and(c.cno
+					            in( 
+					            select distinct cno from classitem where ciname like '%'||#{searchText} ||'%')
+						<if test="searchTitle=='all'">
+							or (ctitle like '%'||#{searchText} ||'%')
+						    or (ccontent like '%'||#{searchText} ||'%'))
+						</if>
+					</if>
+					
+					<if test="searchTitle=='titlecontent'">
+						and ((ctitle like '%' || #{searchText} || '%') or (ccontent like '%' || #{searchText} || '%'))
+					</if>
+					
+					<if test="searchTitle=='category'">
+						and ctname=#{searchText}
+					</if>
+			    )
+		)
+	</select>
+	
 	<!-- classes 읽기 -->
 	<select id="selectByCno" parameterType="int" resultType="classes"> 
 	select cno, ctitle, ccontent, cpersoncount, cprice, 
@@ -94,8 +158,8 @@
 	</select>
 	
 	<!-- hitcount 세기 -->
-	<update id="updateBhitcount" parameterType="int">
-	update classes set chitcount=chitcount+1 
+	<update id="updateChitcount" parameterType="classes">
+	update classes set chitcount=#{chitcount}
 	where cno=#{cno}
 	</update>
 	
@@ -188,7 +252,7 @@
 	<!--클래스 신청 등록-->
 	<insert id="insertClassApply" parameterType="participant">
 	insert into Participant(cno, mid, isparticipant, pdate)
-	values(#{cno}, #{mid}, 1, systimestamp)
+	values(#{cno}, #{mid}, 0, systimestamp)
 	</insert>
 	<!-- 클래스 참석 여부 -->
 	<select id="selectByisParticipant" parameterType="participant" resultType="participant">
@@ -218,7 +282,14 @@
 		select * from awards
 		where mid=#{mid}
 	</select>
-	
+
+	<!-- 클래스 리뷰 갯수 받아오기-->
+	<select id="selectReviewCount" parameterType="int" resultType="int">
+		select count(*)
+		from classReview
+		where cno=#{cno}
+	</select>
+
 	<!-- qna 등록 -->
 	<insert id="insertQna" parameterType="qna">
 		<selectKey keyProperty="qno" resultType="int" order="BEFORE">
@@ -250,5 +321,30 @@
 		delete from qna 
 		where qno=#{qno}
 	</delete>
-
+	
+	
+	<select id="selectBestClass" parameterType="int" resultType="classes">
+		select rnum, cno, ctitle, chitcount
+		from
+			(
+				select rownum as rnum, cno, ctitle, chitcount
+				from classes 
+				where <![CDATA[SYSDATE<CDDAY]]>
+				order by chitcount desc
+			)
+		where <![CDATA[rnum <= #{number}]]>
+	</select>
+	
+	<select id="selectParticipantList" parameterType="Int" resultType="ParticipantList">
+		select m.mid, m.mname, c.ctitle, c.cdday, c.cstarttime, p.isparticipant
+		from classes c
+		join participant p on c.cno = p.cno
+		join member m on m.mid = p.mid
+		where c.cno = #{cno}
+	</select>
+	
+	<update id="updateParticipant" parameterType="Participant">
+		update participant set isParticipant = #{isParticipant}
+		where mid = #{mid} and cno = #{cno}
+	</update>
 </mapper>
