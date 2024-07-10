@@ -159,4 +159,8 @@ public class RecipeService {
 		return recipeDao.selectRecipeList(search, pager);
 	}
 
+	public int recipeDelete(int rno) {
+		return recipeDao.deleteRecipe(rno);
+	}
+
 }
