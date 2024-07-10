@@ -283,7 +283,7 @@
 		where mid=#{mid}
 	</select>
 
-	<!-- 클래스 리뷰 갯수 받아오기-->
+	<!-- !!!!!!아마도 리뷰큐앤에이 xml에 있을 수 있기 때문에 추후에 삭제할 예정임////// 클래스 리뷰 갯수 받아오기-->
 	<select id="selectReviewCount" parameterType="int" resultType="int">
 		select count(*)
 		from classReview

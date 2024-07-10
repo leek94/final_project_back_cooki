@@ -34,12 +34,13 @@
 		where qno=#{qno}
 	</delete>
 	
+	<!-- qna 대댓글 수정(등록) -->
 	<update id="updateQreplyByQno" parameterType="qna">
 		update qna set qreply=#{qreply}, qreplydate=sysdate
 		where qno=#{qno}
 	</update>
 	
-		<!-- classreview 등록 -->
+	<!-- 클래스 review 등록 -->
 	<insert id="insertClassReview" parameterType="classReview">
 		<selectKey keyProperty="crno" resultType="int" order="BEFORE">
 	      select seq_crno.nextval from dual
@@ -51,13 +52,32 @@
 	   )	   
 	</insert>
 	
-	<select id="selectClassReviewByCno" parameterType="int" resultType="classReview">
-		select crno, crtitle, crcontent, crratio, crdate, cno, classreview.mid, mnickname
-		from classreview, member
-		where cno=#{cno} and classreview.mid = member.mid
-		order by crdate desc
+	<!-- 클래스 review 총개수 세기 -->
+	<select id="selectReviewCountByCno" parameterType="int" resultType="int">
+		select count(*)
+		from classReview
+		where cno=#{cno}
 	</select>
 	
+	<!-- 클래스 review 페이지네이션 해서 읽기 -->
+	<select id="selectClassReviewByCnoPager" resultType="classReview">
+		<![CDATA[
+		select rnum, crno, crtitle, crcontent, crratio, crdate, cno, mid, mnickname
+		from(
+			select rownum as rnum, crno, crtitle, crcontent, crratio, crdate, cno, mid, mnickname
+			from(
+				select crno, crtitle, crcontent, crratio, crdate, cno, classreview.mid as mid, mnickname
+				from classreview, member
+				where cno=#{cno} and classreview.mid = member.mid
+				order by crdate desc
+			)
+			where rownum <= #{pager.endRowNo}
+		)
+		where rnum >= #{pager.startRowNo}
+		]]>
+	</select>
+	
+	<!-- 클래스 review 평점 읽기 -->
 	<select id="selectAvgCrratioByCno" parameterType="int" resultType="float">
 		select round(avg(crratio), 1)
 		from classreview
@@ -65,16 +85,18 @@
 		group by cno
 	</select>
 	
+	<!-- 클래스 review 수정 -->
 	<update id="updateClassReviewByCrno" parameterType="classReview">
 		update classreview set crtitle=#{crtitle}, crcontent=#{crcontent}, crratio=#{crratio}
 		where crno=#{crno}
 	</update>
 	
+	<!-- 클래스 review 삭제 -->
 	<delete id="deleteClassReviewByCrno" parameterType="int">
 		delete from classReview 
 		where crno=#{crno}
 	</delete>
-	
+
 	<insert id="insertRecipeReview" parameterType="recipeReview">
 		<selectKey keyProperty="rrno" resultType="int" order="BEFORE">
 			select seq_rrno.nextval from dual
