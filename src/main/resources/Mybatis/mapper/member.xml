@@ -125,4 +125,15 @@
 		where mid = #{mid}
 	</update>
 	
+	<update id="updateMphonenum" parameterType="Member">
+		update member set mphonenum = #{mphonenum}
+		where mid = #{mid}
+	</update>
+	
+	<select id="selectBynameAndPhonenum" parameterType="Member" resultType="Member">
+		select mid
+		from member
+		where mname = #{mname} and mphonenum = #{mphonenum}	
+	</select>
+	
 </mapper>

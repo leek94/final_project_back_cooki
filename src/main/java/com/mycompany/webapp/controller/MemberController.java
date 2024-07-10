@@ -210,6 +210,14 @@ public class MemberController {
 		log.info("에디터로 값 변경 성공");
 	}
 	
+	@PutMapping("/updatePhonenum")
+	public void updatePhonenum(@RequestBody Member member) {
+		log.info("멤버 전화번호"+ member.getMphonenum());
+		
+		memberService.updateMphonenum(member);
+		
+	}
+	
 	@PutMapping("deleteImg/{mid}")
 	public void deleteImg(@PathVariable String mid) {
 		// 이름은 delete지만 update로 값을 null로 변경할 예정
@@ -288,6 +296,26 @@ public class MemberController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("myClassList", myClassList);
 		log.info("컨트롤러 editorRecruitHistory 에디터 모집했던 클래스 리스트 받아옴");
+		return map;
+	}
+	
+	@PostMapping("/searchId")
+	public Map<String, Object> searchId(@RequestBody Member member) {
+		log.info("아이디 확인" + member.getMname());
+		log.info("아이디 확인" + member.getMphonenum());
+		
+		// 이름과 전화번호를 통해서 mid를 받아와서 전달해줌
+		Member memberSaved = memberService.getMemberBynameAndPhonenum(member);
+		Map<String, Object> map = new HashMap<>();
+		
+		if(memberSaved == null) {
+			log.info("값이 없음");
+			map.put("memberSaved", null);
+		} else {
+			log.info("값이 있음"+memberSaved.getMid());
+			map.put("memberSaved", memberSaved);
+		}
+		
 		return map;
 	}
 

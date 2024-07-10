@@ -34,4 +34,6 @@ public interface MemberDao {
    public void updateimage(Member member);
    public void deleteImg(String mid);
    public void updateMrole(Member member);
+   public void updateMphonenum(Member member);
+   public Member selectBynameAndPhonenum(Member member);
 }

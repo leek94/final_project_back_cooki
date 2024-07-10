@@ -139,4 +139,14 @@ public class MemberService {
 		memberDao.updateMrole(member);
 	}
 
+	public void updateMphonenum(Member member) {
+		memberDao.updateMphonenum(member);
+		
+	}
+
+	public Member getMemberBynameAndPhonenum(Member member) {
+		return memberDao.selectBynameAndPhonenum(member);
+		
+	}
+
 }
