@@ -184,7 +184,7 @@ public class MemberController {
 	@GetMapping("/mattach/{mid}")
 	public void mattach(@PathVariable String mid, HttpServletResponse response) {
 		Member member = memberService.getMember(mid);
-		
+		log.info(mid);
 			try {
 				String fileName = new String(member.getMimgoname().getBytes("UTF-8"), "ISO-8859-1");
 				response.setHeader("content-Disposition", "attachment; filename=\"" + fileName + "\"");

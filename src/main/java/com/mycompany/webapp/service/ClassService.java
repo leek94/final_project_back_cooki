@@ -389,9 +389,13 @@ public class ClassService {
 		log.info("서비스 createQna insertQna");
 	}
 
-	public List<Qna> getQnaList(int cno) {
+	public int getQnaCount(int cno) {
+		return reviewQnaDao.selectQnaCountByCno(cno);
+	}
+	
+	public List<Qna> getQnaList(int cno, Pager pager) {
 		log.info("서비스 getQnaList 실행");
-		return reviewQnaDao.selectQnaByCno(cno);
+		return reviewQnaDao.selectQnaByCnoPager(cno, pager);
 	}
 
 	public void updateQna(Qna qna) {
@@ -478,5 +482,4 @@ public class ClassService {
 	public int classDelete(int cno) {
 		return classDao.deleteClass(cno);
 	}
-
 }

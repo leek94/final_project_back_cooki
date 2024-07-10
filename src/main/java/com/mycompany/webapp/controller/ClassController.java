@@ -289,12 +289,17 @@ public class ClassController {
 	// ----------------------------------- Q&A -----------------------------------
 	
 	@GetMapping("/qnaList/{cno}")
-	public Map<String, Object> qnaList(@PathVariable int cno, Authentication authentication) {
+	public Map<String, Object> qnaList(@PathVariable int cno, @RequestParam(defaultValue = "1") int pageNo, Authentication authentication) {
 		log.info("컨트롤러 qnaList 메소드 실행");
+		//페이징 대상이 되는 전체 행수 얻기
+		int totalCount = classService.getQnaCount(cno);
+		//페이저 객체 생성
+		Pager pager = new Pager(5, 5, totalCount, pageNo);
 		//qna 목록을 list 형식으로 받아서 <front>로 넘겨줌
-		List<Qna> qnaList = classService.getQnaList(cno);
+		List<Qna> qnaList = classService.getQnaList(cno, pager);
 		Map<String, Object> map = new HashMap<>();
 		map.put("qnaList", qnaList);
+		map.put("pager", pager);
 		log.info("컨트롤러 qnaList 받아옴");
 		return map;
 	}
