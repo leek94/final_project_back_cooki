@@ -125,6 +125,17 @@
 		where mid = #{mid}
 	</update>
 	
+	<update id="updateMphonenum" parameterType="Member">
+		update member set mphonenum = #{mphonenum}
+		where mid = #{mid}
+	</update>
+	
+	<select id="selectBynameAndPhonenum" parameterType="Member" resultType="Member">
+		select mid
+		from member
+		where mname = #{mname} and mphonenum = #{mphonenum}	
+	</select>
+	
 	<select id="selectRecipeByMid" parameterType="String" resultType="recipe">
 		select rno, rtitle, rhitcount, rdate, mnickname
 		from recipe, member
@@ -142,4 +153,5 @@
 		from recipe, likes, member
 		where likes.mid=#{mid} and likes.rno = recipe.rno and recipe.mid = member.mid
 	</select>
+	
 </mapper>

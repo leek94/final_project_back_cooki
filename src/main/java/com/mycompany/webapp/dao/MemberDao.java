@@ -35,6 +35,8 @@ public interface MemberDao {
    public void updateimage(Member member);
    public void deleteImg(String mid);
    public void updateMrole(Member member);
+   public void updateMphonenum(Member member);
+   public Member selectBynameAndPhonenum(Member member);
    public List<Recipe> selectRecipeByMid(String mid);
    public int selectLikesCountByRno(int rno);
    public List<Recipe> selectRecipeByMidLikes(String mid);
