@@ -421,12 +421,15 @@ public class ClassService {
 		log.info("서비스 insertClassReview 실행");
 		log.info(classReview.toString());
 		reviewQnaDao.insertClassReview(classReview);
-		
 	}
 
-	public List<ClassReview> getClassReviewList(int cno) {
+	public int getReviewCount(int cno) {
+		return reviewQnaDao.selectReviewCountByCno(cno);
+	}
+	
+	public List<ClassReview> getClassReviewList(int cno, Pager pager) {
 		log.info("서비스 getClassReviewList 실행");
-		return reviewQnaDao.selectClassReviewByCno(cno);
+		return reviewQnaDao.selectClassReviewByCnoPager(cno, pager);
 	}
 	
 	public Float getAvgCrratio(int cno) {
@@ -470,6 +473,10 @@ public class ClassService {
 
 	public void updateIsParticipant(Participant participant) {
 		classDao.updateParticipant(participant);
+	}
+
+	public int classDelete(int cno) {
+		return classDao.deleteClass(cno);
 	}
 
 }

@@ -136,4 +136,22 @@
 		where mname = #{mname} and mphonenum = #{mphonenum}	
 	</select>
 	
+	<select id="selectRecipeByMid" parameterType="String" resultType="recipe">
+		select rno, rtitle, rhitcount, rdate, mnickname
+		from recipe, member
+		where recipe.mid=#{mid} and recipe.mid = member.mid
+	</select>
+	
+	<select id="selectLikesCountByRno" parameterType="int" resultType="int">
+		select count(*)
+		from likes
+		where rno=#{rno}
+	</select>
+	
+	<select id="selectRecipeByMidLikes" parameterType="String" resultType="recipe">
+		select recipe.rno, rtitle, rhitcount, rdate, mnickname
+		from recipe, likes, member
+		where likes.mid=#{mid} and likes.rno = recipe.rno and recipe.mid = member.mid
+	</select>
+	
 </mapper>

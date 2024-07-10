@@ -9,6 +9,7 @@ import com.mycompany.webapp.dto.Career;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
 import com.mycompany.webapp.dto.Qna;
+import com.mycompany.webapp.dto.Recipe;
 
 @Mapper
 public interface MemberDao {
@@ -36,4 +37,7 @@ public interface MemberDao {
    public void updateMrole(Member member);
    public void updateMphonenum(Member member);
    public Member selectBynameAndPhonenum(Member member);
+   public List<Recipe> selectRecipeByMid(String mid);
+   public int selectLikesCountByRno(int rno);
+   public List<Recipe> selectRecipeByMidLikes(String mid);
 }

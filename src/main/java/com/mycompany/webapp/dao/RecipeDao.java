@@ -34,5 +34,6 @@ public interface RecipeDao {
 	public int updateHitcount(int rno);
 	public List<Recipe> selectBestRecipe(int number);
 	public int selectTotalCount(Search search);
-	public List<Recipe> selectRecipeList(Search search, Pager pager);	
+	public List<Recipe> selectRecipeList(Search search, Pager pager);
+	public int deleteRecipe(int rno);	
 }
