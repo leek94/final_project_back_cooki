@@ -137,6 +137,7 @@
 		where mname = #{mname} and mphonenum = #{mphonenum}	
 	</select>
 	
+	<!-- 마이페이지 내가 작성한 레시피 데이터 읽기 -->
 	<select id="selectRecipeByMid" parameterType="String" resultType="recipe">
 		select rno, rtitle, rhitcount, rdate, mnickname
 		from recipe, member
@@ -149,6 +150,7 @@
 		where rno=#{rno}
 	</select>
 	
+	<!-- 마이페이지 내가 좋아요 한 레시피 데이터 읽기 -->
 	<select id="selectRecipeByMidLikes" parameterType="String" resultType="recipe">
 		select recipe.rno, rtitle, rhitcount, rdate, mnickname
 		from recipe, likes, member
