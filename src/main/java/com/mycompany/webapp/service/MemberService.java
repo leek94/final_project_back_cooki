@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +12,7 @@ import com.mycompany.webapp.dao.MemberDao;
 import com.mycompany.webapp.dto.Awards;
 import com.mycompany.webapp.dto.Career;
 import com.mycompany.webapp.dto.Classes;
+import com.mycompany.webapp.dto.Likes;
 import com.mycompany.webapp.dto.Member;
 import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Qna;
@@ -23,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 	@Autowired
 	private MemberDao memberDao;
+	@Autowired
+	private RecipeService recipeService;
 
 	public void join(Member member) {
 		memberDao.insert(member);
@@ -152,7 +156,14 @@ public class MemberService {
 
 	public List<Recipe> getMyRecipe(String mid,Pager pager) {
 		List<Recipe> recipeList = memberDao.selectRecipeByMid(mid, pager);
-	
+		for(Recipe recipe : recipeList) {
+			Likes likes = new Likes();
+			likes.setMid(mid);
+			likes.setRno(recipe.getRno());
+			likes = recipeService.getIsLike(likes);
+			recipe.setIslike((likes != null)? true : false );
+		}
+		
 		for(Recipe recipe : recipeList) {
 			int rno = recipe.getRno();
 			int likesCount = memberDao.selectLikesCountByRno(rno);
@@ -165,6 +176,14 @@ public class MemberService {
 	
 	public List<Recipe> getLikeRecipe(String mid, Pager pager) {
 		List<Recipe> likeRecipeList = memberDao.selectRecipeByMidLikes(mid, pager);
+		
+		for(Recipe recipe : likeRecipeList) {
+			Likes likes = new Likes();
+			likes.setMid(mid);
+			likes.setRno(recipe.getRno());
+			likes = recipeService.getIsLike(likes);
+			recipe.setIslike((likes != null)? true : false );
+		}
 		//레시피 번호에 맞는 좋아요수를 레시피리스트의 인덱스마다 저장해주기
 		for(Recipe recipe : likeRecipeList) {
 			int rno = recipe.getRno();
