@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.webapp.dto.ClassItem;
 import com.mycompany.webapp.dto.ClassReview;
@@ -233,6 +234,19 @@ public class ClassController {
 	@PutMapping("/curriculumUpdate")
 	public void curriculumUpdate(Curriculum curriculum) {
 		classService.updateCurriculum(curriculum);
+	}
+	//클래스 다시 열기 
+	@PostMapping("/reopenClassesInsert")
+	public int reopenClass(Classes classes, Authentication authentication) {
+		String mid= authentication.getName();
+		classes.setMid(mid);
+		int cl=classService.insertReopenClass(classes);
+		log.info("cl"+cl);
+		return cl;
+	}
+	@PostMapping("/reopenCurriInsert")
+		public void reopenCurriInsert(CuList cuList) {
+		classService.insertReCurri(cuList);
 	}
 	
 	// ----------------------------------- review -----------------------------------
