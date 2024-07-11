@@ -276,6 +276,7 @@ public class MemberController {
 		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myClassList", myClassList);
+		map.put("pager", pager);
 		log.info("컨트롤러 myClassHistory 내가 수강했던 클래스 리스트 받아옴");
 		return map;
 	}
@@ -288,6 +289,7 @@ public class MemberController {
 		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myClassList", myClassList);
+		map.put("pager", pager);
 		log.info("컨트롤러 myNowClass 내가 수강 신청한 클래스 리스트 받아옴");
 		return map;
 	}
@@ -300,6 +302,7 @@ public class MemberController {
 		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myClassList", myClassList);
+		map.put("pager", pager);
 		log.info("컨트롤러 editorNowRecruit 내가 모집하고 있는 클래스 리스트 받아옴");
 		return map;
 	}
@@ -312,6 +315,7 @@ public class MemberController {
 		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myClassList", myClassList);
+		map.put("pager", pager);
 		log.info("컨트롤러 editorRecruitHistory 에디터 모집했던 클래스 리스트 받아옴");
 		return map;
 	}
