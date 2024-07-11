@@ -330,7 +330,7 @@ public class MemberController {
 		
 		return map;
 	}
-	
+	 
 	// 비밀번호 찾기
 	@PostMapping("/searchPw") 
 	public Map<String, Object> searchPw(@RequestBody Member member) {
