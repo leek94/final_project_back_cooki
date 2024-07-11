@@ -48,5 +48,6 @@ public interface ClassDao {
 	public void updateChitcount(Classes classes);
 	public List<ParticipantList> selectParticipantList(int cno);
 	public void updateParticipant(Participant participant);
+	public int deleteClass(int cno);
 	
 }

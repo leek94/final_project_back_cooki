@@ -22,14 +22,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.webapp.dto.Awards;
 import com.mycompany.webapp.dto.Career;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
+import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Qna;
 import com.mycompany.webapp.dto.Recipe;
+import com.mycompany.webapp.dto.Search;
 import com.mycompany.webapp.security.AppUserDetails;
 import com.mycompany.webapp.security.JwtProvider;
 import com.mycompany.webapp.service.ClassService;
@@ -184,7 +187,7 @@ public class MemberController {
 	@GetMapping("/mattach/{mid}")
 	public void mattach(@PathVariable String mid, HttpServletResponse response) {
 		Member member = memberService.getMember(mid);
-		
+		log.info(mid);
 			try {
 				String fileName = new String(member.getMimgoname().getBytes("UTF-8"), "ISO-8859-1");
 				response.setHeader("content-Disposition", "attachment; filename=\"" + fileName + "\"");
@@ -211,6 +214,14 @@ public class MemberController {
 		log.info("에디터로 값 변경 성공");
 	}
 	
+	@PutMapping("/updatePhonenum")
+	public void updatePhonenum(@RequestBody Member member) {
+		log.info("멤버 전화번호"+ member.getMphonenum());
+		
+		memberService.updateMphonenum(member);
+		
+	}
+	
 	@PutMapping("deleteImg/{mid}")
 	public void deleteImg(@PathVariable String mid) {
 		// 이름은 delete지만 update로 값을 null로 변경할 예정
@@ -228,19 +239,19 @@ public class MemberController {
 		
 	}
 	
-	@GetMapping("/myRecipe/{mid}")
-	public Map<String, Object> myRecipe(@PathVariable String mid) {
-		log.info("컨트롤러 myRecipe 메소드 실행");
-		List<Recipe> myRecipeList = memberService.getMyRecipe(mid);
+	@GetMapping("/myRecipe")
+	public Map<String, Object> myRecipe(@RequestParam(defaultValue = "1") int pageNo, @RequestParam String mid) {
+		int totalCount = memberService.getMyrecipeTotalCount(mid);
+		Pager pager = new Pager(12, 5, totalCount, pageNo);
+		List<Recipe> myRecipeList = memberService.getMyRecipe(mid,pager);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myRecipeList", myRecipeList);
-		log.info("컨트롤러 myRecipe 내가 작성한 레시피 리스트 받아옴");
+		map.put("pager", pager);
 		return map;
 	}
 	
 	@GetMapping("/myLikeRecipe/{mid}")
 	public Map<String, Object> myLikeRecipe(@PathVariable String mid) {
-		log.info("컨트롤러 myLikeRecipe 메소드 실행");
 		List<Recipe> myLikeRecipe = memberService.getLikeRecipe(mid);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myLikeRecipe", myLikeRecipe);
@@ -250,7 +261,6 @@ public class MemberController {
 	
 	@GetMapping("/myQAndA/{mid}")
 	public Map<String, Object> myQAndA(@PathVariable String mid) {
-		log.info("컨트롤러 myQAndA 메소드 실행");
 		List<Qna> myQnaList = memberService.getMyQna(mid);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myQnaList", myQnaList);
@@ -258,47 +268,110 @@ public class MemberController {
 		return map;
 	}
 	
-	@GetMapping("/myClassHistory/{mid}")
-	public Map<String, Object> myClassHistory(@PathVariable String mid) {
-		log.info("컨트롤러 myClassHistory 메소드 실행");
-		List<Classes> myClassList = memberService.getMyPastClass(mid);
+	@GetMapping("/myClassHistory")
+	public Map<String, Object> myClassHistory(@RequestParam(defaultValue = "1") int pageNo, @RequestParam String mid) {
+		int totalCount = memberService.getMyClassHistoryTotalCount(mid);
+		Pager pager = new Pager(12, 5, totalCount, pageNo);
+		List<Classes> myClassList = memberService.getMyPastClass(mid, pager);
 		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myClassList", myClassList);
+		map.put("pager", pager);
 		log.info("컨트롤러 myClassHistory 내가 수강했던 클래스 리스트 받아옴");
 		return map;
 	}
 	
-	@GetMapping("/myNowClass/{mid}")
-	public Map<String, Object> myNowClass(@PathVariable String mid) {
-		log.info("컨트롤러 myNowClass 메소드 실행");
-		List<Classes> myClassList = memberService.getMyNowClass(mid);
+	@GetMapping("/myNowClass")
+	public Map<String, Object> myNowClass(@RequestParam(defaultValue = "1") int pageNo, @RequestParam String mid) {
+		int totalCount = memberService.getMyNowClassTotalCount(mid);
+		Pager pager = new Pager(12, 5, totalCount, pageNo);
+		List<Classes> myClassList = memberService.getMyNowClass(mid,pager);
 		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myClassList", myClassList);
+		map.put("pager", pager);
 		log.info("컨트롤러 myNowClass 내가 수강 신청한 클래스 리스트 받아옴");
 		return map;
 	}
 	
-	@GetMapping("/editorNowRecruit/{mid}")
-	public Map<String, Object> editorNowRecruit(@PathVariable String mid) {
-		log.info("컨트롤러 editorNowRecruit 메소드 실행");
-		List<Classes> myClassList = memberService.getEditorNowClass(mid);
+	@GetMapping("/editorNowRecruit")
+	public Map<String, Object> editorNowRecruit(@RequestParam(defaultValue = "1") int pageNo, @RequestParam String mid) {
+		int totalCount = memberService.getEditorNowRecruitTotalCount(mid);
+		Pager pager = new Pager(8, 5, totalCount, pageNo);
+		List<Classes> myClassList = memberService.getEditorNowClass(mid, pager);
 		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myClassList", myClassList);
+		map.put("pager", pager);
 		log.info("컨트롤러 editorNowRecruit 내가 모집하고 있는 클래스 리스트 받아옴");
 		return map;
 	}
 	
-	@GetMapping("/editorRecruitHistory/{mid}")
-	public Map<String, Object> editorRecruitHistory(@PathVariable String mid) {
-		log.info("컨트롤러 editorRecruitHistory 메소드 실행");
-		List<Classes> myClassList = memberService.getEditorPastClass(mid);
+	@GetMapping("/editorRecruitHistory")
+	public Map<String, Object> editorRecruitHistory(@RequestParam(defaultValue = "1") int pageNo, @RequestParam String mid) {
+		int totalCount = memberService.getEditorRecruitHistoryTotalCount(mid);
+		Pager pager = new Pager(8, 5, totalCount, pageNo);
+		List<Classes> myClassList = memberService.getEditorPastClass(mid,pager);
 		//List<ClassThumbnail> myClassThumbnailList = memberService.getMyClassThumbnail(mid);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myClassList", myClassList);
+		map.put("pager", pager);
 		log.info("컨트롤러 editorRecruitHistory 에디터 모집했던 클래스 리스트 받아옴");
+		return map;
+	}
+	
+	// 아이디 찾기
+	@PostMapping("/searchId")
+	public Map<String, Object> searchId(@RequestBody Member member) {
+		log.info("아이디 확인" + member.getMname());
+		log.info("아이디 확인" + member.getMphonenum());
+		
+		// 이름과 전화번호를 통해서 mid를 받아와서 전달해줌
+		Member memberSaved = memberService.getMemberBynameAndPhonenum(member);
+		Map<String, Object> map = new HashMap<>();
+		
+		if(memberSaved == null) {
+			log.info("값이 없음");
+			map.put("memberSaved", null);
+		} else {
+			log.info("값이 있음"+memberSaved.getMid());
+			map.put("memberSaved", memberSaved);
+		}
+		
+		return map;
+	}
+	 
+	// 비밀번호 찾기
+	@PostMapping("/searchPw") 
+	public Map<String, Object> searchPw(@RequestBody Member member) {
+		log.info("비밀번호 확인" + member.getMid());
+		
+		Member memberSaved = memberService.getMember(member.getMid());
+		Map<String, Object> map = new HashMap<>();
+		
+		if(memberSaved == null) {
+			log.info("값이 없음");
+			map.put("memberSaved", null);
+		} else {
+			log.info("값이 있음"+memberSaved.getMid());
+			map.put("memberSaved", memberSaved);
+		}
+		
+		return map;
+	}
+	
+	// 아이디 중복검사
+	@GetMapping("/idCheck/{mid}")
+	public Map<String, Object> idCheck(@PathVariable String mid) {
+		log.info("아이디 확인" + mid);
+		
+		String midSaved = memberService.checkMid(mid);
+		log.info("로그 확인: " + midSaved);
+		
+		Map<String, Object> map = new HashMap<>();
+	
+		map.put("mid", midSaved);
+		
 		return map;
 	}
 

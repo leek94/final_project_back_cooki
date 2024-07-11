@@ -390,9 +390,13 @@ public class ClassService {
 		log.info("서비스 createQna insertQna");
 	}
 
-	public List<Qna> getQnaList(int cno) {
+	public int getQnaCount(int cno) {
+		return reviewQnaDao.selectQnaCountByCno(cno);
+	}
+	
+	public List<Qna> getQnaList(int cno, Pager pager) {
 		log.info("서비스 getQnaList 실행");
-		return reviewQnaDao.selectQnaByCno(cno);
+		return reviewQnaDao.selectQnaByCnoPager(cno, pager);
 	}
 
 	public void updateQna(Qna qna) {
@@ -422,12 +426,15 @@ public class ClassService {
 		log.info("서비스 insertClassReview 실행");
 		log.info(classReview.toString());
 		reviewQnaDao.insertClassReview(classReview);
-		
 	}
 
-	public List<ClassReview> getClassReviewList(int cno) {
+	public int getReviewCount(int cno) {
+		return reviewQnaDao.selectReviewCountByCno(cno);
+	}
+	
+	public List<ClassReview> getClassReviewList(int cno, Pager pager) {
 		log.info("서비스 getClassReviewList 실행");
-		return reviewQnaDao.selectClassReviewByCno(cno);
+		return reviewQnaDao.selectClassReviewByCnoPager(cno, pager);
 	}
 	
 	public Float getAvgCrratio(int cno) {
@@ -472,6 +479,7 @@ public class ClassService {
 	public void updateIsParticipant(Participant participant) {
 		classDao.updateParticipant(participant);
 	}
+
 
 	public int insertReopenClass(Classes classes) {
 		//이미지가 없을 경우 원래 클래스의 이미지를 받아오기 위해 cno를 저장 
@@ -548,6 +556,10 @@ public class ClassService {
 				log.info("insert21");
 			}
 		}
+	}
+
+	public int classDelete(int cno) {
+		return classDao.deleteClass(cno);
 	}
 
 }

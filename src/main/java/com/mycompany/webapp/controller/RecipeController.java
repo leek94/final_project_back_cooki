@@ -160,9 +160,9 @@ public class RecipeController {
 		//폼데이터를 리스트 형태로 받기 위해 recipeProcess를 리스트로 가지는 dto를 생성해 호출한다
 		recipeService.updateRecipeProcess(prList);
 	}
-	@DeleteMapping("/recipeDelete")
-	public void recipeDelete() {
-		
+	@GetMapping("/recipeDelete/{rno}")
+	public void recipeDelete(@PathVariable int rno) {
+		int result = recipeService.recipeDelete(rno);
 	}
 	
 	@PostMapping("/addLike")

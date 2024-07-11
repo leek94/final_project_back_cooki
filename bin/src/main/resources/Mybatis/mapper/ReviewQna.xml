@@ -50,4 +50,53 @@
 	      #{crno}, #{crtitle}, #{crratio}, #{crcontent}, sysdate, #{cno}, #{mid}
 	   )	   
 	</insert>
+	
+	<select id="selectClassReviewByCno" parameterType="int" resultType="classReview">
+		select crno, crtitle, crcontent, crratio, crdate, cno, classreview.mid, mnickname
+		from classreview, member
+		where cno=#{cno} and classreview.mid = member.mid
+		order by crdate desc
+	</select>
+	
+	<select id="selectAvgCrratioByCno" parameterType="int" resultType="float">
+		select round(avg(crratio), 1)
+		from classreview
+		where cno=#{cno}
+		group by cno
+	</select>
+	
+	<update id="updateClassReviewByCrno" parameterType="classReview">
+		update classreview set crtitle=#{crtitle}, crcontent=#{crcontent}, crratio=#{crratio}
+		where crno=#{crno}
+	</update>
+	
+	<delete id="deleteClassReviewByCrno" parameterType="int">
+		delete from classReview 
+		where crno=#{crno}
+	</delete>
+	
+	<insert id="insertRecipeReview" parameterType="recipeReview">
+		<selectKey keyProperty="rrno" resultType="int" order="BEFORE">
+			select seq_rrno.nextval from dual
+		</selectKey>
+		insert into recipereview ( rrno, rrtitle, rrcontent, rrdate, mid, rno )
+		values(#{rrno}, #{rrtitle}, #{rrcontent}, sysdate, #{mid}, #{rno})
+	</insert>
+	
+	<select id="selectRecipeReviewsByRno" resultType="recipeReview">
+		select rrno, rrtitle, rrcontent, rrdate, mnickname
+		from recipereview, member
+		where recipereview.mid = member.mid
+		and rno = #{rno}
+		order by rrno desc
+	</select>
+	
+	<update id="updateRecipeReview" parameterType="recipeReview">
+		update recipereview set rrtitle = #{rrtitle}, rrcontent = #{rrcontent}
+		where rrno = #{rrno}
+	</update>
+	
+	<delete id="deleteRecipeReview">
+		delete from recipereview where rrno = #{rrno}
+	</delete>
 </mapper>

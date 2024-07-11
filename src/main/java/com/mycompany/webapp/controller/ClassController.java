@@ -27,6 +27,7 @@ import com.mycompany.webapp.dto.ClassThumbnail;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.CuList;
 import com.mycompany.webapp.dto.Curriculum;
+import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Participant;
 import com.mycompany.webapp.dto.ParticipantList;
 import com.mycompany.webapp.dto.Qna;
@@ -253,15 +254,21 @@ public class ClassController {
 	
 	
 	@GetMapping("/reviewList/{cno}")
-	public Map<String, Object> reviewList(@PathVariable int cno, Authentication authentication) {
+	public Map<String, Object> reviewList(@PathVariable int cno, @RequestParam(defaultValue = "1") int pageNo, Authentication authentication) {
 		log.info("컨트롤러 classReviewList 메소드 실행");
-	    List<ClassReview> classReviewList = classService.getClassReviewList(cno);
+		//페이징 대상이 되는 전체 행수 얻기
+		int totalCount = classService.getReviewCount(cno);
+		//페이저 객체 생성
+		Pager pager = new Pager(5, 5, totalCount, pageNo);
+	    List<ClassReview> classReviewList = classService.getClassReviewList(cno, pager);
 	    Float avgCrratio = classService.getAvgCrratio(cno);
 	    log.info("컨트롤러 avgCrratio 받아옴: " + avgCrratio);
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("classReviewList", classReviewList);
 	    map.put("avgCrratio", avgCrratio);
-	    log.info("컨트롤러 classReviewList 받아옴");
+	    map.put("pager", pager);
+	    log.info("컨트롤러 classReviewList 받아옴" );
+	    log.info("map값" + map);
 	    return map;
 	}
 	
@@ -296,12 +303,17 @@ public class ClassController {
 	// ----------------------------------- Q&A -----------------------------------
 	
 	@GetMapping("/qnaList/{cno}")
-	public Map<String, Object> qnaList(@PathVariable int cno, Authentication authentication) {
+	public Map<String, Object> qnaList(@PathVariable int cno, @RequestParam(defaultValue = "1") int pageNo, Authentication authentication) {
 		log.info("컨트롤러 qnaList 메소드 실행");
+		//페이징 대상이 되는 전체 행수 얻기
+		int totalCount = classService.getQnaCount(cno);
+		//페이저 객체 생성
+		Pager pager = new Pager(5, 5, totalCount, pageNo);
 		//qna 목록을 list 형식으로 받아서 <front>로 넘겨줌
-		List<Qna> qnaList = classService.getQnaList(cno);
+		List<Qna> qnaList = classService.getQnaList(cno, pager);
 		Map<String, Object> map = new HashMap<>();
 		map.put("qnaList", qnaList);
+		map.put("pager", pager);
 		log.info("컨트롤러 qnaList 받아옴");
 		return map;
 	}
@@ -366,5 +378,9 @@ public class ClassController {
 	}
 	
 	// 사진 다운로드
-
+	
+	@GetMapping("classDelete/{cno}")
+	public void classDelete(@PathVariable int cno) {
+		int result = classService.classDelete(cno);
+	}
 }
