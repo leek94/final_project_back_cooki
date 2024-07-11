@@ -104,8 +104,8 @@ public class MemberService {
 	}
 
 	// 내가 문의한 댓글 내역 가져오기
-	public List<Qna> getMyQna(String mid) {
-		List<Qna> qna = memberDao.selectQnaByMid(mid);
+	public List<Qna> getMyQna(String mid,Pager pager) {
+		List<Qna> qna = memberDao.selectQnaByMid(mid, pager);
 		log.info("qna리스트: " + qna);
 		log.info("qna리스트: " + qna.size());
 		return qna;
@@ -163,8 +163,8 @@ public class MemberService {
 		return recipeList;
 	}
 	
-	public List<Recipe> getLikeRecipe(String mid) {
-		List<Recipe> likeRecipeList = memberDao.selectRecipeByMidLikes(mid);
+	public List<Recipe> getLikeRecipe(String mid, Pager pager) {
+		List<Recipe> likeRecipeList = memberDao.selectRecipeByMidLikes(mid, pager);
 		//레시피 번호에 맞는 좋아요수를 레시피리스트의 인덱스마다 저장해주기
 		for(Recipe recipe : likeRecipeList) {
 			int rno = recipe.getRno();
@@ -197,5 +197,13 @@ public class MemberService {
 	public String checkMid(String mid) {
 		
 		return memberDao.checkMid(mid);
+	}
+
+	public int getMyLikeRecipeTotalCount(String mid) {
+		return memberDao.selectMyLIkeRecipeTotalCount(mid);
+	}
+
+	public int getMyQAndATotalCount(String mid) {
+		return memberDao.selectMyQandATotalCount(mid);
 	}
 }

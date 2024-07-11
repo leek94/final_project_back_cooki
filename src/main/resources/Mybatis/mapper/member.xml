@@ -188,11 +188,31 @@
 		delete from awards where mid = #{mid}
 	</delete>
 	
-	<select id="selectQnaByMid" parameterType="String" resultType="qna">
-		select qno, qtitle, qcontent, qdate, qreply, qna.cno, classes.ctitle
-		from qna, classes
-		where qna.mid=#{mid} and qna.cno = classes.cno
-		order by qdate
+	
+	<select id="selectMyQandATotalCount">
+		select count(*)
+		from(
+			select qno, qtitle, qcontent, qdate, qreply, qna.cno, classes.ctitle as ctitle
+			from qna, classes
+			where qna.mid=#{mid} and qna.cno = classes.cno
+		)
+	</select>
+	
+	<select id="selectQnaByMid" resultType="qna">
+		<![CDATA[
+		select rnum, qno, qtitle, qcontent, qdate, qreply, cno, ctitle
+		from(
+			select rownum as rnum, qno, qtitle, qcontent, qdate, qreply, cno, ctitle
+			from(
+			select qno, qtitle, qcontent, qdate, qreply, qna.cno as cno, classes.ctitle as ctitle
+			from qna, classes
+			where qna.mid=#{mid} and qna.cno = classes.cno
+			order by qdate
+			)
+			where rownum<=#{pager.endRowNo}
+		)
+		where rnum>=#{pager.startRowNo}
+		]]>
 	</select>
 
 	<update id="updateimage" parameterType="Member">
@@ -250,10 +270,29 @@
 		where rno=#{rno}
 	</select>
 	
-	<select id="selectRecipeByMidLikes" parameterType="String" resultType="recipe">
-		select recipe.rno, rtitle, rhitcount, rdate, mnickname
-		from recipe, likes, member
-		where likes.mid=#{mid} and likes.rno = recipe.rno and recipe.mid = member.mid
+	<select id="selectMyLIkeRecipeTotalCount">
+		select count(*)
+		from (
+			select recipe.rno, rtitle, rhitcount, rdate, mnickname
+			from recipe, likes, member
+			where likes.mid=#{mid} and likes.rno = recipe.rno and recipe.mid = member.mid
+		)
+	</select>
+	
+	<select id="selectRecipeByMidLikes" resultType="recipe">
+		<![CDATA[
+		select rnum, rno, rtitle, rhitcount, rdate, mnickname
+		from(
+			select rownum as rnum, rno,rtitle, rhitcount, rdate, mnickname
+			from(
+			select recipe.rno as rno, rtitle, rhitcount, rdate, mnickname
+			from recipe, likes, member
+			where likes.mid=#{mid} and likes.rno = recipe.rno and recipe.mid = member.mid
+			)
+			where rownum<=#{pager.endRowNo}
+		)
+		where rnum>=#{pager.startRowNo}
+		]]>
 	</select>
 	
 	<select id="checkMid" parameterType="String" resultType="String">

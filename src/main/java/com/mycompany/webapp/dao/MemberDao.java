@@ -32,7 +32,7 @@ public interface MemberDao {
    public List<Classes> selectPastClassesByMidCno(String mid, Pager pager);
    public List<Classes> selectNowClassesByMidCno(String mid, Pager pager);
    public void deleteAwards(String mid);
-   public List<Qna> selectQnaByMid(String mid);
+   public List<Qna> selectQnaByMid(String mid,Pager pager);
    public void updateimage(Member member);
    public void deleteImg(String mid);
    public void updateMrole(Member member);
@@ -40,11 +40,13 @@ public interface MemberDao {
    public Member selectBynameAndPhonenum(Member member);
    public List<Recipe> selectRecipeByMid(String mid, Pager pager);
    public int selectLikesCountByRno(int rno);
-   public List<Recipe> selectRecipeByMidLikes(String mid);
+   public List<Recipe> selectRecipeByMidLikes(String mid, Pager pager);
    public int selectMyrecipeTotalCount(String mid);
    public int selectMyClassHistoryTotalCount(String mid);
    public int selectMyNowClassTotalCount(String mid);
    public int selectEditorNowRecruitTotalCount(String mid);
    public int selectEditorRecruitHistoryTotalCount(String mid);
    public String checkMid(String mid);
+   public int selectMyLIkeRecipeTotalCount(String mid);
+   public int selectMyQandATotalCount(String mid);
 }

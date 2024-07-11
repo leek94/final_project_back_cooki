@@ -250,21 +250,25 @@ public class MemberController {
 		return map;
 	}
 	
-	@GetMapping("/myLikeRecipe/{mid}")
-	public Map<String, Object> myLikeRecipe(@PathVariable String mid) {
-		List<Recipe> myLikeRecipe = memberService.getLikeRecipe(mid);
+	@GetMapping("/myLikeRecipe")
+	public Map<String, Object> myLikeRecipe(@RequestParam(defaultValue = "1") int pageNo, @RequestParam String mid) {
+		int totalCount = memberService.getMyLikeRecipeTotalCount(mid);
+		Pager pager = new Pager(12, 5, totalCount, pageNo);
+		List<Recipe> myLikeRecipe = memberService.getLikeRecipe(mid,pager);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myLikeRecipe", myLikeRecipe);
-		log.info("컨트롤러 myLikeRecipe 내가 작성한 레시피 리스트 받아옴");
+		map.put("pager", pager);
 		return map;
 	}
 	
-	@GetMapping("/myQAndA/{mid}")
-	public Map<String, Object> myQAndA(@PathVariable String mid) {
-		List<Qna> myQnaList = memberService.getMyQna(mid);
+	@GetMapping("/myQAndA")
+	public Map<String, Object> myQAndA(@RequestParam(defaultValue = "1") int pageNo, @RequestParam String mid) {
+		int totalCount = memberService.getMyQAndATotalCount(mid);
+		Pager pager = new Pager(8, 5, totalCount, pageNo);
+		List<Qna> myQnaList = memberService.getMyQna(mid, pager);
 		Map<String, Object> map = new HashMap<>();
 		map.put("myQnaList", myQnaList);
-		log.info("컨트롤러 myQAndA 나의 문의 내역 리스트 받아옴");
+		map.put("pager", pager);
 		return map;
 	}
 	
