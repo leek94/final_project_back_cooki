@@ -46,4 +46,5 @@ public interface MemberDao {
    public int selectMyNowClassTotalCount(String mid);
    public int selectEditorNowRecruitTotalCount(String mid);
    public int selectEditorRecruitHistoryTotalCount(String mid);
+   public String checkMid(String mid);
 }

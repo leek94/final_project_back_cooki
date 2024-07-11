@@ -193,4 +193,9 @@ public class MemberService {
 	public int getEditorRecruitHistoryTotalCount(String mid) {
 		return memberDao.selectEditorRecruitHistoryTotalCount(mid);
 	}
+	
+	public String checkMid(String mid) {
+		
+		return memberDao.checkMid(mid);
+	}
 }

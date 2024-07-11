@@ -54,15 +54,16 @@
 		<![CDATA[
 		select count(*)
 		from(
-			select rownum as rno, cno, ctitle, cpersoncount, cdday, mname, mid
-			from(
-			select cno, ctitle, cpersoncount, cdday, mname, mid
-			from classes, member
-			where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
+				select rownum as rno, cno, ctitle, cpersoncount, cdday, mname, mid
+				from(
+				select cno, ctitle, cpersoncount, cdday, mname, mid
+				from classes, member
+				where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
 		)
-		]]>
+				]]>
 	</select>
-	
+
+	<!-- 에디터가 열었던 클래스 -->
 	<select id="selectPastClassesByMid" resultType="Classes">
 		<![CDATA[
 			select rno, cno, ctitle, cpersoncount, cdday, mname, mid
@@ -259,6 +260,12 @@
 		select recipe.rno, rtitle, rhitcount, rdate, mnickname
 		from recipe, likes, member
 		where likes.mid=#{mid} and likes.rno = recipe.rno and recipe.mid = member.mid
+	</select>
+	
+	<select id="checkMid" parameterType="String" resultType="String">
+		select mid
+		from member
+		where mid = #{mid}
 	</select>
 	
 </mapper>

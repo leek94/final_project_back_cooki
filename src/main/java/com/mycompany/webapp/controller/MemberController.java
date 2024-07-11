@@ -316,6 +316,7 @@ public class MemberController {
 		return map;
 	}
 	
+	// 아이디 찾기
 	@PostMapping("/searchId")
 	public Map<String, Object> searchId(@RequestBody Member member) {
 		log.info("아이디 확인" + member.getMname());
@@ -335,7 +336,8 @@ public class MemberController {
 		
 		return map;
 	}
-	
+	 
+	// 비밀번호 찾기
 	@PostMapping("/searchPw") 
 	public Map<String, Object> searchPw(@RequestBody Member member) {
 		log.info("비밀번호 확인" + member.getMid());
@@ -350,6 +352,21 @@ public class MemberController {
 			log.info("값이 있음"+memberSaved.getMid());
 			map.put("memberSaved", memberSaved);
 		}
+		
+		return map;
+	}
+	
+	// 아이디 중복검사
+	@GetMapping("/idCheck/{mid}")
+	public Map<String, Object> idCheck(@PathVariable String mid) {
+		log.info("아이디 확인" + mid);
+		
+		String midSaved = memberService.checkMid(mid);
+		log.info("로그 확인: " + midSaved);
+		
+		Map<String, Object> map = new HashMap<>();
+	
+		map.put("mid", midSaved);
 		
 		return map;
 	}
