@@ -123,7 +123,7 @@
 	</insert>
 	
 	<select id="selectRecipeReviewsByRno" resultType="recipeReview">
-		select rrno, rrtitle, rrcontent, rrdate, mnickname
+		select rrno, rrtitle, rrcontent, rrdate, member.mid as mid, mnickname
 		from recipereview, member
 		where recipereview.mid = member.mid
 		and rno = #{rno}
