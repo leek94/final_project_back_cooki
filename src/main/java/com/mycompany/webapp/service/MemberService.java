@@ -173,4 +173,9 @@ public class MemberService {
 		}
 		return likeRecipeList;
 	}
+
+	public String checkMid(String mid) {
+		
+		return memberDao.checkMid(mid);
+	}
 }

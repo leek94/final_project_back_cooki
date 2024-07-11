@@ -40,4 +40,5 @@ public interface MemberDao {
    public List<Recipe> selectRecipeByMid(String mid);
    public int selectLikesCountByRno(int rno);
    public List<Recipe> selectRecipeByMidLikes(String mid);
+   public String checkMid(String mid);
 }
