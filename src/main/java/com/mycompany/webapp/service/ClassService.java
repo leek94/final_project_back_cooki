@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.webapp.dao.ClassDao;
@@ -479,7 +480,86 @@ public class ClassService {
 		classDao.updateParticipant(participant);
 	}
 
+
+	public int insertReopenClass(Classes classes) {
+		//이미지가 없을 경우 원래 클래스의 이미지를 받아오기 위해 cno를 저장 
+		int cno=classes.getCno();
+		//클래스 기본 정보 저장
+		classDao.insertClass(classes);
+		
+		ClassThumbnail classThumbNail= new ClassThumbnail();
+		//front에서 받은 list 형태의 사진을 저장해서 하나씩 data에 저장
+		MultipartFile[] thumbImg= classes.getCthumbnailimgs();
+		//이미지가 바뀌었을 경우
+		if(thumbImg!=null) {
+			for(int i=0;i<thumbImg.length;i++) {
+				classThumbNail.setCno(classes.getCno());
+				classThumbNail.setCtorder(i+1);
+				classThumbNail.setCtimgoname(thumbImg[i].getOriginalFilename());
+				classThumbNail.setCtimgtype(thumbImg[i].getContentType());
+				try {
+					classThumbNail.setCtimgdata(thumbImg[i].getBytes());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				classDao.insertClassThumbnail(classThumbNail);
+			}
+		//기존의 이미지를 사용할 경우 cno와 ctorder로 data를 찾아와서 다시 열 클래스의 cno에 이미지를 저장
+		}else {
+			int count= classDao.selectByClassThumbCount(cno);
+			for(int i=0;i<count;i++) {
+				classThumbNail.setCno(cno);
+				classThumbNail.setCtorder(i+1);
+				ClassThumbnail thumb=classDao.selectByClassThumbnail(classThumbNail);
+				thumb.setCno(classes.getCno());
+				classDao.insertClassThumbnail(thumb);
+			}	
+		}
+		return classes.getCno();
+	}
+
+	public void insertReCurri(CuList cuList) {
+		int initCno=cuList.getInitCno();
+		int cno= cuList.getCno();
+		int initialLength=cuList.getInitialLength();
+		int cuLength=cuList.getNowLength();
+		List<Curriculum> cu=cuList.getCurriculums();
+		for(int i=0;i<cuLength;i++) {
+			Curriculum curri=cu.get(i);
+			if(curri.getCuimg()!=null) {
+				log.info("1");
+				log.info("cont"+curri.getCucontent());
+				MultipartFile mf= curri.getCuimg();
+				curri.setCuimgoname(mf.getOriginalFilename());
+				curri.setCucontent(mf.getContentType());
+				try {
+					curri.setCuimgdata(mf.getBytes());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				curri.setCno(cno);
+				curri.setCutitle(curri.getCutitle());
+				curri.setCucontent(curri.getCucontent());
+				classDao.insertCurriculum(curri);
+			}else {
+				log.info("2");
+				Curriculum originCurri= new Curriculum();
+				originCurri.setCno(initCno);
+				originCurri.setCuorder(curri.getCuorder());
+				Curriculum changeCu=classDao.selectByCurriculumimg(originCurri);
+				log.info("cont"+curri.getCucontent());
+				changeCu.setCno(cno);
+				changeCu.setCutitle(curri.getCutitle());
+				changeCu.setCucontent(curri.getCucontent());
+				log.info("insert1");
+				classDao.insertCurriculum(changeCu);
+				log.info("insert21");
+			}
+		}
+	}
+
 	public int classDelete(int cno) {
 		return classDao.deleteClass(cno);
 	}
+
 }

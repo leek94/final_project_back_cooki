@@ -10,4 +10,8 @@ import lombok.Data;
 public class CuList {
 	private List<Curriculum> curriculums;
 	private Integer cno;
+	
+	private Integer initCno;
+	private Integer initialLength;
+	private Integer nowLength;
 }
