@@ -49,49 +49,134 @@
 		update member set mpassword = #{mpassword}
 		where mid = #{mid}
 	</update>
+	
+	<select id="selectEditorRecruitHistoryTotalCount">
+		<![CDATA[
+		select count(*)
+		from(
+				select cno, ctitle, cpersoncount, cdday, mname, member.mid
+				from classes, member
+				where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
+		)
+				]]>
+	</select>
 
 	<!-- 에디터가 열었던 클래스 -->
-	<select id="selectPastClassesByMid" parameterType="String" resultType="Classes">
+	<select id="selectPastClassesByMid" resultType="Classes">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, mname, classes.mid as mid
-		from classes, member
-		where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
-		order by cdday
+			select rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+			from(
+				select rownum as rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+				from(
+				select cno, ctitle, cpersoncount, cdday, mname, member.mid
+				from classes, member
+				where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
+				order by cdday
+				)
+				where rownum<=#{pager.endRowNo}
+				)
+			where rnum>=#{pager.startRowNo}
 		]]>
 	</select>
 	
-	<select id="selectNowClassesByMid" parameterType="String" resultType="Classes">
+	
+	<select id="selectEditorNowRecruitTotalCount">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, member.mname, classes.mid as mid
-		from classes, member
-		where classes.mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
-		order by cdday
+		select count(*)
+		from(
+			select cno, ctitle, cpersoncount, cdday, mname, member.mid
+			from classes, member
+			where classes.mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
+		)
 		]]>
 	</select>
 	
-	<select id="selectPastClassesByMidCno" parameterType="String" resultType="Classes">
+	<select id="selectNowClassesByMid" resultType="Classes">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, mname, classes.mid as mid
-		from classes, member
-		where cno in (
-			select cno
-			from Participant
-			where mid=#{mid}
-		) and cdday < sysdate and classes.mid = member.mid
-		order by cdday
+		select rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+		from(
+			select rownum as rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+			from(
+				select cno, ctitle, cpersoncount, cdday, mname, member.mid as mid
+				from classes, member
+				where classes.mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
+				order by cdday
+			)
+			where rownum<=#{pager.endRowNo}
+		)
+		where rnum>=#{pager.startRowNo}
 		]]>
 	</select>
-
-	<select id="selectNowClassesByMidCno" parameterType="String" resultType="Classes">
+	
+	<select id="selectMyClassHistoryTotalCount">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, mname, classes.mid as mid
-		from classes, member
-		where cno in (
-			select cno
-			from Participant
-			where mid=#{mid}
-		) and cdday >= sysdate and classes.mid = member.mid
-		order by cdday
+		select count(*)
+		from(
+				select  cno, ctitle, cpersoncount, cdday, mname, member.mid
+				from classes, member
+				where cno in (
+					select cno
+					from Participant
+					where mid=#{mid}
+					) and cdday < sysdate and classes.mid = member.mid
+		)
+		]]>
+	</select>
+	
+	<select id="selectPastClassesByMidCno" resultType="Classes">
+		<![CDATA[
+		select rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+			from(
+				select rownum as rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+					from(
+					select  cno, ctitle, cpersoncount, cdday, mname, member.mid as mid
+					from classes, member
+					where cno in (
+						select cno
+						from Participant
+						where mid=#{mid}
+					) and cdday < sysdate and classes.mid = member.mid
+					order by cdday
+					)
+				where rownum<=#{pager.endRowNo}
+			)
+		 where rnum>=#{pager.startRowNo}
+		]]>
+	</select>
+	
+	<select id="selectMyNowClassTotalCount">
+		<![CDATA[
+		select count(*)
+		from(
+			select cno, ctitle, cpersoncount, cdday, mname, member.mid 
+			from classes, member
+			where cno in (
+				select cno
+				from Participant
+				where mid=#{mid}
+			) and cdday >= sysdate and classes.mid = member.mid
+		)
+		]]>
+	</select>
+	
+	<select id="selectNowClassesByMidCno" resultType="Classes">
+		<![CDATA[
+		select rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+		from(
+			select rownum as rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+				from(
+				select cno, ctitle, cpersoncount, cdday, mname, member.mid as mid 
+				from classes, member
+				where cno in (
+					select cno
+					from Participant
+					where mid=#{mid}
+				) and cdday >= sysdate and classes.mid = member.mid
+				order by cdday
+				)
+			where rownum<=#{pager.endRowNo}
+		)
+		 where rnum>=#{pager.startRowNo}
 		]]>
 	</select>
 	
@@ -103,11 +188,31 @@
 		delete from awards where mid = #{mid}
 	</delete>
 	
-	<select id="selectQnaByMid" parameterType="String" resultType="qna">
-		select qno, qtitle, qcontent, qdate, qreply, qna.cno, classes.ctitle
-		from qna, classes
-		where qna.mid=#{mid} and qna.cno = classes.cno
-		order by qdate
+	
+	<select id="selectMyQandATotalCount">
+		select count(*)
+		from(
+			select qno, qtitle, qcontent, qdate, qreply, qna.cno, classes.ctitle as ctitle
+			from qna, classes
+			where qna.mid=#{mid} and qna.cno = classes.cno
+		)
+	</select>
+	
+	<select id="selectQnaByMid" resultType="qna">
+		<![CDATA[
+		select rnum, qno, qtitle, qcontent, qdate, qreply, cno, ctitle
+		from(
+			select rownum as rnum, qno, qtitle, qcontent, qdate, qreply, cno, ctitle
+			from(
+			select qno, qtitle, qcontent, qdate, qreply, qna.cno as cno, classes.ctitle as ctitle
+			from qna, classes
+			where qna.mid=#{mid} and qna.cno = classes.cno
+			order by qdate
+			)
+			where rownum<=#{pager.endRowNo}
+		)
+		where rnum>=#{pager.startRowNo}
+		]]>
 	</select>
 
 	<update id="updateimage" parameterType="Member">
@@ -137,11 +242,34 @@
 		where mname = #{mname} and mphonenum = #{mphonenum}	
 	</select>
 	
+<<<<<<< HEAD
 	<!-- 마이페이지 내가 작성한 레시피 데이터 읽기 -->
 	<select id="selectRecipeByMid" parameterType="String" resultType="recipe">
 		select rno, rtitle, rhitcount, rdate, mnickname
 		from recipe, member
 		where recipe.mid=#{mid} and recipe.mid = member.mid
+=======
+	<select id="selectMyrecipeTotalCount">
+		select count(*)
+		from recipe
+		where recipe.mid = #{mid}
+	</select>
+	
+	<select id="selectRecipeByMid" resultType="recipe">
+		<![CDATA[
+		select rnum, rno, rtitle, rhitcount, rdate, mnickname
+		from(
+			select rownum as rnum, rno, rtitle, rhitcount, rdate, mnickname
+			from(
+				select rno, rtitle, rhitcount, rdate, mnickname
+				from recipe, member
+				where recipe.mid=#{mid} and recipe.mid = member.mid
+			)
+			where rownum<=#{pager.endRowNo}
+		)
+		 where rnum>=#{pager.startRowNo}
+		]]>
+>>>>>>> branch 'main' of https://github.com/leek94/final_project_back_cooki
 	</select>
 	
 	<select id="selectLikesCountByRno" parameterType="int" resultType="int">
@@ -150,11 +278,43 @@
 		where rno=#{rno}
 	</select>
 	
+<<<<<<< HEAD
 	<!-- 마이페이지 내가 좋아요 한 레시피 데이터 읽기 -->
 	<select id="selectRecipeByMidLikes" parameterType="String" resultType="recipe">
 		select recipe.rno, rtitle, rhitcount, rdate, mnickname
 		from recipe, likes, member
 		where likes.mid=#{mid} and likes.rno = recipe.rno and recipe.mid = member.mid
+=======
+	<select id="selectMyLIkeRecipeTotalCount">
+		select count(*)
+		from (
+			select recipe.rno, rtitle, rhitcount, rdate, mnickname
+			from recipe, likes, member
+			where likes.mid=#{mid} and likes.rno = recipe.rno and recipe.mid = member.mid
+		)
+	</select>
+	
+	<select id="selectRecipeByMidLikes" resultType="recipe">
+		<![CDATA[
+		select rnum, rno, rtitle, rhitcount, rdate, mnickname
+		from(
+			select rownum as rnum, rno,rtitle, rhitcount, rdate, mnickname
+			from(
+			select recipe.rno as rno, rtitle, rhitcount, rdate, mnickname
+			from recipe, likes, member
+			where likes.mid=#{mid} and likes.rno = recipe.rno and recipe.mid = member.mid
+			)
+			where rownum<=#{pager.endRowNo}
+		)
+		where rnum>=#{pager.startRowNo}
+		]]>
+	</select>
+	
+	<select id="checkMid" parameterType="String" resultType="String">
+		select mid
+		from member
+		where mid = #{mid}
+>>>>>>> branch 'main' of https://github.com/leek94/final_project_back_cooki
 	</select>
 	
 </mapper>
