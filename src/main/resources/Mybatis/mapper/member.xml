@@ -50,9 +50,10 @@
 		where mid = #{mid}
 	</update>
 
+	<!-- 에디터가 열었던 클래스 -->
 	<select id="selectPastClassesByMid" parameterType="String" resultType="Classes">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, mname
+		select cno, ctitle, cpersoncount, cdday, mname, classes.mid as mid
 		from classes, member
 		where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
 		order by cdday
@@ -61,7 +62,7 @@
 	
 	<select id="selectNowClassesByMid" parameterType="String" resultType="Classes">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, member.mname
+		select cno, ctitle, cpersoncount, cdday, member.mname, classes.mid as mid
 		from classes, member
 		where classes.mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
 		order by cdday
@@ -70,7 +71,7 @@
 	
 	<select id="selectPastClassesByMidCno" parameterType="String" resultType="Classes">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, mname
+		select cno, ctitle, cpersoncount, cdday, mname, classes.mid as mid
 		from classes, member
 		where cno in (
 			select cno
@@ -83,7 +84,7 @@
 
 	<select id="selectNowClassesByMidCno" parameterType="String" resultType="Classes">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, mname 
+		select cno, ctitle, cpersoncount, cdday, mname, classes.mid as mid
 		from classes, member
 		where cno in (
 			select cno
