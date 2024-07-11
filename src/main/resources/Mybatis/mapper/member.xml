@@ -242,13 +242,6 @@
 		where mname = #{mname} and mphonenum = #{mphonenum}	
 	</select>
 	
-<<<<<<< HEAD
-	<!-- 마이페이지 내가 작성한 레시피 데이터 읽기 -->
-	<select id="selectRecipeByMid" parameterType="String" resultType="recipe">
-		select rno, rtitle, rhitcount, rdate, mnickname
-		from recipe, member
-		where recipe.mid=#{mid} and recipe.mid = member.mid
-=======
 	<select id="selectMyrecipeTotalCount">
 		select count(*)
 		from recipe
@@ -269,7 +262,6 @@
 		)
 		 where rnum>=#{pager.startRowNo}
 		]]>
->>>>>>> branch 'main' of https://github.com/leek94/final_project_back_cooki
 	</select>
 	
 	<select id="selectLikesCountByRno" parameterType="int" resultType="int">
@@ -278,13 +270,6 @@
 		where rno=#{rno}
 	</select>
 	
-<<<<<<< HEAD
-	<!-- 마이페이지 내가 좋아요 한 레시피 데이터 읽기 -->
-	<select id="selectRecipeByMidLikes" parameterType="String" resultType="recipe">
-		select recipe.rno, rtitle, rhitcount, rdate, mnickname
-		from recipe, likes, member
-		where likes.mid=#{mid} and likes.rno = recipe.rno and recipe.mid = member.mid
-=======
 	<select id="selectMyLIkeRecipeTotalCount">
 		select count(*)
 		from (
@@ -314,7 +299,6 @@
 		select mid
 		from member
 		where mid = #{mid}
->>>>>>> branch 'main' of https://github.com/leek94/final_project_back_cooki
 	</select>
 	
 </mapper>
