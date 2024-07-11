@@ -49,48 +49,139 @@
 		update member set mpassword = #{mpassword}
 		where mid = #{mid}
 	</update>
-
-	<select id="selectPastClassesByMid" parameterType="String" resultType="Classes">
+	
+	<select id="selectEditorRecruitHistoryTotalCount">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, mname
-		from classes, member
-		where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
-		order by cdday
+		select count(*)
+		from(
+			select rownum as rno, cno, ctitle, cpersoncount, cdday, mname, mid
+			from(
+			select cno, ctitle, cpersoncount, cdday, mname, mid
+			from classes, member
+			where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
+		)
 		]]>
 	</select>
 	
-	<select id="selectNowClassesByMid" parameterType="String" resultType="Classes">
+	<select id="selectPastClassesByMid" resultType="Classes">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, member.mname
-		from classes, member
-		where classes.mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
-		order by cdday
+			select rno, cno, ctitle, cpersoncount, cdday, mname, mid
+			from(
+				select rownum as rno, cno, ctitle, cpersoncount, cdday, mname, mid
+				from(
+				select cno, ctitle, cpersoncount, cdday, mname, mid
+				from classes, member
+				where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
+				order by cdday
+				)
+				where rownum<=#{pager.endRowNo}
+				)
+			where rnum>=#{pager.startRowNo}
 		]]>
 	</select>
 	
-	<select id="selectPastClassesByMidCno" parameterType="String" resultType="Classes">
+	
+	<select id="selectEditorNowRecruitTotalCount">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, mname
-		from classes, member
-		where cno in (
-			select cno
-			from Participant
-			where mid=#{mid}
-		) and cdday < sysdate and classes.mid = member.mid
-		order by cdday
+		select count(*)
+		from(
+			select cno, ctitle, cpersoncount, cdday, member.mname, mid
+			from classes, member
+			where classes.mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
+		)
 		]]>
 	</select>
-
-	<select id="selectNowClassesByMidCno" parameterType="String" resultType="Classes">
+	
+	<select id="selectNowClassesByMid" resultType="Classes">
 		<![CDATA[
-		select cno, ctitle, cpersoncount, cdday, mname 
-		from classes, member
-		where cno in (
-			select cno
-			from Participant
-			where mid=#{mid}
-		) and cdday >= sysdate and classes.mid = member.mid
-		order by cdday
+		select rno, cno, ctitle, cpersoncount, cdday, member.mname, mid
+		from(
+			select rownum as rno, cno, ctitle, cpersoncount, cdday, member.mname, mid
+			from(
+				select cno, ctitle, cpersoncount, cdday, member.mname, mid
+				from classes, member
+				where classes.mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
+				order by cdday
+			)
+			where rownum<=#{pager.endRowNo}
+		)
+		where rnum>=#{pager.startRowNo}
+		]]>
+	</select>
+	
+	<select id="selectMyClassHistoryTotalCount">
+		<![CDATA[
+		select count(*)
+		from(
+			select rownum as rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+			from(
+			select  cno, ctitle, cpersoncount, cdday, mname, mid
+			from classes, member
+			where cno in (
+				select cno
+				from Participant
+				where mid=#{mid}
+			) and cdday < sysdate and classes.mid = member.mid
+		)
+		]]>
+	</select>
+	
+	<select id="selectPastClassesByMidCno" resultType="Classes">
+		<![CDATA[
+		select rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+			from(
+				select rownum as rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+					from(
+					select  cno, ctitle, cpersoncount, cdday, mname, mid
+					from classes, member
+					where cno in (
+						select cno
+						from Participant
+						where mid=#{mid}
+					) and cdday < sysdate and classes.mid = member.mid
+					order by cdday
+					)
+				where rownum<=#{pager.endRowNo}
+			)
+		 where rnum>=#{pager.startRowNo}
+		]]>
+	</select>
+	
+	<select id="selectMyNowClassTotalCount">
+		<![CDATA[
+		select count(*)
+		from(
+				select rownum as rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+				from(
+				select cno, ctitle, cpersoncount, cdday, mname, mid 
+				from classes, member
+				where cno in (
+					select cno
+					from Participant
+					where mid=#{mid}
+				) and cdday >= sysdate and classes.mid = member.mid
+		)
+		]]>
+	</select>
+	
+	<select id="selectNowClassesByMidCno" resultType="Classes">
+		<![CDATA[
+		select rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+		from(
+			select rownum as rnum, cno, ctitle, cpersoncount, cdday, mname, mid
+				from(
+				select cno, ctitle, cpersoncount, cdday, mname, mid 
+				from classes, member
+				where cno in (
+					select cno
+					from Participant
+					where mid=#{mid}
+				) and cdday >= sysdate and classes.mid = member.mid
+				order by cdday
+				)
+			where rownum<=#{pager.endRowNo}
+		)
+		 where rnum>=#{pager.startRowNo}
 		]]>
 	</select>
 	
@@ -136,10 +227,26 @@
 		where mname = #{mname} and mphonenum = #{mphonenum}	
 	</select>
 	
-	<select id="selectRecipeByMid" parameterType="String" resultType="recipe">
-		select rno, rtitle, rhitcount, rdate, mnickname
-		from recipe, member
-		where recipe.mid=#{mid} and recipe.mid = member.mid
+	<select id="selectMyrecipeTotalCount">
+		select count(*)
+		from recipe
+		where recipe.mid = #{mid}
+	</select>
+	
+	<select id="selectRecipeByMid" resultType="recipe">
+		<![CDATA[
+		select rnum, rno, rtitle, rhitcount, rdate, mnickname
+		from(
+			select rownum as rnum, rno, rtitle, rhitcount, rdate, mnickname
+			from(
+				select rno, rtitle, rhitcount, rdate, mnickname
+				from recipe, member
+				where recipe.mid=#{mid} and recipe.mid = member.mid
+			)
+			where rownum<=#{pager.endRowNo}
+		)
+		 where rnum>=#{pager.startRowNo}
+		]]>
 	</select>
 	
 	<select id="selectLikesCountByRno" parameterType="int" resultType="int">

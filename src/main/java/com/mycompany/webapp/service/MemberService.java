@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.webapp.dao.MemberDao;
@@ -13,6 +12,7 @@ import com.mycompany.webapp.dto.Awards;
 import com.mycompany.webapp.dto.Career;
 import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Member;
+import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Qna;
 import com.mycompany.webapp.dto.Recipe;
 
@@ -66,29 +66,29 @@ public class MemberService {
 	}
 
 	// 일반 유저가 수강했었던 클래스 가져오기
-	public List<Classes> getMyPastClass(String mid) {
-		List<Classes> classes = memberDao.selectPastClassesByMidCno(mid);
+	public List<Classes> getMyPastClass(String mid, Pager pager) {
+		List<Classes> classes = memberDao.selectPastClassesByMidCno(mid, pager);
 		log.info("class리스트" + classes);
 		return classes;
 	}
 
 	// 일반 유저가 수강 신청한 클래스 가져오기
-	public List<Classes> getMyNowClass(String mid) {
-		List<Classes> classes = memberDao.selectNowClassesByMidCno(mid);
+	public List<Classes> getMyNowClass(String mid, Pager pager) {
+		List<Classes> classes = memberDao.selectNowClassesByMidCno(mid, pager);
 		log.info("class리스트" + classes);
 		return classes;
 	}
 
 	// 에디터가 과거 모집했었던 클래스 가져오기
-	public List<Classes> getEditorPastClass(String mid) {
-		List<Classes> classes = memberDao.selectPastClassesByMid(mid);
+	public List<Classes> getEditorPastClass(String mid, Pager pager) {
+		List<Classes> classes = memberDao.selectPastClassesByMid(mid, pager);
 		log.info("class리스트" + classes);
 		return classes;
 	}
 
 	// 에디터가 현재 모집중인 클래스 가져오기
-	public List<Classes> getEditorNowClass(String mid) {
-		List<Classes> classes = memberDao.selectNowClassesByMid(mid);
+	public List<Classes> getEditorNowClass(String mid, Pager pager) {
+		List<Classes> classes = memberDao.selectNowClassesByMid(mid, pager);
 		log.info("class리스트" + classes);
 		return classes;
 	}
@@ -150,8 +150,8 @@ public class MemberService {
 		
 	}
 
-	public List<Recipe> getMyRecipe(String mid) {
-		List<Recipe> recipeList = memberDao.selectRecipeByMid(mid);
+	public List<Recipe> getMyRecipe(String mid,Pager pager) {
+		List<Recipe> recipeList = memberDao.selectRecipeByMid(mid, pager);
 	
 		for(Recipe recipe : recipeList) {
 			int rno = recipe.getRno();
@@ -172,5 +172,25 @@ public class MemberService {
 			recipe.setLikecount(likesCount);
 		}
 		return likeRecipeList;
+	}
+
+	public int getMyrecipeTotalCount(String mid) {
+		return memberDao.selectMyrecipeTotalCount(mid);
+	}
+
+	public int getMyClassHistoryTotalCount(String mid) {
+		return memberDao.selectMyClassHistoryTotalCount(mid);
+	}
+
+	public int getMyNowClassTotalCount(String mid) {
+		return memberDao.selectMyNowClassTotalCount(mid);
+	}
+
+	public int getEditorNowRecruitTotalCount(String mid) {
+		return memberDao.selectEditorNowRecruitTotalCount(mid);
+	}
+
+	public int getEditorRecruitHistoryTotalCount(String mid) {
+		return memberDao.selectEditorRecruitHistoryTotalCount(mid);
 	}
 }
