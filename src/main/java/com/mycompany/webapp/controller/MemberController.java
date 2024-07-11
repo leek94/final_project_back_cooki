@@ -329,5 +329,23 @@ public class MemberController {
 		
 		return map;
 	}
+	
+	@PostMapping("/searchPw") 
+	public Map<String, Object> searchPw(@RequestBody Member member) {
+		log.info("비밀번호 확인" + member.getMid());
+		
+		Member memberSaved = memberService.getMember(member.getMid());
+		Map<String, Object> map = new HashMap<>();
+		
+		if(memberSaved == null) {
+			log.info("값이 없음");
+			map.put("memberSaved", null);
+		} else {
+			log.info("값이 있음"+memberSaved.getMid());
+			map.put("memberSaved", memberSaved);
+		}
+		
+		return map;
+	}
 
 }
