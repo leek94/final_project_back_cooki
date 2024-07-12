@@ -21,9 +21,9 @@
 	</insert>
 	
 	<select id="selectRecipeByRno" resultType="recipe">
-		select rno, rtitle, rcontent, rhitcount, rdate, mid, rimgdata, rimgtype, rimgoname, ctno
-		from recipe
-		where rno = #{rno}
+		select rno, rtitle, rcontent, rhitcount, rdate, recipe.mid, rimgdata, rimgtype, rimgoname, ctno, mnickname
+		from recipe, member
+		where rno = #{rno} and recipe.mid=member.mid
 	</select>
 	
 	<select id="selectRecipeProcessByRnoRporder" resultType="recipeProcess">

@@ -44,7 +44,6 @@ public class ClassService {
 		classes.setMid("test123@naver.com");
 		classes.setCtno(1);
 
-		classes.setCround(1);
 		classDao.insertClass(classes);
 		log.info("서비스 createClass insertClass");
 

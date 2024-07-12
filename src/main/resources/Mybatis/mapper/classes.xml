@@ -8,11 +8,11 @@
 	      select seq_cno.nextval from dual
 	   </selectKey>
 	   insert into classes (
-	      cno, ctitle, ccontent, cpersoncount, cprice, caddress, cstartdate,
-	      cenddate, cdday, cstarttime, cendtime, chitcount, cround, mid, ctno
+	      cno, ctitle, ccontent, cpersoncount, cprice, caddress
+	      cdday, cstarttime, cendtime, chitcount, mid, ctno
 	   ) values (
-	      #{cno}, #{ctitle}, #{ccontent}, #{cpersoncount}, #{cprice}, #{caddress}, #{cstartdate},
-	      #{cenddate}, #{cdday}, #{cstarttime}, #{cendtime}, 0, #{cround}, #{mid}, #{ctno} 
+	      #{cno}, #{ctitle}, #{ccontent}, #{cpersoncount}, #{cprice}, #{caddress},
+	      #{cdday}, #{cstarttime}, #{cendtime}, 0,  #{mid}, #{ctno} 
 	   )
 	   
 	</insert>
@@ -22,7 +22,7 @@
 	<update id="updateClassByCno" parameterType="classes">
 		update classes set ctitle=#{ctitle}, ccontent=#{ccontent}, 
 		cpersoncount=#{cpersoncount}, cprice=#{cprice}, caddress=#{caddress}, 
-		cenddate=#{cenddate}, cdday=#{cdday}, 
+		cdday=#{cdday}, 
 		cstarttime=#{cstarttime}, cendtime=#{cendtime}, ctno=#{ctno}
 		where cno=#{cno}
 	</update>
@@ -62,11 +62,11 @@
 	
 	<!-- 클래스 검색 결과 받아오기 -->
 	<select id="selectSearchClass" resultType="classes">
-		select cno, ctitle, chitcount, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname,rnum
+		select cno, ctitle, chitcount, cpersoncount, cdday, mname, crratio,ccontent, reviewCount,ctname,rnum
 				from(
-					select cno, ctitle, chitcount, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname, rownum as rnum
+					select cno, ctitle, chitcount, cpersoncount, cdday, mname, crratio,ccontent, reviewCount,ctname, rownum as rnum
 					from(
-					        select c.cno as cno, ctitle, chitcount, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname
+					        select c.cno as cno, ctitle, chitcount, cpersoncount, cdday, mname, crratio,ccontent, reviewCount,ctname
 					            from classes c
 					            left join (
 					                select cr.cno as cno, count(cr.cno) as reviewCount, avg(cr.crratio) as crratio
@@ -116,9 +116,9 @@
 	<select id="getSearchCount" parameterType="search" resultType="int">
 		select count(*) 
 		from(
-			select cno, ctitle, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname
+			select cno, ctitle, cpersoncount, cdday,  mname, crratio,ccontent, reviewCount,ctname
 			from(
-			        select c.cno as cno, ctitle, cpersoncount, cdday, cround, mname, crratio,ccontent, reviewCount,ctname
+			        select c.cno as cno, ctitle, cpersoncount, cdday, mname, crratio,ccontent, reviewCount,ctname
 			            from classes c
 			            left join (
 			                select cr.cno as cno, count(cr.cno) as reviewCount, avg(cr.crratio) as crratio
@@ -152,7 +152,7 @@
 	<!-- classes 읽기 -->
 	<select id="selectByCno" parameterType="int" resultType="classes"> 
 	select cno, ctitle, ccontent, cpersoncount, cprice, 
-	caddress, cstartdate, cenddate, cdday, cstarttime, cendtime,chitcount,cround, classes.mid, classes.ctno, ctname, mnickname
+	caddress, cdday, cstarttime, cendtime,chitcount, classes.mid, classes.ctno, ctname, mnickname
 	from classes, category, member
 	where cno=#{cno} and classes.ctno= category.ctno and classes.mid=member.mid
 	</select>
