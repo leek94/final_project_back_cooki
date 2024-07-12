@@ -149,11 +149,11 @@
 	</select>
 	
 	<select id="selectRecipeList" resultType="recipe">
-		select rnum, rno, rtitle, rcontent, rhitcount, rdate, mname, reviewcount, ctname, likecount
+		select rnum, rno, rtitle, rcontent, rhitcount, rdate, mname, mnickname,reviewcount, ctname, likecount
 				from(
-					select rownum as rnum, rno, rtitle, rcontent, rhitcount, rdate, mname, reviewcount, ctname, likecount
+					select rownum as rnum, rno, rtitle, rcontent, rhitcount, rdate, mname, mnickname,reviewcount, ctname, likecount
 					from(
-					       select r.rno as rno, rtitle, rcontent, rhitcount, rdate, mname, reviewcount, ctname, likecount
+					       select r.rno as rno, rtitle, rcontent, rhitcount, rdate, mname, mnickname,reviewcount, ctname, likecount
 			            	from recipe r
 			            	left join (
 			                	select rno , count(rno) as reviewcount
