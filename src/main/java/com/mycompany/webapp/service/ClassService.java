@@ -528,10 +528,9 @@ public class ClassService {
 			Curriculum curri=cu.get(i);
 			if(curri.getCuimg()!=null) {
 				log.info("1");
-				log.info("cont"+curri.getCucontent());
 				MultipartFile mf= curri.getCuimg();
 				curri.setCuimgoname(mf.getOriginalFilename());
-				curri.setCucontent(mf.getContentType());
+				curri.setCuimgtype(mf.getContentType());
 				try {
 					curri.setCuimgdata(mf.getBytes());
 				} catch (IOException e) {
@@ -551,6 +550,7 @@ public class ClassService {
 				changeCu.setCno(cno);
 				changeCu.setCutitle(curri.getCutitle());
 				changeCu.setCucontent(curri.getCucontent());
+				log.info("ccont"+changeCu.getCucontent());
 				log.info("insert1");
 				classDao.insertCurriculum(changeCu);
 				log.info("insert21");

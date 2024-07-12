@@ -222,7 +222,7 @@ public class ClassController {
 		return map;
 	}
 	
-	@PutMapping("/classUpdate")
+	@PostMapping("/classUpdate")
 	public void classUpdate(Classes classes) {
 		classService.updateClass(classes);
 	}
