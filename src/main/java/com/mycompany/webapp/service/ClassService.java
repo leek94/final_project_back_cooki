@@ -41,9 +41,6 @@ public class ClassService {
 
 		// -------------------- classes insert --------------------
 		// 추후에 시큐리티로 받아올 예정
-		classes.setMid("test123@naver.com");
-		classes.setCtno(1);
-
 		classDao.insertClass(classes);
 		log.info("서비스 createClass insertClass");
 
