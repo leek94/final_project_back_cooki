@@ -8,7 +8,7 @@
 	      select seq_cno.nextval from dual
 	   </selectKey>
 	   insert into classes (
-	      cno, ctitle, ccontent, cpersoncount, cprice, caddress
+	      cno, ctitle, ccontent, cpersoncount, cprice, caddress,
 	      cdday, cstarttime, cendtime, chitcount, mid, ctno
 	   ) values (
 	      #{cno}, #{ctitle}, #{ccontent}, #{cpersoncount}, #{cprice}, #{caddress},
