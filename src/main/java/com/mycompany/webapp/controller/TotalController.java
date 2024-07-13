@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
+@RequestMapping("/total")
 //레시피와 클래스에 대한 정보를 동시에 가지고 오는 controller
 public class TotalController {
 	@Autowired
