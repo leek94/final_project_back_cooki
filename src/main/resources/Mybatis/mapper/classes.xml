@@ -152,7 +152,7 @@
 	<!-- classes 읽기 -->
 	<select id="selectByCno" parameterType="int" resultType="classes"> 
 	select cno, ctitle, ccontent, cpersoncount, cprice, 
-	caddress, cdday, cstarttime, cendtime,chitcount, classes.mid, classes.ctno, ctname, mnickname
+	caddress, cdday, cstarttime, cendtime,chitcount, classes.mid, classes.ctno, ctname, mnickname, mimgoname
 	from classes, category, member
 	where cno=#{cno} and classes.ctno= category.ctno and classes.mid=member.mid
 	</select>

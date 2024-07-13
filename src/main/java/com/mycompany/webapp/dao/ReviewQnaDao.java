@@ -28,7 +28,8 @@ public interface ReviewQnaDao {
 	public int insertRecipeReview(RecipeReview recipeReview);
 	public int updateRecipeReview(RecipeReview recipeReview);
 	public int deleteRecipeReview(int rrno);
-	public List<RecipeReview> selectRecipeReviewsByRno(int rno);
+	public List<RecipeReview> selectRecipeReviewsByRno(int rno, Pager pager);
+	public int selectReviewCount(int rno);
 
 	
 }

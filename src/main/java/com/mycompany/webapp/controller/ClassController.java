@@ -259,7 +259,7 @@ public class ClassController {
 		//페이징 대상이 되는 전체 행수 얻기
 		int totalCount = classService.getReviewCount(cno);
 		//페이저 객체 생성
-		Pager pager = new Pager(5, 5, totalCount, pageNo);
+		Pager pager = new Pager(10, 5, totalCount, pageNo);
 	    List<ClassReview> classReviewList = classService.getClassReviewList(cno, pager);
 	    Float avgCrratio = classService.getAvgCrratio(cno);
 	    log.info("컨트롤러 avgCrratio 받아옴: " + avgCrratio);

@@ -127,9 +127,11 @@ public class MemberController {
 		Classes classes = classService.getClasses(cno);
 		String mnickname= classes.getMnickname();
 		String mid= classes.getMid();
+		String mimgoname = classes.getMimgoname();
 		List<Career> career = memberService.getCareer(mid);
 		List<Awards> awards = memberService.getAwards(mid);
 		Map<String, Object> map = new HashMap<>();
+		map.put("mimgoname", mimgoname);
 		map.put("mnickname", mnickname);
 		map.put("career", career);
 		map.put("awards", awards);
