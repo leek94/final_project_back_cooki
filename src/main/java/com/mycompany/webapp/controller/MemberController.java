@@ -131,6 +131,7 @@ public class MemberController {
 		List<Career> career = memberService.getCareer(mid);
 		List<Awards> awards = memberService.getAwards(mid);
 		Map<String, Object> map = new HashMap<>();
+		map.put("mid", mid);
 		map.put("mimgoname", mimgoname);
 		map.put("mnickname", mnickname);
 		map.put("career", career);
