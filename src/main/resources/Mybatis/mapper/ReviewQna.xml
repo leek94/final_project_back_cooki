@@ -130,9 +130,9 @@
 	
 	<select id="selectRecipeReviewsByRno" resultType="recipeReview">
 	<![CDATA[
-		select rnum, rrno, rrtitle, rrcontent, rrdate, member.mid as mid, mnickname, mimgoname
+		select rnum, rrno, rrtitle, rrcontent, rrdate,  mid, mnickname, mimgoname
 		from(
-			select rownum as rnum, rrno, rrtitle, rrcontent, rrdate, member.mid as mid, mnickname, mimgoname
+			select rownum as rnum, rrno, rrtitle, rrcontent, rrdate,mid, mnickname, mimgoname
 				from(
 					select rrno, rrtitle, rrcontent, rrdate, member.mid as mid, mnickname, mimgoname
 					from recipereview, member
