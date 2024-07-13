@@ -54,12 +54,12 @@ public class MemberController {
 	private UserDetailsService userDetailsService;
 	@Autowired
 	private JwtProvider jwtProvider;
+	
 	@PostMapping("/login")
 	public Map<String,String> login(@RequestBody Member member) {
 		Map<String, String> map = new HashMap<>();
 		//AppUserDetailsService에서 재정의 된 메소드에서 mid로 멤버에 대한 정보를 가져옴 
 		try {
-
 			AppUserDetails userDetails = (AppUserDetails)userDetailsService.loadUserByUsername(member.getMid());
 			PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 			//사용자에게 입력 받은 비밀번호와 데이터 베이스에 있는 비밀번호를 비교 
@@ -78,13 +78,10 @@ public class MemberController {
 				map.put("mrole", userDetails.getMember().getMrole());
 				map.put("mimgoname", userDetails.getMember().getMimgoname());
 				map.put("mnickname", userDetails.getMember().getMnickname());
-				
 			}else {
 				map.put("result", "fail");
 			}
-			
 		}catch ( UsernameNotFoundException e){
-			
 			log.info("서버에 등록되지 않은 mid이다");
 			
 		}
