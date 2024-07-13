@@ -67,7 +67,7 @@ public class MemberController {
 			//권한 부여 
 			Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,userDetails.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-			
+			 
 			if(checkResult) {
 				//jwtprovider에서 토큰 생성
 				String accessToken=jwtProvider.createAccessToken(member.getMid(), userDetails.getMember().getMrole());
