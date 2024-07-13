@@ -147,8 +147,8 @@ public class RecipeService {
 		return reviewQnaDao.deleteRecipeReview(rrno);
 	}
 
-	public List<RecipeReview> getRecipeReviews(int rno) {
-		return reviewQnaDao.selectRecipeReviewsByRno(rno);
+	public List<RecipeReview> getRecipeReviews(int rno, Pager pager) {
+		return reviewQnaDao.selectRecipeReviewsByRno(rno, pager);
 	}
 
 	public int getTotalCount(Search search) {
@@ -161,6 +161,10 @@ public class RecipeService {
 
 	public int recipeDelete(int rno) {
 		return recipeDao.deleteRecipe(rno);
+	}
+
+	public int getReviewCount(int rno) {
+		return	reviewQnaDao.selectReviewCount(rno);
 	}
 
 }

@@ -14,4 +14,5 @@ public class RecipeReview { //레시피 리뷰
 	private Integer rno; //->레시피 번호
 	
 	private String mnickname;
+	private String mimgoname;
 }

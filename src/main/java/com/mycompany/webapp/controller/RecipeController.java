@@ -160,6 +160,7 @@ public class RecipeController {
 		//폼데이터를 리스트 형태로 받기 위해 recipeProcess를 리스트로 가지는 dto를 생성해 호출한다
 		recipeService.updateRecipeProcess(prList);
 	}
+	
 	@GetMapping("/recipeDelete/{rno}")
 	public void recipeDelete(@PathVariable int rno) {
 		int result = recipeService.recipeDelete(rno);
@@ -179,10 +180,15 @@ public class RecipeController {
 	
 	/*댓글*/
 	
-	@GetMapping("/reviewList/{rno}")
-	public List<RecipeReview> reviewList(@PathVariable int rno) {
-		List<RecipeReview> recipeReviews = recipeService.getRecipeReviews(rno);
-		return recipeReviews;
+	@PostMapping("/reviewList/{rno}")
+	public Map<String, Object> reviewList(@PathVariable int rno,@RequestParam(defaultValue = "1") int pageNo) {
+		int totalCount = recipeService.getReviewCount(rno);
+		Pager pager = new Pager(10, 5, totalCount, pageNo);
+		List<RecipeReview> recipeReviews = recipeService.getRecipeReviews(rno, pager);
+		Map<String, Object> map = new HashMap<>();
+		map.put("recipeReviews", recipeReviews);
+	    map.put("pager", pager);
+		return map;
 	}
 	
 	@PostMapping("/reviewRegister")

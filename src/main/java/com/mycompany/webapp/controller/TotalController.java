@@ -32,11 +32,7 @@ public class TotalController {
 	@Autowired
 	private RecipeService recipeService;
 	
-	@RequestMapping("/")
-	public String home() {
-		return "restapi";
-	}
-	
+
 	@PostMapping("/ClassSearch")
 	public Map<String,Object> ClassSearch(@RequestBody Search search, @RequestParam(defaultValue = "1") int pageNo,
 			@RequestParam(defaultValue = "12") int perPage) {

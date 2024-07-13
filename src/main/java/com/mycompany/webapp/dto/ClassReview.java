@@ -16,4 +16,5 @@ public class ClassReview { //클래스 리뷰
 	
 	private String mnickname;
 	private Float avgCrratio; //별점 평균(정수로 반올림)
+	private String mimgoname;
 }

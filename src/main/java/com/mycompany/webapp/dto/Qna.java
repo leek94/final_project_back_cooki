@@ -17,4 +17,5 @@ public class Qna { //문의하기
 
 	private String mnickname;
 	private String ctitle;
+	private String mimgoname;
 }

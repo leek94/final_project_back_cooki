@@ -21,7 +21,7 @@
 	</insert>
 	
 	<select id="selectRecipeByRno" resultType="recipe">
-		select rno, rtitle, rcontent, rhitcount, rdate, recipe.mid, rimgdata, rimgtype, rimgoname, ctno, mnickname
+		select rno, rtitle, rcontent, rhitcount, rdate, recipe.mid, rimgdata, rimgtype, rimgoname, ctno, mnickname, mimgoname
 		from recipe, member
 		where rno = #{rno} and recipe.mid=member.mid
 	</select>

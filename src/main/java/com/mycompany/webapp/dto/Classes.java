@@ -29,7 +29,7 @@ public class Classes { //클래스\
 	
 	//클래스 디테일에서 크리에이터명을 받아오기
 	private String mnickname;
-	
+	private String mimgoname;
 	private int reviewCount;
 	
 	private float crratio;
