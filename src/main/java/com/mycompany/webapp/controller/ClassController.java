@@ -163,7 +163,7 @@ public class ClassController {
 	}
 	
 	//클래스 신청 여부 받아오기 (단순 문자열이나 숫자를 받을 때는 requestparam을 사용해야 함)
-	@PostMapping("/classApply")
+	@PostMapping("/classApply") 
 	public Map<String, Object> classApply(@RequestParam int cno, Authentication authentication) {
 		Map<String, Object> map = new HashMap<>();
 		if(authentication == null) { // 로그인 안했을 경우 로그인 페이지로 던짐
