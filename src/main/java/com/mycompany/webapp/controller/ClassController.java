@@ -258,6 +258,7 @@ public class ClassController {
 		log.info("컨트롤러 classReviewList 메소드 실행");
 		//페이징 대상이 되는 전체 행수 얻기
 		int totalCount = classService.getReviewCount(cno);
+		log.info(""+totalCount);
 		//페이저 객체 생성
 		Pager pager = new Pager(10, 5, totalCount, pageNo);
 	    List<ClassReview> classReviewList = classService.getClassReviewList(cno, pager);

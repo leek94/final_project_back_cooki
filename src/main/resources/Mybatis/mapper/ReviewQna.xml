@@ -70,10 +70,15 @@
 	</insert>
 	
 	<!-- 클래스 review 등록된 갯수 세기 -->
-	<select id="selectReviewCountByCno" parameterType="int" resultType="int">
+	<select id="selectReviewCountByCno"  resultType="int">
 		select count(*)
 		from classReview
-		where cno=#{cno}
+		where cno in
+			(
+				select cno
+				from classes
+				where ctitle = #{ctitle} and  mid = #{mid}
+			)
 	</select>
 	
 	<!-- 클래스 review 페이지네이션 해서 읽기 -->
@@ -85,7 +90,13 @@
 			from(
 				select crno, crtitle, crcontent, crratio, crdate, cno, classreview.mid as mid, mnickname, mimgoname
 				from classreview, member
-				where cno=#{cno} and classreview.mid = member.mid
+				where  classreview.mid = member.mid and
+						cno in
+							(
+								select cno
+								from classes
+								where ctitle = #{classes.ctitle} and  mid = #{classes.mid}
+							)
 				order by crdate desc
 			)
 			where rownum <= #{pager.endRowNo}
@@ -132,7 +143,7 @@
 	<![CDATA[
 		select rnum, rrno, rrtitle, rrcontent, rrdate,  mid, mnickname, mimgoname
 		from(
-			select rownum as rnum, rrno, rrtitle, rrcontent, rrdate,mid, mnickname, mimgoname
+			select rownum as rnum, rrno, rrtitle, rrcontent, rrdate,  mid, mnickname, mimgoname
 				from(
 					select rrno, rrtitle, rrcontent, rrdate, member.mid as mid, mnickname, mimgoname
 					from recipereview, member
