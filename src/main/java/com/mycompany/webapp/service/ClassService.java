@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.webapp.dao.ClassDao;
@@ -425,12 +424,14 @@ public class ClassService {
 	}
 
 	public int getReviewCount(int cno) {
-		return reviewQnaDao.selectReviewCountByCno(cno);
+		Classes classes = classDao.selectByCno(cno);
+		return reviewQnaDao.selectReviewCountByCno(classes);
 	}
 	
 	public List<ClassReview> getClassReviewList(int cno, Pager pager) {
 		log.info("서비스 getClassReviewList 실행");
-		return reviewQnaDao.selectClassReviewByCnoPager(cno, pager);
+		Classes classes = classDao.selectByCno(cno);
+		return reviewQnaDao.selectClassReviewByCnoPager(classes, pager);
 	}
 	
 	public Float getAvgCrratio(int cno) {

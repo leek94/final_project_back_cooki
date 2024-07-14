@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.mycompany.webapp.dto.ClassReview;
+import com.mycompany.webapp.dto.Classes;
 import com.mycompany.webapp.dto.Pager;
 import com.mycompany.webapp.dto.Qna;
 import com.mycompany.webapp.dto.RecipeReview;
@@ -20,8 +21,8 @@ public interface ReviewQnaDao {
 	public int deleteQnaByQno(int qno);
 	public int updateQreplyByQno(Qna qna);
 	public int insertClassReview(ClassReview classReview);
-	public int selectReviewCountByCno(int cno);
-	public List<ClassReview> selectClassReviewByCnoPager(int cno, @Param("pager") Pager pager);
+	public int selectReviewCountByCno(Classes classes);
+	public List<ClassReview> selectClassReviewByCnoPager(Classes classes, Pager pager);
 	public Float selectAvgCrratioByCno(int cno);
 	public int updateClassReviewByCrno(ClassReview classReview);
 	public int deleteClassReviewByCrno(int crno);
