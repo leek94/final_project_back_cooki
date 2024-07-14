@@ -46,6 +46,7 @@ public class ClassController {
 	// 신청 인원을 서버에서 확인
 	@GetMapping("/classNowPerson/{cno}")
 	public Map<String, Object> classNowPerson(@PathVariable int cno){
+		log.info("버튼 실행");
 		// 현재 인원 수 몇명인 바로 리턴하기 위해서 서버에서 인원 확인
 		log.info("클래스 나우 실행" + cno);
 		int nowPerson = classService.getNowPerson(cno);
@@ -72,7 +73,11 @@ public class ClassController {
 	
 	@GetMapping("/classDetail/{cno}")
 	public Map<String, Object> classDetail(@PathVariable int cno) {
+<<<<<<< HEAD
 		log.info("디테일 실행" + cno);
+=======
+		log.info("THIS");
+>>>>>>> branch 'main' of https://github.com/leek94/final_project_back_cooki.git
 		Map<String, Object> map = new HashMap<>();
 		Classes classes = classService.getClasses(cno);
 		classes.setChitcount(classes.getChitcount()+1);

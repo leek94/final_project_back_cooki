@@ -435,8 +435,8 @@ public class ClassService {
 	}
 	
 	public Float getAvgCrratio(int cno) {
-		log.info("서비스 getAvgCrratio 실행");
-		return reviewQnaDao.selectAvgCrratioByCno(cno);
+		Classes classes = classDao.selectByCno(cno);
+		return reviewQnaDao.selectAvgCrratioByCno(classes);
 	}
 
 	public int getCount() {
