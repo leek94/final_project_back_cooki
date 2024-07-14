@@ -66,13 +66,14 @@
 				from(
 					select cno, ctitle, chitcount, cpersoncount, cdday, mname, crratio,ccontent, reviewCount,ctname, rownum as rnum
 					from(
-					        select c.cno as cno, ctitle, chitcount, cpersoncount, cdday, mname, crratio,ccontent, reviewCount,ctname
+					        select c.cno as cno, c.ctitle as ctitle, chitcount, cpersoncount, cdday, mname, crratio,ccontent, reviewCount,ctname
 					            from classes c
 					            left join (
-					                select cr.cno as cno, count(cr.cno) as reviewCount, avg(cr.crratio) as crratio
-					                from classreview cr
-					                group by cr.cno
-					            ) cr on cr.cno = c.cno
+					                select c.ctitle as ctitle, c.mid as mid ,round(avg(crratio), 1) as crratio, count(crratio) as reviewCount
+					                from classreview cr, classes c
+					               	where c.cno = cr.cno
+					                group by c.ctitle, c.mid
+					            ) cr on cr.ctitle = c.ctitle and c.mid = cr.mid
 					            join member m on m.mid = c.mid
 					            join category ct on ct.ctno = c.ctno
 					           <![CDATA[ where sysdate<cdday ]]>
@@ -81,13 +82,13 @@
 							            in(
 							            select distinct cno from classitem where ciname like '%'||#{search.searchText} ||'%')
 								<if test="search.searchTitle=='all'">
-									or (ctitle like '%'||#{search.searchText} ||'%')
+									or (c.ctitle like '%'||#{search.searchText} ||'%')
 								    or (ccontent like '%'||#{search.searchText} ||'%'))
 								</if>
 							</if>
 							
 							<if test="search.searchTitle=='titlecontent'">
-								and ((ctitle like '%' || #{search.searchText} || '%') or (ccontent like '%' || #{search.searchText} || '%'))
+								and ((c.ctitle like '%' || #{search.searchText} || '%') or (ccontent like '%' || #{search.searchText} || '%'))
 							</if>
 							
 							<if test="search.searchTitle=='category'">
