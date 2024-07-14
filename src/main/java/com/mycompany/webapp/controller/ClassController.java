@@ -46,6 +46,7 @@ public class ClassController {
 	// 신청 인원을 서버에서 확인
 	@GetMapping("/classNowPerson/{cno}")
 	public Map<String, Object> classNowPerson(@PathVariable int cno){
+		log.info("버튼 실행");
 		// 현재 인원 수 몇명인 바로 리턴하기 위해서 서버에서 인원 확인
 		int nowPerson = classService.getNowPerson(cno);
 		Map<String, Object> map = new HashMap<>();
@@ -71,6 +72,7 @@ public class ClassController {
 	
 	@GetMapping("/classDetail/{cno}")
 	public Map<String, Object> classDetail(@PathVariable int cno) {
+		log.info("THIS");
 		Map<String, Object> map = new HashMap<>();
 		Classes classes = classService.getClasses(cno);
 		classes.setChitcount(classes.getChitcount()+1);

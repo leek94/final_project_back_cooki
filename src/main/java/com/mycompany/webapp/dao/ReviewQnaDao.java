@@ -23,7 +23,7 @@ public interface ReviewQnaDao {
 	public int insertClassReview(ClassReview classReview);
 	public int selectReviewCountByCno(Classes classes);
 	public List<ClassReview> selectClassReviewByCnoPager(Classes classes, Pager pager);
-	public Float selectAvgCrratioByCno(int cno);
+	public Float selectAvgCrratioByCno(Classes classes);
 	public int updateClassReviewByCrno(ClassReview classReview);
 	public int deleteClassReviewByCrno(int crno);
 	public int insertRecipeReview(RecipeReview recipeReview);
