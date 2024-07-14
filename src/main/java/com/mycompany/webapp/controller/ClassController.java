@@ -71,6 +71,7 @@ public class ClassController {
 	
 	@GetMapping("/classDetail/{cno}")
 	public Map<String, Object> classDetail(@PathVariable int cno) {
+		log.info("rhasdf : "  + cno);
 		Map<String, Object> map = new HashMap<>();
 		Classes classes = classService.getClasses(cno);
 		classes.setChitcount(classes.getChitcount()+1);
@@ -143,8 +144,8 @@ public class ClassController {
 			String mid = authentication.getName();
 			Participant participant = new Participant();
 			participant.setMid(mid);
+			participant.setCno(cno);
 			Participant isParticipant = classService.getIsparticipant(participant);
-			
 			if(isParticipant != null) {
 				// 테이블에 값이 있으면 실패
 				map.put("result", "false");
