@@ -142,7 +142,6 @@ public class ClassController {
 		} else {
 			String mid = authentication.getName();
 			Participant participant = new Participant();
-			participant.setCno(cno);
 			participant.setMid(mid);
 			Participant isParticipant = classService.getIsparticipant(participant);
 			
