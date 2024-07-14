@@ -32,7 +32,7 @@ public class Classes { //클래스\
 	private String mimgoname;
 	private int reviewCount;
 	
-	private float crratio;
+	private Float crratio;
 	private String mname;
 	
 	private MultipartFile[] cthumbnailimgs; //썸네일 이미지 배열

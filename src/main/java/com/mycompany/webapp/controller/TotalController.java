@@ -1,6 +1,7 @@
 package com.mycompany.webapp.controller;
 
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,21 @@ public class TotalController {
 		//페이저 객체 생성
 		Pager pager = new Pager(perPage, 5, totalRows, pageNo);
 		List<Classes> searchClasses = classService.getSearchClasses(search, pager);
+		for(Classes classes : searchClasses) {
+			int cno = classes.getCno();
+			Float ratio = classService.getAvgCrratio(cno);
+			classes.setCrratio(ratio == null? 0 : ratio);
+			Integer count = classService.getReviewCount(cno);
+			classes.setReviewCount( count == null? 0 : count);
+		}
+		if(search.getSearchSort() == 2) {
+			log.info("sadasdas");
+			Collections.sort(searchClasses, (p1, p2) -> Integer.compare(p2.getReviewCount(), p1.getReviewCount()));
+		}
+		if(search.getSearchSort()==3) {
+			Collections.sort(searchClasses, (p1, p2) -> Float.compare(p2.getCrratio(), p1.getCrratio()));
+		}
+	
 		Map<String, Object> map = new HashMap<>();
 		map.put("searchClass", searchClasses);
 		map.put("pager", pager);

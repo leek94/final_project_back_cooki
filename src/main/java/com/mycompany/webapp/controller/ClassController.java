@@ -266,6 +266,7 @@ public class ClassController {
 		//페이저 객체 생성
 		Pager pager = new Pager(10, 5, totalCount, pageNo);
 	    List<ClassReview> classReviewList = classService.getClassReviewList(cno, pager);
+	    log.info("되나요");
 	    Float avgCrratio = classService.getAvgCrratio(cno);
 	    log.info("컨트롤러 avgCrratio 받아옴: " + avgCrratio);
 	    Map<String, Object> map = new HashMap<>();

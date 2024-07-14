@@ -116,7 +116,6 @@
 			from classes
 			where ctitle = #{ctitle} and  mid = #{mid}
 		)
-		group by cno
 	</select>
 	
 	<!-- 클래스 review 수정 -->
