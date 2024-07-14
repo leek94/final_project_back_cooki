@@ -47,6 +47,7 @@ public class ClassController {
 	@GetMapping("/classNowPerson/{cno}")
 	public Map<String, Object> classNowPerson(@PathVariable int cno){
 		// 현재 인원 수 몇명인 바로 리턴하기 위해서 서버에서 인원 확인
+		log.info("클래스 나우 실행" + cno);
 		int nowPerson = classService.getNowPerson(cno);
 		Map<String, Object> map = new HashMap<>();
 		map.put("nowPerson", nowPerson);
@@ -71,6 +72,7 @@ public class ClassController {
 	
 	@GetMapping("/classDetail/{cno}")
 	public Map<String, Object> classDetail(@PathVariable int cno) {
+		log.info("디테일 실행" + cno);
 		Map<String, Object> map = new HashMap<>();
 		Classes classes = classService.getClasses(cno);
 		classes.setChitcount(classes.getChitcount()+1);
@@ -136,6 +138,7 @@ public class ClassController {
 	// 신청했는지 아닌지 확인하는 메서드 - 나중에 secured를 붙여서 로그인 페이지로 보낼 예정
 	@GetMapping("/isParticipant/{cno}") 
 	public Map<String, Object> isParticipant(@PathVariable int cno, Authentication authentication) {
+		log.info("이즈 파티시 먼트 실행" + cno);
 		Map<String, Object> map = new HashMap<>();
 		if(authentication == null) {
 			map.put("result", "backToLogin");
@@ -143,12 +146,15 @@ public class ClassController {
 			String mid = authentication.getName();
 			Participant participant = new Participant();
 			participant.setMid(mid);
+			participant.setCno(cno);
 			Participant isParticipant = classService.getIsparticipant(participant);
 			
 			if(isParticipant != null) {
+				log.info("이즈 파티시 먼트 있음" + cno);
 				// 테이블에 값이 있으면 실패
 				map.put("result", "false");
 			} else {
+				log.info("이즈 파티시 먼트 없음" + cno);
 				// 테이블에 값이 없으면 성공
 				map.put("result", "success");
 			}
