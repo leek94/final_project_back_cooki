@@ -106,10 +106,16 @@
 	</select>
 	
 	<!-- 클래스 review 평점 읽기 -->
-	<select id="selectAvgCrratioByCno" parameterType="int" resultType="float">
+	<select id="selectAvgCrratioByCno" resultType="float">
 		select round(avg(crratio), 1)
 		from classreview
-		where cno=#{cno}
+		where
+			cno in
+		(
+			select cno
+			from classes
+			where ctitle = #{ctitle} and  mid = #{mid}
+		)
 		group by cno
 	</select>
 	

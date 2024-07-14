@@ -180,7 +180,7 @@ public class RecipeController {
 	
 	/*댓글*/
 	
-	@PostMapping("/reviewList/{rno}")
+	@GetMapping("/reviewList/{rno}")
 	public Map<String, Object> reviewList(@PathVariable int rno,@RequestParam(defaultValue = "1") int pageNo) {
 		int totalCount = recipeService.getReviewCount(rno);
 		Pager pager = new Pager(10, 5, totalCount, pageNo);
