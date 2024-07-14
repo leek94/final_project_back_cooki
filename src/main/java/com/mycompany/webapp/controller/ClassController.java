@@ -73,11 +73,7 @@ public class ClassController {
 	
 	@GetMapping("/classDetail/{cno}")
 	public Map<String, Object> classDetail(@PathVariable int cno) {
-<<<<<<< HEAD
-		log.info("디테일 실행" + cno);
-=======
 		log.info("THIS");
->>>>>>> branch 'main' of https://github.com/leek94/final_project_back_cooki.git
 		Map<String, Object> map = new HashMap<>();
 		Classes classes = classService.getClasses(cno);
 		classes.setChitcount(classes.getChitcount()+1);
