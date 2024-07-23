@@ -15,10 +15,15 @@
 	</insert>
 	
 	<!-- qna 등록된 갯수 세기 -->
-	<select id="selectQnaCountByCno" parameterType="int" resultType="int">
+	<select id="selectQnaCountByCno" parameterType="classes" resultType="int">
 		select count(*)
 		from qna
-		where cno=#{cno}
+		where cno in
+					(
+						select cno
+						from classes
+						where ctitle = #{ctitle} and  mid = #{mid}
+					)
 	</select>
 	
 	<!-- qna 페이지네이션 해서 읽기 -->
@@ -30,7 +35,13 @@
 			from(
 				select qno, qtitle, qcontent, qdate, qna.mid as mid, cno, mnickname, qreply, qreplydate, mimgoname
 				from qna, member
-				where cno=#{cno} and qna.mid = member.mid
+				where qna.mid = member.mid
+				and cno in
+					(
+						select cno
+						from classes
+						where ctitle = #{classes.ctitle} and  mid = #{classes.mid}
+					)
 				order by qdate desc
 			)
 			where rownum <= #{pager.endRowNo}

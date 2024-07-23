@@ -15,8 +15,8 @@ import com.mycompany.webapp.dto.RecipeReview;
 public interface ReviewQnaDao {
 	
 	public int insertQna(Qna qna);
-	public int selectQnaCountByCno(int cno);
-	public List<Qna> selectQnaByCnoPager(int cno, @Param("pager") Pager pager);
+	public int selectQnaCountByCno(Classes classes);
+	public List<Qna> selectQnaByCnoPager(Classes classes, @Param("pager") Pager pager);
 	public int updateQnaByQno(Qna qna);
 	public int deleteQnaByQno(int qno);
 	public int updateQreplyByQno(Qna qna);

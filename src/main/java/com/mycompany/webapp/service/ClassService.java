@@ -386,12 +386,14 @@ public class ClassService {
 	}
 
 	public int getQnaCount(int cno) {
-		return reviewQnaDao.selectQnaCountByCno(cno);
+		Classes classes = classDao.selectByCno(cno);
+		return reviewQnaDao.selectQnaCountByCno(classes);
 	}
 	
 	public List<Qna> getQnaList(int cno, Pager pager) {
 		log.info("서비스 getQnaList 실행");
-		return reviewQnaDao.selectQnaByCnoPager(cno, pager);
+		Classes classes = classDao.selectByCno(cno);
+		return reviewQnaDao.selectQnaByCnoPager(classes, pager);
 	}
 
 	public void updateQna(Qna qna) {
