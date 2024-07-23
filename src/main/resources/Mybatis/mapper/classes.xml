@@ -76,14 +76,17 @@
 					            ) cr on cr.ctitle = c.ctitle and c.mid = cr.mid
 					            join member m on m.mid = c.mid
 					            join category ct on ct.ctno = c.ctno
-					           <![CDATA[ where sysdate<cdday ]]>
-					        <if test="search.searchTitle=='all' || search.searchTitle=='ingredient'">
+					           <![CDATA[ where sysdate < cdday ]]>
+					        <if test="search.searchTitle=='all'">
 									 and(c.cno
 							            in(
-							            select distinct cno from classitem where ciname like '%'||#{search.searchText} ||'%'))
-								<if test="search.searchTitle=='all'">
-									or (c.ctitle like '%'||#{search.searchText} ||'%')
-								    or (ccontent like '%'||#{search.searchText} ||'%')
+							            select distinct cno from classitem where ciname like '%'||#{search.searchText} ||'%')
+							         	or (c.ctitle like '%'||#{search.searchText} ||'%')
+								    	or (ccontent like '%'||#{search.searchText} ||'%'))
+								<if test="search.searchTitle=='ingredient'">
+									and c.cno
+							            in(
+							            select distinct cno from classitem where ciname like '%'||#{search.searchText} ||'%')
 								</if>
 							</if>
 							
