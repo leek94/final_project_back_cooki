@@ -80,10 +80,10 @@
 					        <if test="search.searchTitle=='all' || search.searchTitle=='ingredient'">
 									 and(c.cno
 							            in(
-							            select distinct cno from classitem where ciname like '%'||#{search.searchText} ||'%')
+							            select distinct cno from classitem where ciname like '%'||#{search.searchText} ||'%'))
 								<if test="search.searchTitle=='all'">
 									or (c.ctitle like '%'||#{search.searchText} ||'%')
-								    or (ccontent like '%'||#{search.searchText} ||'%'))
+								    or (ccontent like '%'||#{search.searchText} ||'%')
 								</if>
 							</if>
 							
@@ -132,10 +132,10 @@
 			        <if test="searchTitle=='all' || searchTitle=='ingredient'">
 							 and(c.cno
 					            in( 
-					            select distinct cno from classitem where ciname like '%'||#{searchText} ||'%')
+					            select distinct cno from classitem where ciname like '%'||#{searchText} ||'%'))
 						<if test="searchTitle=='all'">
 							or (ctitle like '%'||#{searchText} ||'%')
-						    or (ccontent like '%'||#{searchText} ||'%'))
+						    or (ccontent like '%'||#{searchText} ||'%')
 						</if>
 					</if>
 					

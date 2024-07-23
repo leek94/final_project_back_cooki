@@ -130,10 +130,10 @@
 			        <if test="searchTitle=='all' || searchTitle=='ingredient'">
 							  (r.rno
 					            in( 
-					            select distinct rno from recipeitem where riname like '%'||#{searchText} ||'%')
+					            select distinct rno from recipeitem where riname like '%'||#{searchText} ||'%'))
 						<if test="searchTitle=='all'">
 							or (rtitle like '%'||#{searchText} ||'%')
-						    or (rcontent like '%'||#{searchText} ||'%'))
+						    or (rcontent like '%'||#{searchText} ||'%')
 						</if>
 					</if>
 					
@@ -170,10 +170,10 @@
 			      	 		where 
 					        <if test="search.searchTitle=='all' || search.searchTitle=='ingredient'">
 								   (r.rno in( 
-							        select distinct rno from recipeitem where riname like '%'||#{search.searchText} ||'%')
+							        select distinct rno from recipeitem where riname like '%'||#{search.searchText} ||'%'))
 								<if test="search.searchTitle=='all'">
 									or (rtitle like '%'||#{search.searchText} ||'%')
-								    or (rcontent like '%'||#{search.searchText} ||'%'))
+								    or (rcontent like '%'||#{search.searchText} ||'%')
 								</if>
 							</if>
 							
