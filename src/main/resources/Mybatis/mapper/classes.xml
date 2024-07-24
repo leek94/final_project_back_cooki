@@ -338,7 +338,7 @@
 			(
 				select rownum as rnum, cno, ctitle, chitcount
 				from classes 
-				where <![CDATA[SYSDATE<CDDAY]]>
+				where <![CDATA[where to_char(sysdate,'YYYYMMDD') < to_char(cdday,'YYYYMMDD')]]>
 				order by chitcount desc
 			)
 		where <![CDATA[rnum <= #{number}]]>
