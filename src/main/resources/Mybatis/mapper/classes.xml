@@ -76,7 +76,7 @@
 					            ) cr on cr.ctitle = c.ctitle and c.mid = cr.mid
 					            join member m on m.mid = c.mid
 					            join category ct on ct.ctno = c.ctno
-					           <![CDATA[ where sysdate < cdday ]]>
+					           <![CDATA[ where to_char(sysdate,'YYYYMMDD') < to_char(cdday,'YYYYMMDD') ]]>
 					        <if test="search.searchTitle=='all'">
 									 and(c.cno
 							            in(
@@ -132,7 +132,7 @@
 			            ) cr on cr.ctitle = c.ctitle and c.mid = cr.mid
 			            join member m on m.mid = c.mid
 			            join category ct on ct.ctno = c.ctno
-			           <![CDATA[ where sysdate<cdday ]]>
+			           <![CDATA[ where to_char(sysdate,'YYYYMMDD') < to_char(cdday,'YYYYMMDD') ]]>
 					        <if test="searchTitle=='all'">
 									 and(c.cno
 							            in(
