@@ -56,7 +56,7 @@
 		from(
 				select cno, ctitle, cpersoncount, cdday, mname, member.mid
 				from classes, member
-				where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
+				where classes.mid=#{mid} and  to_char(sysdate,'YYYYMMDD') >= to_char(cdday,'YYYYMMDD') and classes.mid = member.mid
 		)
 				]]>
 	</select>
@@ -70,7 +70,7 @@
 				from(
 				select cno, ctitle, cpersoncount, cdday, mname, member.mid
 				from classes, member
-				where classes.mid=#{mid} and cdday < sysdate and classes.mid = member.mid
+				where classes.mid=#{mid} and  to_char(sysdate,'YYYYMMDD') >= to_char(cdday,'YYYYMMDD') and classes.mid = member.mid
 				order by cdday
 				)
 				where rownum<=#{pager.endRowNo}
@@ -86,7 +86,7 @@
 		from(
 			select cno, ctitle, cpersoncount, cdday, mname, member.mid
 			from classes, member
-			where classes.mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
+			where classes.mid=#{mid} and  to_char(sysdate,'YYYYMMDD') < to_char(cdday-1,'YYYYMMDD') and classes.mid = member.mid
 		)
 		]]>
 	</select>
@@ -99,7 +99,7 @@
 			from(
 				select cno, ctitle, cpersoncount, cdday, mname, member.mid as mid
 				from classes, member
-				where classes.mid=#{mid} and cdday >= sysdate and classes.mid = member.mid
+				where classes.mid=#{mid} and to_char(sysdate,'YYYYMMDD') < to_char(cdday-1,'YYYYMMDD') and classes.mid = member.mid
 				order by cdday
 			)
 			where rownum<=#{pager.endRowNo}
@@ -118,7 +118,7 @@
 					select cno
 					from Participant
 					where mid=#{mid}
-					) and cdday < sysdate and classes.mid = member.mid
+					) and to_char(sysdate,'YYYYMMDD') >= to_char(cdday,'YYYYMMDD') and classes.mid = member.mid
 		)
 		]]>
 	</select>
@@ -135,7 +135,7 @@
 						select cno
 						from Participant
 						where mid=#{mid}
-					) and cdday < sysdate and classes.mid = member.mid
+					) and to_char(sysdate,'YYYYMMDD') >= to_char(cdday,'YYYYMMDD') and classes.mid = member.mid
 					order by cdday
 					)
 				where rownum<=#{pager.endRowNo}
@@ -154,7 +154,7 @@
 				select cno
 				from Participant
 				where mid=#{mid}
-			) and cdday >= sysdate and classes.mid = member.mid
+			) and to_char(sysdate,'YYYYMMDD') < to_char(cdday-1,'YYYYMMDD') and classes.mid = member.mid
 		)
 		]]>
 	</select>
@@ -171,7 +171,7 @@
 					select cno
 					from Participant
 					where mid=#{mid}
-				) and cdday >= sysdate and classes.mid = member.mid
+				) and to_char(sysdate,'YYYYMMDD') < to_char(cdday-1,'YYYYMMDD') and classes.mid = member.mid
 				order by cdday
 				)
 			where rownum<=#{pager.endRowNo}
