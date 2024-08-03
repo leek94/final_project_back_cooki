@@ -85,8 +85,8 @@ public class ClassController {
 	//클래스 써메니일 갯수 받아오기
 	@GetMapping("/getThumbimgCount/{cno}")
 	public int getThumbimgCount(@PathVariable int cno) {
-		int cont = classService.getThumbimgCount(cno);
-		return  cont;
+		int count = classService.getThumbimgCount(cno);
+		return  count;
 	}
 	
 	//클래스 썸네일 이미지 다운로드
@@ -243,10 +243,10 @@ public class ClassController {
 	//클래스 다시 열기 
 	@PostMapping("/reopenClassesInsert")
 	public int reopenClass(Classes classes, Authentication authentication) {
+		//class를 새롭게 등록하기 위해서 mid가 필요
 		String mid= authentication.getName();
 		classes.setMid(mid);
 		int cl=classService.insertReopenClass(classes);
-		log.info("cl"+cl);
 		return cl;
 	}
 	@PostMapping("/reopenCurriInsert")
@@ -266,7 +266,6 @@ public class ClassController {
 		//페이저 객체 생성
 		Pager pager = new Pager(10, 5, totalCount, pageNo);
 	    List<ClassReview> classReviewList = classService.getClassReviewList(cno, pager);
-	    log.info("되나요");
 	    Float avgCrratio = classService.getAvgCrratio(cno);
 	    log.info("컨트롤러 avgCrratio 받아옴: " + avgCrratio);
 	    Map<String, Object> map = new HashMap<>();

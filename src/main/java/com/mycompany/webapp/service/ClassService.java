@@ -481,7 +481,8 @@ public class ClassService {
 
 
 	public int insertReopenClass(Classes classes) {
-		//이미지가 없을 경우 원래 클래스의 이미지를 받아오기 위해 cno를 저장 
+		//이미지가 없을 경우 원래 클래스의 이미지를 받아오기 위해 cno를 저장
+		//**아래 getCno는 front에서 받아온 기존의 cno이고 setCno에서 받는 getCno는 새롭게 생성되는 cno
 		int cno=classes.getCno();
 		//클래스 기본 정보 저장
 		classDao.insertClass(classes);
@@ -492,6 +493,7 @@ public class ClassService {
 		//이미지가 바뀌었을 경우
 		if(thumbImg!=null) {
 			for(int i=0;i<thumbImg.length;i++) {
+				//다시 열 클래스의 cno값과 ctorder 저장
 				classThumbNail.setCno(classes.getCno());
 				classThumbNail.setCtorder(i+1);
 				classThumbNail.setCtimgoname(thumbImg[i].getOriginalFilename());
@@ -505,15 +507,19 @@ public class ClassService {
 			}
 		//기존의 이미지를 사용할 경우 cno와 ctorder로 data를 찾아와서 다시 열 클래스의 cno에 이미지를 저장
 		}else {
+			//기존의 cno로 img가 몇 개인지 받아오기
 			int count= classDao.selectByClassThumbCount(cno);
 			for(int i=0;i<count;i++) {
+				//기존의 cno와 ctorder로 classThumbnail 받아오기
 				classThumbNail.setCno(cno);
 				classThumbNail.setCtorder(i+1);
 				ClassThumbnail thumb=classDao.selectByClassThumbnail(classThumbNail);
+				//새로운 cno에 다시 저장해 insert해주기
 				thumb.setCno(classes.getCno());
 				classDao.insertClassThumbnail(thumb);
 			}	
 		}
+		//curriculum 정보를 insert 할 때 cno가 필요하므로 return 해준다.
 		return classes.getCno();
 	}
 
@@ -523,10 +529,12 @@ public class ClassService {
 		int initialLength=cuList.getInitialLength();
 		int cuLength=cuList.getNowLength();
 		List<Curriculum> cu=cuList.getCurriculums();
+		//list로 받은 curriculum을 하나씩 저장
 		for(int i=0;i<cuLength;i++) {
+			//curriculum list 안에 객체에 접근 
 			Curriculum curri=cu.get(i);
+			//이미지를 변경했을 때 이미지를 DB에 저장해주기
 			if(curri.getCuimg()!=null) {
-				log.info("1");
 				MultipartFile mf= curri.getCuimg();
 				curri.setCuimgoname(mf.getOriginalFilename());
 				curri.setCuimgtype(mf.getContentType());
@@ -539,20 +547,18 @@ public class ClassService {
 				curri.setCutitle(curri.getCutitle());
 				curri.setCucontent(curri.getCucontent());
 				classDao.insertCurriculum(curri);
+			//기존의 curriculum 사진을 불러와 다시 저장할 때
 			}else {
-				log.info("2");
+				//기존의 curriculum 이미지를 cno와 cuorder로 불러오기
 				Curriculum originCurri= new Curriculum();
 				originCurri.setCno(initCno);
 				originCurri.setCuorder(curri.getCuorder());
 				Curriculum changeCu=classDao.selectByCurriculumimg(originCurri);
-				log.info("cont"+curri.getCucontent());
+				//새로 등록해 줄 curriculum에 cno 값만 바꿔준 후 제목과 내용을 다시 insert 해주기 
 				changeCu.setCno(cno);
 				changeCu.setCutitle(curri.getCutitle());
 				changeCu.setCucontent(curri.getCucontent());
-				log.info("ccont"+changeCu.getCucontent());
-				log.info("insert1");
 				classDao.insertCurriculum(changeCu);
-				log.info("insert21");
 			}
 		}
 	}
